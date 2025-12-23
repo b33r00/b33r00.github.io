@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>B3r0</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:'Press Start 2P', monospace;
+      background: linear-gradient(180deg, #0b0220, #24003a);
+      color:#bdb3d6;
+      image-rendering: pixelated;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image: linear-gradient(rgba(0,0,0,0.06) 50%, rgba(255,255,255,0.02) 51%);
+      background-size:100% 4px;
+      pointer-events:none;
+    }
+
+    .box{
+      max-width:520px;
+      padding:36px;
+      border:2px solid rgba(180,92,255,0.25);
+      box-shadow: 0 10px 40px rgba(10,4,20,0.7);
+      text-align:center;
+      background: rgba(255,255,255,0.02);
+    }
+
+    h1{
+      margin:0 0 16px 0;
+      color:#b45cff;
+      font-size:18px;
+      text-shadow: 0 0 12px rgba(180,92,255,0.25);
+    }
+
+    p{
+      font-size:10px;
+      line-height:1.7;
+      margin-bottom:22px;
+    }
+
+    .links{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    a{
+      padding:10px 14px;
+      border:1px solid #b45cff;
+      color:#b45cff;
+      text-decoration:none;
+      font-size:9px;
+    }
+
+    a:hover{
+      background:#b45cff;
+      color:#0b0220;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>B3r0</h1>
+
+    <p>
+      18-year-old pentester from Hungary.<br>
+      Focused on offensive security, HTB challenges<br>
+      and real-world exploitation.<br><br>
+      Daily driving Artix Linux (runit) with i3wm.
+    </p>
+
+    <div class="links">
+      <a href="/writeups.html">→ Writeups</a>
+      <a href="https://github.com/b33r00" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+  </div>
+</body>
+</html>
