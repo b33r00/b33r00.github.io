@@ -17,9 +17,16 @@
       --muted2:#8d8d8d;
       --line:#1a1a1a;
       --accent:#f5c542;
+
       --max:1120px;
       --menuW:300px;
-      --radius:12px;
+
+      /* zero rounding */
+      --radius:0px;
+
+      /* terminal */
+      --termBg:#070707;
+      --termLine:#242424;
     }
 
     *{ box-sizing:border-box; }
@@ -44,44 +51,37 @@
       gap:34px;
     }
 
-   .back{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  font-family:"JetBrains Mono", ui-monospace, monospace;
-  color:var(--muted2);
-  font-size:13px;
-  margin-bottom:16px;
-  padding:0;            /* no box */
-}
+    /* Back */
+    .back{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      color:var(--muted2);
+      font-size:13px;
+      margin-bottom:16px;
+      padding:0;
+    }
+    .back .arrow{
+      display:inline-block;
+      color:var(--muted2);
+      line-height:1;
+    }
+    .back:hover{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+    .back:hover .arrow{ color:var(--accent); }
 
-.back .arrow{
-  width:auto;
-  height:auto;
-  border:0;            /* remove border */
-  border-radius:0;     /* remove rounding */
-  display:inline-block;
-  color:var(--muted2);
-  line-height:1;
-}
-
-/* minimal hover: underline only */
-.back:hover{
-  color:var(--accent);
-  text-decoration:underline;
-  text-underline-offset:4px;
-}
-.back:hover .arrow{
-  color:var(--accent);
-}
-
-
+    /* Header */
     h1{
       margin:0;
       font-size:28px;
       font-weight:600;
       letter-spacing:-0.01em;
     }
+
     .meta{
       margin-top:10px;
       display:flex;
@@ -92,15 +92,20 @@
       font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:13px;
     }
+
+    /* square tags, HTB no yellow outline */
     .pill{
       border:1px solid var(--line);
       padding:6px 10px;
-      border-radius:999px;
+      border-radius:0;
       color:var(--muted2);
+      background:transparent;
+      white-space:nowrap;
     }
     .pill.hl{
-      border-color:rgba(245,197,66,0.35);
+      border-color:var(--line);
       color:var(--accent);
+      background:transparent;
     }
 
     .intro{
@@ -110,6 +115,7 @@
       font-size:15px;
     }
 
+    /* Sections */
     .content{ margin-top:22px; }
 
     h2{
@@ -118,6 +124,7 @@
       font-weight:600;
       letter-spacing:-0.01em;
     }
+
     .sub{
       color:var(--muted2);
       font-size:13px;
@@ -141,12 +148,13 @@
     }
     li{ margin:6px 0; }
 
+    /* Callout: square + left yellow rail */
     .callout{
       margin:12px 0 0;
       padding:12px 14px;
       border:1px solid var(--line);
       border-left:2px solid var(--accent);
-      border-radius:var(--radius);
+      border-radius:0;
       background:transparent;
       color:var(--muted);
       max-width:82ch;
@@ -154,19 +162,31 @@
     }
     .callout strong{ color:var(--fg); font-weight:600; }
 
+    /* CODE: terminal + left yellow rail */
     .code{
       margin:12px 0;
       padding:12px 14px;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
+
+      border:1px solid var(--termLine);
+      border-left:2px solid var(--accent);
+      border-radius:0;
+
+      background:var(--termBg);
+      color:var(--fg);
+
       font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:13px;
-      color:var(--fg);
-      background:rgba(255,255,255,0.02);
-      white-space:pre-wrap;
+      line-height:1.6;
+
+      white-space:pre;     /* terminal feel */
+      overflow-x:auto;
       max-width:92ch;
+
+      box-shadow:none;
+      text-decoration:none;
     }
 
+    /* Two-column summary blocks: keep minimal (no rounded “cards”) */
     .twoCol{
       margin-top:12px;
       display:grid;
@@ -176,15 +196,17 @@
     }
     .card{
       border:1px solid var(--line);
-      border-radius:var(--radius);
+      border-radius:0;
       padding:12px 14px;
-      background:rgba(255,255,255,0.02);
+      background:transparent;
     }
     .card h3{
       margin:0 0 8px 0;
       font-size:13px;
       font-weight:600;
       color:var(--fg);
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      letter-spacing:0.02em;
     }
     .card p{
       margin:0;
@@ -193,13 +215,27 @@
       max-width:none;
     }
 
+    .divider{
+      margin:16px 0;
+      border-top:1px solid var(--line);
+    }
+
+    .foot{
+      margin-top:18px;
+      color:var(--muted2);
+      font-size:12px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+    }
+
+    /* Right rail: minimal line (NOT yellow) */
     aside{
       padding-left:18px;
-      border-left:2px solid var(--accent);
+      border-left:1px solid var(--line);
       height:fit-content;
       position:sticky;
       top:28px;
     }
+
     .railTitle{
       margin:0 0 12px 0;
       font-size:12px;
@@ -209,6 +245,7 @@
       color:var(--fg);
       opacity:0.9;
     }
+
     .toc{
       display:flex;
       flex-direction:column;
@@ -221,24 +258,13 @@
     }
     .toc a:hover{ color:var(--accent); }
 
-    .divider{
-      margin:16px 0;
-      border-top:1px solid var(--line);
-    }
-    .foot{
-      margin-top:18px;
-      color:var(--muted2);
-      font-size:12px;
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-    }
-
     @media (max-width:900px){
       .page{ grid-template-columns:1fr; }
       aside{
         position:static;
         border-left:none;
         padding-left:0;
-        border-top:2px solid var(--accent);
+        border-top:1px solid var(--line);
         padding-top:16px;
       }
       .twoCol{ grid-template-columns:1fr; }
@@ -249,6 +275,7 @@
 <body>
   <main class="page">
 
+    <!-- MAIN CONTENT -->
     <section aria-label="Writeup">
       <a class="back" href="/writeups/" aria-label="Back to writeups">
         <span class="arrow">←</span>
@@ -267,13 +294,9 @@
       <p class="intro">
         Soulmate exposes a multi-surface compromise path: initial enumeration identifies a small set of services,
         but subdomain discovery reveals a file-transfer administration surface. A CrushFTP authentication bypass
-        (CVE-2025-31161) enables administrative access without valid credentials, which is then leveraged to obtain
-        a stable user foothold and pivot into a privileged internal service for root escalation.
+        enables administrative access without valid credentials, which is then leveraged to obtain a stable user foothold
+        and pivot into a privileged internal service for root escalation.
       </p>
-
-      <div class="callout">
-        <strong>Note:</strong> Public version omits flags, passwords, and unique identifiers. Commands use placeholders and focus on technique.
-      </div>
 
       <div class="content">
         <h2 id="overview">Overview</h2>
@@ -282,12 +305,16 @@
         <div class="twoCol">
           <div class="card">
             <h3>Entry point</h3>
-            <p>Subdomain leads to CrushFTP interface; auth bypass enables admin takeover. :contentReference[oaicite:1]{index=1}</p>
+            <p>Subdomain leads to CrushFTP interface; auth bypass enables administrative takeover.</p>
           </div>
           <div class="card">
             <h3>Escalation</h3>
             <p>Internal service access (localhost-only) enables privilege boundary bypass and root-level action.</p>
           </div>
+        </div>
+
+        <div class="callout">
+          <strong>Note:</strong> Public version omits flags, passwords, and unique identifiers. Commands use placeholders and focus on technique.
         </div>
 
         <h2 id="recon">Reconnaissance</h2>
@@ -302,97 +329,95 @@
 nmap -p- --min-rate 10000 TARGET_IP</div>
 
         <p>
-          Perform host discovery for additional names, then validate by requesting with Host headers or adding
-          entries to your local resolver (lab environment).
+          If the HTTP service is present, enumerate for virtual hosts / subdomains to locate non-obvious admin panels.
         </p>
 
-        <div class="code"># examples (pick your tooling)
-ffuf -u http://TARGET_IP/ -H "Host: FUZZ.soulmate.htb" -w subdomains.txt
-# or DNS/vhost enumeration as applicable</div>
+        <div class="code">ffuf -w WORDLIST.txt -u http://TARGET_IP/ -H "Host: FUZZ.TARGET_DOMAIN" -fs 0
+# or: gobuster vhost -u http://TARGET_IP -w WORDLIST.txt</div>
 
-        <div class="callout">
-          <strong>Finding:</strong> Subdomain exposed a CrushFTP web interface, expanding the attack surface significantly.
-        </div>
-
-        <h2 id="initial-access">Initial access</h2>
-        <div class="sub">CrushFTP CVE-2025-31161 → administrative access</div>
+        <h2 id="initial">Initial access</h2>
+        <div class="sub">CrushFTP auth bypass → admin context</div>
 
         <p>
-          The CrushFTP instance was vulnerable to CVE-2025-31161, an authentication bypass that can result in administrative
-          account takeover on affected versions. :contentReference[oaicite:2]{index=2}
+          The admin interface was reachable and vulnerable to an authentication bypass. The goal is to obtain a privileged
+          application context that can be translated into an OS-level foothold (file write, command execution, or credential recovery).
         </p>
 
-        <div class="code"># Verify product/version and exposure (example)
-# Access the CrushFTP interface over HTTP(S) and validate affected version range</div>
+        <div class="code"># validate target version + exposed endpoints (placeholder)
+curl -i http://CRUSHFTP_HOST:PORT/
+# exploit step (placeholder)
+python3 exploit.py --target http://CRUSHFTP_HOST:PORT/ --mode bypass</div>
 
         <div class="callout">
-          <strong>Impact:</strong> Administrative access without valid credentials enables user management and configuration abuse.
+          <strong>Result:</strong> Administrative access established → pivot toward OS-level access.
         </div>
 
         <h2 id="foothold">Foothold</h2>
-        <div class="sub">from admin surface → stable ssh access</div>
+        <div class="sub">convert app control → stable shell / SSH</div>
 
         <p>
-          With administrative control, create a controlled access path for a standard low-privileged user (lab-safe approach),
-          then authenticate via SSH. The exact mechanism varies per box configuration; keep it reproducible and auditable.
+          Use the gained control to establish a reproducible foothold (e.g., SSH keys, service creds, or a controlled outbound shell).
+          Prefer persistence that does not rely on fragile web sessions.
         </p>
 
-        <div class="code">ssh USER@soulmate.htb
-# foothold acquired (user context)</div>
+        <div class="code"># example: drop SSH key if file-write is possible (placeholder)
+mkdir -p ~/.ssh
+echo "SSH_PUBLIC_KEY" >> ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys</div>
 
         <h2 id="privesc">Privilege escalation</h2>
-        <div class="sub">local pivot → internal service → privileged execution</div>
+        <div class="sub">local pivot → internal service → root action</div>
 
         <p>
-          Local enumeration revealed an internal-only service reachable via localhost on a non-standard SSH port.
-          This is a common pattern: an administrative/management interface exposed only to the host itself, relying
-          on “local trust” assumptions.
+          Local enumeration identified an internal-only service bound to localhost. By tunneling/pivoting locally,
+          the attack gains access to functionality not exposed externally.
         </p>
 
-        <div class="code"># identify listening services on localhost
-ss -lntp
-# connect to internal service (placeholder)
-ssh -p INTERNAL_PORT USER@127.0.0.1</div>
+        <div class="code">ss -lntup
+# if needed: forward internal port to attacker (placeholder)
+ssh -L 127.0.0.1:LOCAL_PORT:127.0.0.1:INTERNAL_PORT USER@TARGET_IP</div>
 
         <p>
-          The escalation path leveraged an Erlang component (BEAM ecosystem) that provided a command execution primitive
-          when accessed through the internal channel. This resulted in root-level action.
+          Once the internal surface is reachable, look for trust assumptions (host-based allowlists, wrapper scripts, weak auth),
+          and convert that into a root primitive.
         </p>
 
-        <div class="code"># Erlang-based interaction (conceptual)
-# (avoid embedding sensitive one-liners in public writeups)
-# goal: demonstrate root-level command execution via internal Erlang surface</div>
+        <div class="code"># enumerate sudo and privileged helpers
+sudo -l
+ls -la /usr/local/bin
+# exploit privileged path (placeholder)</div>
 
         <div class="callout">
-          <strong>Impact:</strong> Internal “trusted” interfaces can become a root pivot once local access is achieved.
+          <strong>Impact:</strong> Root execution achieved → full compromise.
         </div>
 
         <h2 id="summary">Attack chain summary</h2>
         <ul>
-          <li>Port discovery established baseline services; host discovery revealed an admin subdomain.</li>
-          <li>CrushFTP CVE-2025-31161 enabled authentication bypass / admin takeover on vulnerable versions. :contentReference[oaicite:3]{index=3}</li>
-          <li>Administrative capabilities were used to obtain a stable low-privileged foothold.</li>
-          <li>Local pivot accessed an internal-only service and abused an Erlang execution path for root escalation.</li>
+          <li>TCP baseline enumeration → identify candidate web surface.</li>
+          <li>Vhost/subdomain discovery → locate admin interface.</li>
+          <li>CrushFTP auth bypass → administrative control.</li>
+          <li>Translate app control into OS foothold (SSH/shell/creds).</li>
+          <li>Local pivot → internal-only service exposure → privilege boundary bypass.</li>
         </ul>
 
         <h2 id="mitigations">Security recommendations</h2>
-        <div class="sub">defensive takeaways</div>
+        <div class="sub">fixes mapped to each stage</div>
 
         <ul>
-          <li><strong>Patch management:</strong> upgrade CrushFTP to fixed versions; monitor vendor advisories. :contentReference[oaicite:4]{index=4}</li>
-          <li><strong>Reduce exposure:</strong> isolate admin interfaces (VPN / allowlist / mTLS), avoid public HTTP(S) access.</li>
-          <li><strong>Credential hygiene:</strong> strong admin secrets, rotate after patching and suspected compromise.</li>
-          <li><strong>Internal service hardening:</strong> do not rely on “localhost only” as a security boundary; enforce authz/authn.</li>
-          <li><strong>Logging & detection:</strong> alert on anomalous admin sessions and configuration/user changes in FTP management suites.</li>
+          <li><strong>Minimize admin exposure:</strong> isolate admin interfaces; restrict by network + strong auth.</li>
+          <li><strong>Patch management:</strong> timely upgrades for internet-facing services (CrushFTP, gateways, panels).</li>
+          <li><strong>Secrets hygiene:</strong> prevent credential reuse across services; rotate after incidents.</li>
+          <li><strong>Internal service hardening:</strong> localhost-only is not a security boundary; enforce real auth.</li>
+          <li><strong>Privilege policy:</strong> audit sudo/wrappers; remove trust-by-assertion patterns.</li>
         </ul>
 
         <h2 id="tools">Tools</h2>
         <ul>
-          <li>nmap (service discovery)</li>
-          <li>subdomain/vhost enumeration tooling</li>
+          <li>nmap</li>
+          <li>ffuf / gobuster</li>
+          <li>curl</li>
           <li>SSH</li>
-          <li>CrushFTP verification/exploitation tooling (lab)</li>
-          <li>local enumeration (ss/netstat)</li>
         </ul>
 
         <div class="divider"></div>
@@ -400,12 +425,13 @@ ssh -p INTERNAL_PORT USER@127.0.0.1</div>
       </div>
     </section>
 
+    <!-- RIGHT RAIL -->
     <aside aria-label="On-page navigation">
       <div class="railTitle">On this page</div>
       <nav class="toc">
         <a href="#overview">Overview</a>
         <a href="#recon">Reconnaissance</a>
-        <a href="#initial-access">Initial access</a>
+        <a href="#initial">Initial access</a>
         <a href="#foothold">Foothold</a>
         <a href="#privesc">Privilege escalation</a>
         <a href="#summary">Chain summary</a>
