@@ -161,17 +161,18 @@ a:hover{
       color:var(--fg);
       opacity:0.92;
     }
-    /* Social linkek legyenek kékek */
 .value a{
-  color:#4da3ff;
-  text-decoration:none;
-  transition: color .2s ease, text-shadow .2s ease;
-  text-shadow: 0 0 6px rgba(77,163,255,.4);
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .2s ease, border-color .2s ease;
 }
+
 .value a:hover{
-  color:var(--accent);
-  text-shadow: 0 0 8px rgba(245,197,66,.6);
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
 }
+
 
 
     /* RIGHT MENU */
