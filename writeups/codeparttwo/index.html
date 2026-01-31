@@ -94,16 +94,16 @@
       font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:13px;
     }
-    .pill{
-      border:1px solid var(--line);
-      padding:6px 10px;
-      border-radius:999px;
-      color:var(--muted2);
-    }
-    .pill.hl{
-      border-color:rgba(245,197,66,0.35);
-      color:var(--accent);
-    }
+.pill.hl{
+  border-color: var(--line) !important;     /* vissza sima vonalra */
+  color: var(--accent);
+  background: transparent;
+}
+
+/* opcionális: a sima pill-ek is lehetnek még "laposabbak" */
+.pill{
+  background: transparent;
+}
 
     .intro{
       margin-top:16px;
