@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Soulmate — Technical Walkthrough</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0a0a0a;
+      --fg:#f2f2f2;
+      --muted:#b7b7b7;
+      --muted2:#8d8d8d;
+      --line:#1a1a1a;
+      --accent:#f5c542;
+      --max:1120px;
+      --menuW:300px;
+      --radius:12px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height:1.55;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ color:var(--accent); }
+
+    .page{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:34px 18px 44px;
+      display:grid;
+      grid-template-columns: 1fr var(--menuW);
+      gap:34px;
+    }
+
+    .back{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      color:var(--muted2);
+      font-size:13px;
+      margin-bottom:16px;
+    }
+    .back .arrow{
+      width:34px;height:34px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      color:var(--muted2);
+    }
+    .back:hover .arrow{
+      border-color:rgba(245,197,66,0.35);
+      color:var(--accent);
+    }
+    .back:hover{ color:var(--accent); }
+
+    h1{
+      margin:0;
+      font-size:28px;
+      font-weight:600;
+      letter-spacing:-0.01em;
+    }
+    .meta{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      color:var(--muted2);
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:13px;
+    }
+    .pill{
+      border:1px solid var(--line);
+      padding:6px 10px;
+      border-radius:999px;
+      color:var(--muted2);
+    }
+    .pill.hl{
+      border-color:rgba(245,197,66,0.35);
+      color:var(--accent);
+    }
+
+    .intro{
+      margin-top:16px;
+      color:var(--muted);
+      max-width:82ch;
+      font-size:15px;
+    }
+
+    .content{ margin-top:22px; }
+
+    h2{
+      margin:26px 0 10px;
+      font-size:16px;
+      font-weight:600;
+      letter-spacing:-0.01em;
+    }
+    .sub{
+      color:var(--muted2);
+      font-size:13px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      margin:6px 0 12px;
+    }
+
+    p{
+      margin:10px 0;
+      color:var(--muted);
+      max-width:82ch;
+      font-size:15px;
+    }
+
+    ul{
+      margin:10px 0;
+      padding-left:18px;
+      color:var(--muted);
+      max-width:82ch;
+      font-size:15px;
+    }
+    li{ margin:6px 0; }
+
+    .callout{
+      margin:12px 0 0;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-left:2px solid var(--accent);
+      border-radius:var(--radius);
+      background:transparent;
+      color:var(--muted);
+      max-width:82ch;
+      font-size:14px;
+    }
+    .callout strong{ color:var(--fg); font-weight:600; }
+
+    .code{
+      margin:12px 0;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:13px;
+      color:var(--fg);
+      background:rgba(255,255,255,0.02);
+      white-space:pre-wrap;
+      max-width:92ch;
+    }
+
+    .twoCol{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      max-width:92ch;
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:12px 14px;
+      background:rgba(255,255,255,0.02);
+    }
+    .card h3{
+      margin:0 0 8px 0;
+      font-size:13px;
+      font-weight:600;
+      color:var(--fg);
+    }
+    .card p{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+      max-width:none;
+    }
+
+    aside{
+      padding-left:18px;
+      border-left:2px solid var(--accent);
+      height:fit-content;
+      position:sticky;
+      top:28px;
+    }
+    .railTitle{
+      margin:0 0 12px 0;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      color:var(--fg);
+      opacity:0.9;
+    }
+    .toc{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .toc a{
+      font-size:13px;
+      color:var(--muted);
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+    }
+    .toc a:hover{ color:var(--accent); }
+
+    .divider{
+      margin:16px 0;
+      border-top:1px solid var(--line);
+    }
+    .foot{
+      margin-top:18px;
+      color:var(--muted2);
+      font-size:12px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+    }
+
+    @media (max-width:900px){
+      .page{ grid-template-columns:1fr; }
+      aside{
+        position:static;
+        border-left:none;
+        padding-left:0;
+        border-top:2px solid var(--accent);
+        padding-top:16px;
+      }
+      .twoCol{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <section aria-label="Writeup">
+      <a class="back" href="/writeups/" aria-label="Back to writeups">
+        <span class="arrow">←</span>
+        <span>writeups</span>
+      </a>
+
+      <h1>Soulmate</h1>
+
+      <div class="meta">
+        <span class="pill hl">HTB</span>
+        <span class="pill">Linux</span>
+        <span class="pill">UDP + Web</span>
+        <span class="pill">CrushFTP auth bypass → SSH → local pivot → root</span>
+      </div>
+
+      <p class="intro">
+        Soulmate exposes a multi-surface compromise path: initial enumeration identifies a small set of services,
+        but subdomain discovery reveals a file-transfer administration surface. A CrushFTP authentication bypass
+        (CVE-2025-31161) enables administrative access without valid credentials, which is then leveraged to obtain
+        a stable user foothold and pivot into a privileged internal service for root escalation.
+      </p>
+
+      <div class="callout">
+        <strong>Note:</strong> Public version omits flags, passwords, and unique identifiers. Commands use placeholders and focus on technique.
+      </div>
+
+      <div class="content">
+        <h2 id="overview">Overview</h2>
+        <div class="sub">high-level chain</div>
+
+        <div class="twoCol">
+          <div class="card">
+            <h3>Entry point</h3>
+            <p>Subdomain leads to CrushFTP interface; auth bypass enables admin takeover. :contentReference[oaicite:1]{index=1}</p>
+          </div>
+          <div class="card">
+            <h3>Escalation</h3>
+            <p>Internal service access (localhost-only) enables privilege boundary bypass and root-level action.</p>
+          </div>
+        </div>
+
+        <h2 id="recon">Reconnaissance</h2>
+        <div class="sub">port scan → vhost/subdomain discovery</div>
+
+        <p>
+          Start with full TCP discovery and service fingerprinting. Even when the web surface appears limited,
+          DNS/virtual-host discovery often reveals administrative or auxiliary interfaces.
+        </p>
+
+        <div class="code">nmap -sC -sV TARGET_IP
+nmap -p- --min-rate 10000 TARGET_IP</div>
+
+        <p>
+          Perform host discovery for additional names, then validate by requesting with Host headers or adding
+          entries to your local resolver (lab environment).
+        </p>
+
+        <div class="code"># examples (pick your tooling)
+ffuf -u http://TARGET_IP/ -H "Host: FUZZ.soulmate.htb" -w subdomains.txt
+# or DNS/vhost enumeration as applicable</div>
+
+        <div class="callout">
+          <strong>Finding:</strong> Subdomain exposed a CrushFTP web interface, expanding the attack surface significantly.
+        </div>
+
+        <h2 id="initial-access">Initial access</h2>
+        <div class="sub">CrushFTP CVE-2025-31161 → administrative access</div>
+
+        <p>
+          The CrushFTP instance was vulnerable to CVE-2025-31161, an authentication bypass that can result in administrative
+          account takeover on affected versions. :contentReference[oaicite:2]{index=2}
+        </p>
+
+        <div class="code"># Verify product/version and exposure (example)
+# Access the CrushFTP interface over HTTP(S) and validate affected version range</div>
+
+        <div class="callout">
+          <strong>Impact:</strong> Administrative access without valid credentials enables user management and configuration abuse.
+        </div>
+
+        <h2 id="foothold">Foothold</h2>
+        <div class="sub">from admin surface → stable ssh access</div>
+
+        <p>
+          With administrative control, create a controlled access path for a standard low-privileged user (lab-safe approach),
+          then authenticate via SSH. The exact mechanism varies per box configuration; keep it reproducible and auditable.
+        </p>
+
+        <div class="code">ssh USER@soulmate.htb
+# foothold acquired (user context)</div>
+
+        <h2 id="privesc">Privilege escalation</h2>
+        <div class="sub">local pivot → internal service → privileged execution</div>
+
+        <p>
+          Local enumeration revealed an internal-only service reachable via localhost on a non-standard SSH port.
+          This is a common pattern: an administrative/management interface exposed only to the host itself, relying
+          on “local trust” assumptions.
+        </p>
+
+        <div class="code"># identify listening services on localhost
+ss -lntp
+# connect to internal service (placeholder)
+ssh -p INTERNAL_PORT USER@127.0.0.1</div>
+
+        <p>
+          The escalation path leveraged an Erlang component (BEAM ecosystem) that provided a command execution primitive
+          when accessed through the internal channel. This resulted in root-level action.
+        </p>
+
+        <div class="code"># Erlang-based interaction (conceptual)
+# (avoid embedding sensitive one-liners in public writeups)
+# goal: demonstrate root-level command execution via internal Erlang surface</div>
+
+        <div class="callout">
+          <strong>Impact:</strong> Internal “trusted” interfaces can become a root pivot once local access is achieved.
+        </div>
+
+        <h2 id="summary">Attack chain summary</h2>
+        <ul>
+          <li>Port discovery established baseline services; host discovery revealed an admin subdomain.</li>
+          <li>CrushFTP CVE-2025-31161 enabled authentication bypass / admin takeover on vulnerable versions. :contentReference[oaicite:3]{index=3}</li>
+          <li>Administrative capabilities were used to obtain a stable low-privileged foothold.</li>
+          <li>Local pivot accessed an internal-only service and abused an Erlang execution path for root escalation.</li>
+        </ul>
+
+        <h2 id="mitigations">Security recommendations</h2>
+        <div class="sub">defensive takeaways</div>
+
+        <ul>
+          <li><strong>Patch management:</strong> upgrade CrushFTP to fixed versions; monitor vendor advisories. :contentReference[oaicite:4]{index=4}</li>
+          <li><strong>Reduce exposure:</strong> isolate admin interfaces (VPN / allowlist / mTLS), avoid public HTTP(S) access.</li>
+          <li><strong>Credential hygiene:</strong> strong admin secrets, rotate after patching and suspected compromise.</li>
+          <li><strong>Internal service hardening:</strong> do not rely on “localhost only” as a security boundary; enforce authz/authn.</li>
+          <li><strong>Logging & detection:</strong> alert on anomalous admin sessions and configuration/user changes in FTP management suites.</li>
+        </ul>
+
+        <h2 id="tools">Tools</h2>
+        <ul>
+          <li>nmap (service discovery)</li>
+          <li>subdomain/vhost enumeration tooling</li>
+          <li>SSH</li>
+          <li>CrushFTP verification/exploitation tooling (lab)</li>
+          <li>local enumeration (ss/netstat)</li>
+        </ul>
+
+        <div class="divider"></div>
+        <div class="foot">b3r0 — technical notes for reproducible security work</div>
+      </div>
+    </section>
+
+    <aside aria-label="On-page navigation">
+      <div class="railTitle">On this page</div>
+      <nav class="toc">
+        <a href="#overview">Overview</a>
+        <a href="#recon">Reconnaissance</a>
+        <a href="#initial-access">Initial access</a>
+        <a href="#foothold">Foothold</a>
+        <a href="#privesc">Privilege escalation</a>
+        <a href="#summary">Chain summary</a>
+        <a href="#mitigations">Recommendations</a>
+        <a href="#tools">Tools</a>
+      </nav>
+
+      <div class="divider"></div>
+      <div class="foot">
+        back: <a href="/writeups/">/writeups/</a>
+      </div>
+    </aside>
+
+  </main>
+</body>
+</html>
