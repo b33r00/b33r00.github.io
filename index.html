@@ -94,7 +94,7 @@
     }
 
     .about{
-      max-width:78ch;
+      max-width:82ch;
       color:var(--muted);
       font-size:15px;
       margin:0;
@@ -114,11 +114,45 @@
       margin-right:10px;
     }
 
-    .mono{
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      color:var(--muted2);
-      font-size:13px;
+    .socialBlock{
+      margin-top:18px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+      max-width:82ch;
     }
+    .socialTitle{
+      margin:0 0 10px 0;
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      color:var(--fg);
+      opacity:0.85;
+    }
+    .socials{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:13px;
+      color:var(--muted2);
+    }
+    .socialRow{
+      display:flex;
+      gap:10px;
+      align-items:baseline;
+      flex-wrap:wrap;
+    }
+    .label{
+      min-width:88px;
+      color:var(--muted2);
+    }
+    .value{
+      color:var(--fg);
+      opacity:0.92;
+    }
+    .value a{ color:var(--fg); }
+    .value a:hover{ color:var(--accent); }
 
     /* RIGHT MENU */
     aside{
@@ -145,6 +179,7 @@
       gap:14px;
     }
 
+    .group{ }
     .row{
       display:flex;
       align-items:center;
@@ -152,6 +187,7 @@
       gap:12px;
     }
 
+    /* The title is the link; click goes to index page. */
     .row a.main{
       font-size:14px;
       font-weight:500;
@@ -160,6 +196,7 @@
       flex:1;
     }
 
+    /* Separate toggle button only controls expand/collapse */
     .toggle{
       width:30px;
       height:30px;
@@ -175,6 +212,7 @@
       line-height:1;
     }
     .toggle:hover{ border-color:rgba(245,197,66,0.35); color:var(--accent); }
+    .open .toggle{ color:var(--accent); border-color:rgba(245,197,66,0.35); }
 
     .sub{
       margin-top:8px;
@@ -188,33 +226,12 @@
       font-size:13px;
       padding:4px 0;
     }
-
     .open .sub{ display:flex; }
 
     .divider{
       margin:16px 0;
       border-top:1px solid var(--line);
     }
-
-    .socials{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .iconBtn{
-      width:34px;height:34px;
-      border:1px solid var(--line);
-      border-radius:10px;
-      display:grid;
-      place-items:center;
-      color:var(--muted);
-    }
-    .iconBtn:hover{
-      border-color:rgba(245,197,66,0.45);
-      color:var(--accent);
-    }
-    svg{ display:block; }
 
     @media (max-width:900px){
       .page{ grid-template-columns:1fr; }
@@ -252,18 +269,33 @@
 
       <div class="prompt">b3r0@gentoo:~$ emerge -s about-me</div>
 
+      <!-- Professional, restrained, “smart” tone, not braggy -->
       <p class="about">
-        I’m a pentester from Hungary. I’m interested in web security, Active Directory, and real-world exploitation paths,
-        with a preference for deep system understanding and clean, reproducible workflows.
+        I’m a pentester from Hungary with a bias toward fundamentals and systems thinking.
+        I care about understanding why an exploit works, how trust boundaries fail, and how small misconfigurations
+        combine into real compromise paths. My interests currently center on web security, Active Directory, and practical
+        exploitation in realistic environments.
       </p>
 
       <ul class="bullets">
-        <li>Linux-first daily driver; I’ve used minimalist setups (Artix + runit + i3wm) and experimented with Gentoo-based environments.</li>
-        <li>I keep tooling/configs versioned and prefer transparent systems over “black box” setups.</li>
+        <li>Linux-first workflow; daily-driven minimalist environments (Artix + runit + i3wm) and experimented with Gentoo-based setups.</li>
+        <li>I keep tooling and configurations versioned, and prefer transparent systems I can reason about end-to-end.</li>
       </ul>
 
-      <!-- Optional: only if you really want a single credibility anchor -->
-      <!-- <p class="mono" style="margin-top:14px;">Preparing for: eJPT / PNPT</p> -->
+      <!-- Socials moved here (menu icons removed) -->
+      <div class="socialBlock" aria-label="Socials">
+        <div class="socialTitle">Socials</div>
+        <div class="socials">
+          <div class="socialRow"><span class="label">Discord</span><span class="value">0x00f17e</span></div>
+          <div class="socialRow"><span class="label">HTB</span><span class="value">b3r0</span></div>
+          <div class="socialRow"><span class="label">THM</span><span class="value">b3r0</span></div>
+          <div class="socialRow">
+            <span class="label">GitHub</span>
+            <span class="value"><a href="https://github.com/b33r00" target="_blank" rel="noopener">github.com/b33r00</a></span>
+          </div>
+          <!-- Add more rows later -->
+        </div>
+      </div>
     </section>
 
     <!-- RIGHT -->
@@ -278,7 +310,6 @@
             <button class="toggle" type="button" aria-label="Toggle writeups" data-toggle="g-writeups">v</button>
           </div>
           <div class="sub">
-            <a href="/writeups">All writeups</a>
             <a href="/writeups/htb">HTB</a>
             <a href="/writeups/thm">THM</a>
             <a href="/writeups/other">Other</a>
@@ -291,7 +322,6 @@
             <button class="toggle" type="button" aria-label="Toggle notes" data-toggle="g-notes">v</button>
           </div>
           <div class="sub">
-            <a href="/notes">All notes</a>
             <a href="/notes/linux">Linux</a>
             <a href="/notes/windows">Windows</a>
             <a href="/notes/web">Web</a>
@@ -325,26 +355,13 @@
       </div>
 
       <div class="divider"></div>
-
-      <div class="socials" aria-label="Socials">
-        <a class="iconBtn" href="https://github.com/b33r00" target="_blank" rel="noopener" aria-label="GitHub">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.12 3.29 9.46 7.86 10.99.58.11.79-.26.79-.57v-2.1c-3.2.71-3.87-1.58-3.87-1.58-.52-1.37-1.27-1.73-1.27-1.73-1.04-.73.08-.72.08-.72 1.15.08 1.75 1.2 1.75 1.2 1.02 1.79 2.67 1.27 3.32.97.1-.76.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.84 0-1.29.45-2.35 1.19-3.18-.12-.3-.52-1.52.11-3.17 0 0 .98-.32 3.2 1.21a10.7 10.7 0 0 1 2.91-.4c.99 0 1.99.14 2.91.4 2.22-1.53 3.2-1.21 3.2-1.21.63 1.65.23 2.87.11 3.17.74.83 1.19 1.89 1.19 3.18 0 4.54-2.69 5.54-5.25 5.83.41.36.77 1.08.77 2.18v3.23c0 .32.21.69.8.57A11.3 11.3 0 0 0 23.25 12C23.25 5.62 18.27.5 12 .5z"/>
-          </svg>
-        </a>
-
-        <a class="iconBtn" href="https://discord.com/" target="_blank" rel="noopener" aria-label="Discord (set link)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M20 4.8A16.4 16.4 0 0 0 15.9 3l-.2.4a14.6 14.6 0 0 1 3.3 1.6 12 12 0 0 0-4.6-1.4 10.4 10.4 0 0 0-1.5 0 12 12 0 0 0-4.6 1.4A14.6 14.6 0 0 1 11.6 3l-.2-.4A16.4 16.4 0 0 0 7.3 4.8C4.7 8.7 4 12.5 4.3 16.2A16.3 16.3 0 0 0 9 18.9l.9-1.4a10.6 10.6 0 0 1-1.8-.9l.4-.3a11.7 11.7 0 0 0 6.9 0l.4.3a10.6 10.6 0 0 1-1.8.9l.9 1.4a16.3 16.3 0 0 0 4.7-2.7c.4-4.1-.7-7.9-2.6-11.4zM9.4 14.5c-.7 0-1.3-.7-1.3-1.6s.6-1.6 1.3-1.6 1.3.7 1.3 1.6-.6 1.6-1.3 1.6zm5.2 0c-.7 0-1.3-.7-1.3-1.6s.6-1.6 1.3-1.6 1.3.7 1.3 1.6-.6 1.6-1.3 1.6z"/>
-          </svg>
-        </a>
-      </div>
+      <!-- No social icons here anymore; removed as requested -->
     </aside>
 
   </main>
 
   <script>
-    // Toggle groups without breaking the main link behavior.
+    // Toggle groups without affecting the main link navigation.
     document.querySelectorAll('button[data-toggle]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
