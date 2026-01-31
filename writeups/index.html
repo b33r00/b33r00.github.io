@@ -19,7 +19,9 @@
       --accent:#f5c542;
       --max:1120px;
       --menuW:320px;
-      --radius:10px;
+
+      /* NO rounding anywhere */
+      --radius:0px;
     }
 
     *{ box-sizing:border-box; }
@@ -45,39 +47,31 @@
     }
 
     /* back arrow (top-left) */
-.back{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  font-family:"JetBrains Mono", ui-monospace, monospace;
-  color:var(--muted2);
-  font-size:13px;
-  margin-bottom:16px;
-  padding:0;            /* no box */
-}
-
-.back .arrow{
-  width:auto;
-  height:auto;
-  border:0;            /* remove border */
-  border-radius:0;     /* remove rounding */
-  display:inline-block;
-  color:var(--muted2);
-  line-height:1;
-}
-
-/* minimal hover: underline only */
-.back:hover{
-  color:var(--accent);
-  text-decoration:underline;
-  text-underline-offset:4px;
-}
-.back:hover .arrow{
-  color:var(--accent);
-}
-
+    .back{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      color:var(--muted2);
+      font-size:13px;
+      margin-bottom:16px;
+      padding:0; /* no box */
     }
-    .back:hover{ color:var(--accent); }
+    .back .arrow{
+      width:auto;
+      height:auto;
+      border:0;
+      border-radius:0;
+      display:inline-block;
+      color:var(--muted2);
+      line-height:1;
+    }
+    .back:hover{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+    .back:hover .arrow{ color:var(--accent); }
 
     /* main content */
     .title{
@@ -193,7 +187,10 @@
     /* RIGHT MENU */
     aside{
       padding-left:18px;
-      border-left:2px solid var(--accent);
+
+      /* keep it minimal (not yellow) */
+      border-left:1px solid var(--line);
+
       height:fit-content;
       position:sticky;
       top:28px;
@@ -210,16 +207,16 @@
     }
 
     /* Search moved to right */
-    .searchBox{
-      margin:0 0 14px 0;
-    }
+    .searchBox{ margin:0 0 14px 0; }
     .searchBox input{
       width:100%;
       padding:10px 12px;
-      border-radius:var(--radius);
+
+      border-radius:0;                 /* NO rounding */
       border:1px solid var(--line);
       background:transparent;
       color:var(--fg);
+
       font-size:14px;
       outline:none;
     }
@@ -242,7 +239,7 @@
       gap:12px;
       padding:6px 0;
       user-select:none;
-      cursor:pointer; /* <- shows clickable */
+      cursor:pointer;
     }
 
     /* subtle "expandable" hint: dotted leader + hover underline */
@@ -376,7 +373,7 @@
           <button class="toggle" type="button" aria-label="Toggle Categories" data-toggle="g-cats">v</button>
         </div>
         <div class="sub">
-          <button type="button" data-topic="">All categories</button>
+          <button type="button" data-topic="" class="active">All categories</button>
           <button type="button" data-topic="web">Web</button>
           <button type="button" data-topic="ad">Active Directory</button>
           <button type="button" data-topic="network">Network</button>
@@ -525,8 +522,6 @@
         }
       });
 
-      // Prevent toggling when clicking inside the title button itself (optional)
-      // In this page, the title is purely a label, so we keep it simple:
       row.querySelectorAll(".mainBtn").forEach(btn => {
         btn.addEventListener("click", (e) => e.stopPropagation());
       });
