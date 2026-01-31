@@ -1,4 +1,4 @@
-  <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -18,7 +18,8 @@
       --line:#1a1a1a;
       --accent:#f5c542;
       --max:1120px;
-      --menuW:300px;
+      --menuW:320px;
+      --radius:10px;
     }
 
     *{ box-sizing:border-box; }
@@ -56,7 +57,7 @@
     .back .arrow{
       width:34px;height:34px;
       border:1px solid var(--line);
-      border-radius:10px;
+      border-radius:var(--radius);
       display:grid;
       place-items:center;
       color:var(--muted2);
@@ -81,61 +82,21 @@
       font-size:13px;
     }
 
-    .toolbar{
+    .toolbarTop{
       margin-top:16px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       align-items:center;
     }
-    .search{
-      flex:1 1 320px;
-      max-width:520px;
-    }
-    .search input{
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:transparent;
-      color:var(--fg);
-      font-size:14px;
-      outline:none;
-    }
-    .search input:focus{
-      border-color:rgba(245,197,66,0.45);
-    }
-    .pill{
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:12px;
-      border:1px solid var(--line);
-      padding:7px 10px;
-      border-radius:999px;
-      color:var(--muted2);
-      background:transparent;
-    }
-    .pill strong{ color:var(--fg); font-weight:500; }
 
-    .tagsRow{
-      margin-top:14px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .tag{
+    /* results: plain text, no pill */
+    .results{
       font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:12px;
-      border:1px solid var(--line);
-      padding:6px 10px;
-      border-radius:999px;
       color:var(--muted2);
-      cursor:pointer;
-      user-select:none;
     }
-    .tag:hover, .tag.active{
-      color:var(--accent);
-      border-color:rgba(245,197,66,0.35);
-    }
+    .results strong{ color:var(--fg); font-weight:500; }
 
     .list{
       margin-top:18px;
@@ -166,18 +127,16 @@
     }
     .itemTitle a:hover{ color:var(--accent); }
 
-    .badge{
+    /* platform badge: no pill, no rounded border */
+    .platform{
       font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:12px;
       color:var(--muted2);
-      border:1px solid var(--line);
-      padding:6px 8px;
-      border-radius:999px;
+      border:none;
+      padding:0;
+      letter-spacing:0.06em;
     }
-    .badge.hl{
-      border-color:rgba(245,197,66,0.35);
-      color:var(--accent);
-    }
+    .platform.hl{ color:var(--accent); }
 
     .desc{
       margin:8px 0 0 0;
@@ -186,11 +145,31 @@
       max-width:82ch;
     }
 
-    .badges{
+    /* tags: inline, keret nélkül */
+    .tags{
       margin-top:10px;
       display:flex;
       flex-wrap:wrap;
-      gap:8px;
+      gap:10px;
+      color:var(--muted2);
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:12px;
+    }
+    .tag{
+      cursor:pointer;
+      user-select:none;
+      color:var(--muted2);
+      text-decoration:none;
+    }
+    .tag:hover, .tag.active{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+    .tag::before{
+      content:"#";
+      color:rgba(245,197,66,0.9);
+      margin-right:2px;
     }
 
     .empty{
@@ -200,7 +179,7 @@
       display:none;
     }
 
-    /* RIGHT MENU (same theme) */
+    /* RIGHT MENU */
     aside{
       padding-left:18px;
       border-left:2px solid var(--accent);
@@ -219,9 +198,30 @@
       opacity:0.9;
     }
 
-    .group{
-      margin-bottom:14px;
+    /* Search moved to right */
+    .searchBox{
+      margin:0 0 14px 0;
     }
+    .searchBox input{
+      width:100%;
+      padding:10px 12px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--fg);
+      font-size:14px;
+      outline:none;
+    }
+    .searchBox input:focus{
+      border-color:rgba(245,197,66,0.45);
+    }
+
+    .divider{
+      margin:14px 0;
+      border-top:1px solid var(--line);
+    }
+
+    .group{ margin-bottom:14px; }
 
     .row{
       display:flex;
@@ -232,7 +232,7 @@
       user-select:none;
     }
 
-    /* Section title clickable (filters) */
+    /* main clickable section title (applies filter) */
     .row .mainBtn{
       font-size:14px;
       font-weight:500;
@@ -246,7 +246,7 @@
     }
     .row .mainBtn:hover{ color:var(--accent); }
 
-    /* Separate chevron toggles expand/collapse only */
+    /* chevron expand only */
     .toggle{
       width:30px;
       height:30px;
@@ -264,6 +264,7 @@
     .toggle:hover{ border-color:rgba(245,197,66,0.35); color:var(--accent); }
     .open .toggle{ color:var(--accent); border-color:rgba(245,197,66,0.35); }
 
+    /* sub-filters */
     .sub{
       margin-top:8px;
       padding-left:10px;
@@ -281,13 +282,19 @@
       padding:4px 0;
       cursor:pointer;
       text-align:left;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
     }
     .sub button:hover{ color:var(--accent); }
-    .sub button.active{ color:var(--accent); }
+    .sub button.active{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
 
-    .divider{
-      margin:16px 0;
-      border-top:1px solid var(--line);
+    .hint{
+      color:var(--muted2);
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:12px;
     }
 
     @media (max-width:900px){
@@ -316,67 +323,55 @@
       <h1 class="title">Writeups</h1>
       <div class="subtitle" id="contextLine">filter: all</div>
 
-      <div class="toolbar">
-        <div class="search">
-          <input id="q" type="text" placeholder="Search by title / tags / keywords" autocomplete="off" />
-        </div>
-        <div class="pill">results: <strong id="count">0</strong></div>
+      <div class="toolbarTop">
+        <div class="results">results: <strong id="count">0</strong></div>
       </div>
-
-      <!-- tag “rotation” (optional, driven by content) -->
-      <div class="tagsRow" id="tagsRow"></div>
 
       <div class="list" id="list"></div>
       <div class="empty" id="empty">No matching writeups.</div>
     </section>
 
-    <!-- RIGHT MENU: only writeups -->
+    <!-- RIGHT MENU: search + platform + major categories -->
     <aside aria-label="Writeups menu">
       <div class="menuTitle">Writeups</div>
 
-      <!-- HTB -->
-      <section class="group open" id="g-htb">
+      <div class="searchBox">
+        <input id="q" type="text" placeholder="Search titles / keywords" autocomplete="off" />
+      </div>
+
+      <!-- PLATFORM -->
+      <section class="group open" id="g-platform">
         <div class="row">
-          <button class="mainBtn" type="button" data-platform="htb">HTB</button>
-          <button class="toggle" type="button" aria-label="Toggle HTB" data-toggle="g-htb">v</button>
+          <button class="mainBtn" type="button" data-platform="all">Platform</button>
+          <button class="toggle" type="button" aria-label="Toggle Platform" data-toggle="g-platform">v</button>
         </div>
         <div class="sub">
-          <!-- These are topic filters inside HTB -->
-          <button type="button" data-platform="htb" data-topic="web">Web</button>
-          <button type="button" data-platform="htb" data-topic="ad">Active Directory</button>
-          <button type="button" data-platform="htb" data-topic="network">Network</button>
-          <button type="button" data-platform="htb" data-topic="privesc">PrivEsc</button>
+          <button type="button" data-platform="all" class="active">All</button>
+          <button type="button" data-platform="htb">HTB</button>
+          <button type="button" data-platform="thm">THM</button>
+          <button type="button" data-platform="other">Others</button>
         </div>
       </section>
 
-      <!-- THM -->
-      <section class="group" id="g-thm">
+      <!-- MAJOR CATEGORIES (fewer, professional) -->
+      <section class="group open" id="g-cats">
         <div class="row">
-          <button class="mainBtn" type="button" data-platform="thm">THM</button>
-          <button class="toggle" type="button" aria-label="Toggle THM" data-toggle="g-thm">v</button>
+          <button class="mainBtn" type="button" data-topic="">Categories</button>
+          <button class="toggle" type="button" aria-label="Toggle Categories" data-toggle="g-cats">v</button>
         </div>
         <div class="sub">
-          <button type="button" data-platform="thm" data-topic="web">Web</button>
-          <button type="button" data-platform="thm" data-topic="ad">Active Directory</button>
-          <button type="button" data-platform="thm" data-topic="network">Network</button>
-        </div>
-      </section>
-
-      <!-- Others -->
-      <section class="group" id="g-other">
-        <div class="row">
-          <button class="mainBtn" type="button" data-platform="other">Others</button>
-          <button class="toggle" type="button" aria-label="Toggle Others" data-toggle="g-other">v</button>
-        </div>
-        <div class="sub">
-          <button type="button" data-platform="other" data-topic="research">Research</button>
-          <button type="button" data-platform="other" data-topic="tools">Tools</button>
-          <button type="button" data-platform="other" data-topic="exploits">Exploits</button>
+          <button type="button" data-topic="">All categories</button>
+          <button type="button" data-topic="web">Web</button>
+          <button type="button" data-topic="ad">Active Directory</button>
+          <button type="button" data-topic="network">Network</button>
+          <button type="button" data-topic="privesc">Privilege Escalation</button>
+          <button type="button" data-topic="exploit">Exploitation</button>
+          <button type="button" data-topic="forensics">Forensics</button>
         </div>
       </section>
 
       <div class="divider"></div>
-      <div class="subtitle" style="margin:0;">click section title to filter</div>
+      <div class="hint">click a section item to filter</div>
     </aside>
 
   </main>
@@ -385,7 +380,8 @@
     // ------------------------------------------
     // Data model:
     // platform: htb | thm | other
-    // topics/tags: array (web/ad/network/privesc/etc)
+    // tags: keep FEW. Prefer major categories:
+    // web | ad | network | privesc | exploit | forensics
     // ------------------------------------------
     const WRITEUPS = [
       {
@@ -393,34 +389,30 @@
         title: "CodePartTwo",
         platform: "htb",
         summary: "Source exposure → server-side execution → credential reuse → privileged backup access.",
-        tags: ["web","rce","misconfiguration","privesc"],
-        href: "/writeups/codeparttwo"
+        tags: ["web","exploit","privesc"],
+        href: "/writeups/codeparttwo/"
       },
       {
         id: "expressway",
         title: "Expressway",
         platform: "htb",
-        summary: "UDP discovery → IKE aggressive mode intel → PSK crack → hostname trust abuse.",
-        tags: ["network","ipsec","infoleak","privesc"],
-        href: "/writeups/expressway"
+        summary: "UDP discovery → IKE aggressive mode intel → offline PSK testing → hostname trust abuse.",
+        tags: ["network","exploit","privesc"],
+        href: "/writeups/expressway/"
       },
       {
-      id: "soulmate",
-      title: "Soulmate",
-      platform: "htb",
-      os: "Linux",
-      difficulty: "Easy",            // ha így van nálad
-      summary: "CrushFTP auth bypass → SSH foothold → local pivot → Erlang path → root.",
-      tags: ["network","udp","ike","auth-bypass","privesc"],
-      href: "/writeups/soulmate/"
-}
-
+        id: "soulmate",
+        title: "Soulmate",
+        platform: "htb",
+        summary: "CrushFTP auth bypass → SSH foothold → local pivot → internal service path → root.",
+        tags: ["web","network","exploit","privesc"],
+        href: "/writeups/soulmate/"
+      }
     ];
 
     // State
     let platformFilter = "all";   // all | htb | thm | other
-    let topicFilter = null;       // e.g. web/ad/network/privesc
-    let tagFilter = null;         // tag chip selection
+    let topicFilter = "";         // "" means all
     let query = "";
 
     const listEl = document.getElementById("list");
@@ -428,7 +420,6 @@
     const countEl = document.getElementById("count");
     const qEl = document.getElementById("q");
     const contextLine = document.getElementById("contextLine");
-    const tagsRow = document.getElementById("tagsRow");
 
     function norm(s){ return (s||"").toLowerCase(); }
 
@@ -448,44 +439,17 @@
       return (w.tags||[]).includes(topicFilter);
     }
 
-    function matchesTag(w){
-      if(!tagFilter) return true;
-      return (w.tags||[]).includes(tagFilter);
-    }
-
     function setContext(){
       const parts = [];
       parts.push(`filter: ${platformFilter}`);
-      if(topicFilter) parts.push(`topic: ${topicFilter}`);
-      if(tagFilter) parts.push(`tag: ${tagFilter}`);
+      if(topicFilter) parts.push(`category: ${topicFilter}`);
       contextLine.textContent = parts.join(" • ");
-    }
-
-    function renderTagsPool(){
-      // Build tag chips from currently platform-filtered items (so it feels relevant)
-      const pool = WRITEUPS.filter(matchesPlatform);
-      const set = new Set();
-      pool.forEach(w => (w.tags||[]).forEach(t => set.add(t)));
-
-      tagsRow.innerHTML = "";
-      [...set].sort().forEach(t => {
-        const chip = document.createElement("div");
-        chip.className = "tag" + (tagFilter === t ? " active" : "");
-        chip.textContent = `#${t}`;
-        chip.addEventListener("click", () => {
-          tagFilter = (tagFilter === t) ? null : t;
-          // if user picks a tag, we keep topicFilter as-is (you can change later if you want)
-          render();
-        });
-        tagsRow.appendChild(chip);
-      });
     }
 
     function render(){
       const items = WRITEUPS
         .filter(matchesPlatform)
         .filter(matchesTopic)
-        .filter(matchesTag)
         .filter(w => matchesQuery(w, query));
 
       listEl.innerHTML = "";
@@ -493,23 +457,40 @@
       countEl.textContent = String(items.length);
 
       setContext();
-      renderTagsPool();
 
       items.forEach(w => {
         const div = document.createElement("div");
         div.className = "item";
 
-        const badgeClass = (w.platform === "htb") ? "badge hl" : "badge";
+        const platformClass = (w.platform === "htb") ? "platform hl" : "platform";
+        const tagsHtml = (w.tags||[])
+          .map(t => `<span class="tag" data-tag="${t}" role="button" tabindex="0">${t}</span>`)
+          .join("");
+
         div.innerHTML = `
           <div class="itemTitle">
             <a href="${w.href}">${w.title}</a>
-            <span class="${badgeClass}">${w.platform.toUpperCase()}</span>
+            <span class="${platformClass}">${w.platform.toUpperCase()}</span>
           </div>
           <p class="desc">${w.summary}</p>
-          <div class="badges">
-            ${(w.tags||[]).map(t => `<span class="badge">#${t}</span>`).join("")}
-          </div>
+          <div class="tags">${tagsHtml}</div>
         `;
+
+        // tag click -> category filter
+        div.querySelectorAll(".tag").forEach(el => {
+          el.addEventListener("click", () => {
+            topicFilter = el.getAttribute("data-tag") || "";
+            // update active states in menu
+            document.querySelectorAll('.sub button[data-topic]').forEach(b => b.classList.remove("active"));
+            const btn = document.querySelector(`.sub button[data-topic="${topicFilter}"]`);
+            if(btn) btn.classList.add("active");
+            render();
+          });
+          el.addEventListener("keydown", (e) => {
+            if(e.key === "Enter" || e.key === " ") el.click();
+          });
+        });
+
         listEl.appendChild(div);
       });
     }
@@ -530,35 +511,29 @@
       });
     });
 
-    // Platform filter: clicking section title sets platform + clears topic
-    document.querySelectorAll('button[data-platform]').forEach(btn => {
+    // Platform selection (sub buttons)
+    document.querySelectorAll('.sub button[data-platform]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const p = btn.getAttribute('data-platform');
-        const t = btn.getAttribute('data-topic');
+        document.querySelectorAll('.sub button[data-platform]').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
 
-        // clear active classes
-        document.querySelectorAll('.sub button').forEach(x => x.classList.remove('active'));
-
-        platformFilter = p || "all";
-        topicFilter = t || null;
-
-        // if clicked a sub-topic, mark it active
-        if(t){
-          btn.classList.add('active');
-        }
-
-        // keep tagFilter if it still exists in new pool; else drop it
-        if(tagFilter){
-          const pool = WRITEUPS.filter(matchesPlatform);
-          const exists = pool.some(w => (w.tags||[]).includes(tagFilter));
-          if(!exists) tagFilter = null;
-        }
-
+        platformFilter = btn.getAttribute('data-platform') || "all";
         render();
       });
     });
 
-    // Init: default show all
+    // Category selection (sub buttons)
+    document.querySelectorAll('.sub button[data-topic]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sub button[data-topic]').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+
+        topicFilter = btn.getAttribute('data-topic') || "";
+        render();
+      });
+    });
+
+    // Init
     render();
   </script>
 </body>
