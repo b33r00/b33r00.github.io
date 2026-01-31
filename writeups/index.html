@@ -145,7 +145,7 @@
       max-width:82ch;
     }
 
-    /* tags: inline, keret nélkül */
+    /* tags: inline */
     .tags{
       margin-top:10px;
       display:flex;
@@ -223,6 +223,7 @@
 
     .group{ margin-bottom:14px; }
 
+    /* ROW becomes the "disclosure" control */
     .row{
       display:flex;
       align-items:center;
@@ -230,9 +231,28 @@
       gap:12px;
       padding:6px 0;
       user-select:none;
+      cursor:pointer; /* <- shows clickable */
     }
 
-    /* main clickable section title (applies filter) */
+    /* subtle "expandable" hint: dotted leader + hover underline */
+    .row::after{
+      content:"";
+      flex:0 0 42px;
+      height:1px;
+      opacity:0.55;
+      background-image: radial-gradient(circle, var(--line) 1px, transparent 1.5px);
+      background-size: 6px 1px;
+      background-repeat: repeat-x;
+      background-position: center;
+      margin-left:10px;
+    }
+    .row:hover .mainBtn{
+      color:var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    /* main clickable section title */
     .row .mainBtn{
       font-size:14px;
       font-weight:500;
@@ -243,26 +263,11 @@
       cursor:pointer;
       text-align:left;
       flex:1;
+      outline:none;
     }
-    .row .mainBtn:hover{ color:var(--accent); }
 
-    /* chevron expand only */
-    .toggle{
-      width:30px;
-      height:30px;
-      border:1px solid var(--line);
-      background:transparent;
-      border-radius:8px;
-      color:var(--muted2);
-      cursor:pointer;
-      display:grid;
-      place-items:center;
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:13px;
-      line-height:1;
-    }
-    .toggle:hover{ border-color:rgba(245,197,66,0.35); color:var(--accent); }
-    .open .toggle{ color:var(--accent); border-color:rgba(245,197,66,0.35); }
+    /* chevron hidden */
+    .toggle{ display:none !important; }
 
     /* sub-filters */
     .sub{
@@ -331,7 +336,7 @@
       <div class="empty" id="empty">No matching writeups.</div>
     </section>
 
-    <!-- RIGHT MENU: search + platform + major categories -->
+    <!-- RIGHT MENU -->
     <aside aria-label="Writeups menu">
       <div class="menuTitle">Writeups</div>
 
@@ -341,8 +346,8 @@
 
       <!-- PLATFORM -->
       <section class="group open" id="g-platform">
-        <div class="row">
-          <button class="mainBtn" type="button" data-platform="all">Platform</button>
+        <div class="row" data-group-toggle="g-platform" role="button" tabindex="0" aria-expanded="true">
+          <button class="mainBtn" type="button">Platform</button>
           <button class="toggle" type="button" aria-label="Toggle Platform" data-toggle="g-platform">v</button>
         </div>
         <div class="sub">
@@ -353,10 +358,10 @@
         </div>
       </section>
 
-      <!-- MAJOR CATEGORIES (fewer, professional) -->
+      <!-- CATEGORIES -->
       <section class="group open" id="g-cats">
-        <div class="row">
-          <button class="mainBtn" type="button" data-topic="">Categories</button>
+        <div class="row" data-group-toggle="g-cats" role="button" tabindex="0" aria-expanded="true">
+          <button class="mainBtn" type="button">Categories</button>
           <button class="toggle" type="button" aria-label="Toggle Categories" data-toggle="g-cats">v</button>
         </div>
         <div class="sub">
@@ -371,18 +376,12 @@
       </section>
 
       <div class="divider"></div>
-      <div class="hint">click a section item to filter</div>
+      <div class="hint">click section header to expand/collapse</div>
     </aside>
 
   </main>
 
   <script>
-    // ------------------------------------------
-    // Data model:
-    // platform: htb | thm | other
-    // tags: keep FEW. Prefer major categories:
-    // web | ad | network | privesc | exploit | forensics
-    // ------------------------------------------
     const WRITEUPS = [
       {
         id: "codeparttwo",
@@ -410,9 +409,8 @@
       }
     ];
 
-    // State
-    let platformFilter = "all";   // all | htb | thm | other
-    let topicFilter = "";         // "" means all
+    let platformFilter = "all";
+    let topicFilter = "";
     let query = "";
 
     const listEl = document.getElementById("list");
@@ -428,17 +426,14 @@
       const hay = [w.title, w.summary, w.platform, ...(w.tags||[])].join(" ").toLowerCase();
       return hay.includes(q);
     }
-
     function matchesPlatform(w){
       if(platformFilter === "all") return true;
       return w.platform === platformFilter;
     }
-
     function matchesTopic(w){
       if(!topicFilter) return true;
       return (w.tags||[]).includes(topicFilter);
     }
-
     function setContext(){
       const parts = [];
       parts.push(`filter: ${platformFilter}`);
@@ -455,7 +450,6 @@
       listEl.innerHTML = "";
       emptyEl.style.display = items.length ? "none" : "block";
       countEl.textContent = String(items.length);
-
       setContext();
 
       items.forEach(w => {
@@ -476,11 +470,9 @@
           <div class="tags">${tagsHtml}</div>
         `;
 
-        // tag click -> category filter
         div.querySelectorAll(".tag").forEach(el => {
           el.addEventListener("click", () => {
             topicFilter = el.getAttribute("data-tag") || "";
-            // update active states in menu
             document.querySelectorAll('.sub button[data-topic]').forEach(b => b.classList.remove("active"));
             const btn = document.querySelector(`.sub button[data-topic="${topicFilter}"]`);
             if(btn) btn.classList.add("active");
@@ -501,17 +493,40 @@
       render();
     });
 
-    // Right menu toggles (expand/collapse)
-    document.querySelectorAll('button[data-toggle]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = btn.getAttribute('data-toggle');
-        const group = document.getElementById(id);
-        if (group) group.classList.toggle('open');
+    // Expand/Collapse by clicking the section header row
+    function toggleGroup(id){
+      const group = document.getElementById(id);
+      if(!group) return;
+      group.classList.toggle("open");
+      const row = group.querySelector(".row[data-group-toggle]");
+      if(row) row.setAttribute("aria-expanded", group.classList.contains("open") ? "true" : "false");
+    }
+
+    document.querySelectorAll(".row[data-group-toggle]").forEach(row => {
+      const id = row.getAttribute("data-group-toggle");
+
+      row.addEventListener("click", () => toggleGroup(id));
+
+      row.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleGroup(id);
+        }
+      });
+
+      // Prevent toggling when clicking inside the title button itself (optional)
+      // In this page, the title is purely a label, so we keep it simple:
+      row.querySelectorAll(".mainBtn").forEach(btn => {
+        btn.addEventListener("click", (e) => e.stopPropagation());
       });
     });
 
-    // Platform selection (sub buttons)
+    // Prevent sub-click from collapsing section
+    document.querySelectorAll(".sub button").forEach(btn => {
+      btn.addEventListener("click", (e) => e.stopPropagation());
+    });
+
+    // Platform selection
     document.querySelectorAll('.sub button[data-platform]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.sub button[data-platform]').forEach(x => x.classList.remove('active'));
@@ -522,7 +537,7 @@
       });
     });
 
-    // Category selection (sub buttons)
+    // Category selection
     document.querySelectorAll('.sub button[data-topic]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.sub button[data-topic]').forEach(x => x.classList.remove('active'));
@@ -533,7 +548,6 @@
       });
     });
 
-    // Init
     render();
   </script>
 </body>
