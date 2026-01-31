@@ -1,25 +1,24 @@
 <!doctype html>
-<html lang="hu">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>B3r0</title>
+  <title>b3r0</title>
 
-  <!-- clean, professional font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#0b0b0b;
+      --bg:#0a0a0a;
       --fg:#f2f2f2;
-      --muted:#b8b8b8;
-      --muted2:#8b8b8b;
+      --muted:#b7b7b7;
+      --muted2:#8d8d8d;
       --line:#1a1a1a;
-      --accent:#f5c542; /* yellow */
-      --accent2:#f2b705;
+      --accent:#f5c542;
       --max:1120px;
+      --menuW:280px;
     }
 
     *{ box-sizing:border-box; }
@@ -32,295 +31,200 @@
       line-height:1.55;
     }
 
-    /* Layout */
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ color:var(--accent); }
+
     .page{
       max-width:var(--max);
       margin:0 auto;
-      padding:48px 18px;
+      padding:44px 18px;
       display:grid;
-      grid-template-columns: 1fr 260px;
-      gap:56px;
+      grid-template-columns: 1fr var(--menuW);
+      gap:34px;
     }
 
-    /* Left column */
-    .title{
-      margin:0;
-      font-size:42px;
-      font-weight:600;
-      letter-spacing:-0.02em;
-    }
-    .title .hl{ color:var(--accent); }
-
-    .subtitle{
-      margin:14px 0 0 0;
-      color:var(--muted);
-      max-width:62ch;
-      font-size:16px;
+    /* LEFT */
+    .ascii{
+      font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color:var(--accent);
+      font-size:12px;
+      line-height:1.2;
+      white-space:pre;
+      margin:0 0 20px 0;
+      opacity:0.95;
     }
 
-    .meta{
-      margin-top:18px;
+    .header{
       display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      color:var(--muted2);
-      font-size:14px;
+      align-items:center;
+      gap:16px;
+      margin-bottom:14px;
     }
 
-    .chip{
+    .avatar{
+      width:78px;
+      height:78px;
+      border-radius:50%;
       border:1px solid var(--line);
-      padding:7px 10px;
-      border-radius:999px;
-      background:transparent;
+      background: radial-gradient(circle at 35% 30%, rgba(245,197,66,0.08), transparent 55%);
+      overflow:hidden;
+      flex:0 0 78px;
+    }
+    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    h1{
+      margin:0;
+      font-size:24px;
+      font-weight:600;
+      letter-spacing:-0.01em;
     }
 
-    .section{
-      margin-top:34px;
-      padding-top:26px;
-      border-top:1px solid var(--line);
-    }
-    .section h2{
-      margin:0 0 12px 0;
+    .subline{
+      margin-top:6px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:13px;
-      font-weight:600;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .prompt{
+      margin:12px 0 16px 0;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:13px;
       color:var(--accent);
     }
 
-    .lead{
-      margin:0;
-      color:var(--fg);
-      max-width:72ch;
+    .about{
+      max-width:78ch;
+      color:var(--muted);
       font-size:15px;
+      margin:0;
     }
 
     .bullets{
       margin:14px 0 0 0;
       padding:0;
       list-style:none;
-      max-width:72ch;
-    }
-    .bullets li{
-      margin:10px 0;
       color:var(--muted);
       font-size:15px;
     }
+    .bullets li{ margin:8px 0; }
     .bullets li::before{
       content:"—";
       color:var(--accent);
       margin-right:10px;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:22px;
-      margin-top:16px;
-    }
-
-    .box{
-      border:1px solid var(--line);
-      padding:16px 16px;
-      border-radius:12px;
-      background:transparent;
-    }
-    .box h3{
-      margin:0 0 10px 0;
-      font-size:15px;
-      font-weight:600;
-      color:var(--fg);
-    }
-    .box p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    .kv{
-      margin:12px 0 0 0;
-      padding:0;
-      list-style:none;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      font-size:14px;
-      color:var(--muted);
-    }
-    .kv span.key{
-      display:inline-block;
-      min-width:120px;
-      color:var(--muted2);
-    }
-
     .mono{
-      font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .writeups{
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-      margin-top:16px;
-    }
-
-    .item{
-      padding-bottom:18px;
-      border-bottom:1px solid var(--line);
-    }
-    .item:last-child{ border-bottom:none; padding-bottom:0; }
-
-    .item a{
-      color:var(--fg);
-      text-decoration:none;
-      font-weight:600;
-      font-size:16px;
-    }
-    .item a:hover{
-      color:var(--accent);
-    }
-    .item .desc{
-      margin:8px 0 0 0;
-      color:var(--muted);
-      font-size:14px;
-      max-width:70ch;
-    }
-    .tags{
-      margin-top:10px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .tag{
       font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:12px;
-      border:1px solid var(--line);
-      padding:6px 8px;
-      border-radius:999px;
       color:var(--muted2);
-    }
-    .tag.hl{
-      border-color:rgba(245,197,66,0.35);
-      color:var(--accent);
+      font-size:13px;
     }
 
-    /* Right column */
+    /* RIGHT MENU */
     aside{
+      padding-left:18px;
+      border-left:2px solid var(--accent);
+      height:fit-content;
       position:sticky;
       top:28px;
-      align-self:start;
-      padding-top:6px;
     }
 
-    .nav-title{
+    .menuTitle{
       margin:0 0 12px 0;
-      font-size:13px;
+      font-size:12px;
       font-weight:600;
-      letter-spacing:0.08em;
+      letter-spacing:0.12em;
       text-transform:uppercase;
-      color:var(--accent);
+      color:var(--fg);
+      opacity:0.9;
     }
 
-    .nav{
-      list-style:none;
-      padding:0;
-      margin:0;
+    .navGroup{
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap:14px;
     }
 
-    .nav a{
-      color:var(--muted);
-      text-decoration:none;
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .row a.main{
       font-size:14px;
-      padding:6px 0;
-      display:inline-block;
-      position:relative;
-    }
-
-    .nav a:hover{ color:var(--fg); }
-
-    .nav a.active{
+      font-weight:500;
       color:var(--fg);
-    }
-    .nav a.active::after{
-      content:"";
-      position:absolute;
-      left:0;
-      bottom:-6px;
-      width:100%;
-      height:2px;
-      background:var(--accent);
+      padding:6px 0;
+      flex:1;
     }
 
-    .search{
-      margin-top:18px;
-      padding-top:18px;
-      border-top:1px solid var(--line);
-    }
-    .search label{
-      display:block;
-      font-size:12px;
-      color:var(--muted2);
-      margin-bottom:8px;
-      letter-spacing:0.06em;
-      text-transform:uppercase;
-    }
-    .search input{
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
+    .toggle{
+      width:30px;
+      height:30px;
       border:1px solid var(--line);
       background:transparent;
-      color:var(--fg);
-      font-family:Inter, system-ui, sans-serif;
-      font-size:14px;
-      outline:none;
-    }
-    .search input:focus{
-      border-color:rgba(245,197,66,0.45);
-    }
-
-    .links{
-      margin-top:18px;
-      padding-top:18px;
-      border-top:1px solid var(--line);
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .links a{
-      color:var(--muted);
-      text-decoration:none;
-      font-size:14px;
-    }
-    .links a:hover{ color:var(--accent); }
-
-    footer{
-      margin-top:40px;
-      padding-top:18px;
-      border-top:1px solid var(--line);
+      border-radius:8px;
       color:var(--muted2);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:13px;
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      justify-content:space-between;
+      line-height:1;
+    }
+    .toggle:hover{ border-color:rgba(245,197,66,0.35); color:var(--accent); }
+
+    .sub{
+      margin-top:8px;
+      padding-left:10px;
+      display:none;
+      flex-direction:column;
+      gap:8px;
+    }
+    .sub a{
+      color:var(--muted);
+      font-size:13px;
+      padding:4px 0;
     }
 
-    /* Responsive */
-    @media (max-width:980px){
-      .page{ grid-template-columns:1fr; gap:28px; }
-      aside{ position:static; padding-top:0; }
-      .title{ font-size:36px; }
-      .grid{ grid-template-columns:1fr; }
+    .open .sub{ display:flex; }
+
+    .divider{
+      margin:16px 0;
+      border-top:1px solid var(--line);
     }
-    @media (max-width:520px){
-      .page{ padding:34px 16px; }
-      .title{ font-size:30px; }
+
+    .socials{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .iconBtn{
+      width:34px;height:34px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      color:var(--muted);
+    }
+    .iconBtn:hover{
+      border-color:rgba(245,197,66,0.45);
+      color:var(--accent);
+    }
+    svg{ display:block; }
+
+    @media (max-width:900px){
+      .page{ grid-template-columns:1fr; }
+      aside{
+        position:static;
+        border-left:none;
+        padding-left:0;
+        border-top:2px solid var(--accent);
+        padding-top:16px;
+      }
     }
   </style>
 </head>
@@ -329,146 +233,126 @@
   <main class="page">
 
     <!-- LEFT -->
-    <section>
-      <h1 class="title"><span class="hl">B3r0</span></h1>
-      <p class="subtitle">
-        Offensive security portfolio — documented attack chains, exploitation notes, and remediation guidance.
+    <section aria-label="About">
+<pre class="ascii">    _    ____   ___  _   _ _____   __  __ _____
+   / \  | __ ) / _ \| | | |_   _| |  \/  | ____|
+  / _ \ |  _ \| | | | | | | | |   | |\/| |  _|
+ / ___ \| |_) | |_| | |_| | | |   | |  | | |___
+/_/   \_\____/ \___/ \___/  |_|   |_|  |_|_____</pre>
+
+      <div class="header">
+        <div class="avatar" aria-label="Profile picture">
+          <!-- <img src="/assets/pfp.jpg" alt="b3r0"> -->
+        </div>
+        <div>
+          <h1>b3r0</h1>
+          <div class="subline">18 y/o pentester • Hungary</div>
+        </div>
+      </div>
+
+      <div class="prompt">b3r0@gentoo:~$ emerge -s about-me</div>
+
+      <p class="about">
+        I’m a pentester from Hungary. I’m interested in web security, Active Directory, and real-world exploitation paths,
+        with a preference for deep system understanding and clean, reproducible workflows.
       </p>
 
-      <div class="meta">
-        <span class="chip">Hungary</span>
-        <span class="chip">Pentesting</span>
-        <span class="chip">HTB lab writeups (no secrets)</span>
-        <span class="chip mono">Artix Linux • runit • i3wm</span>
-      </div>
+      <ul class="bullets">
+        <li>Linux-first daily driver; I’ve used minimalist setups (Artix + runit + i3wm) and experimented with Gentoo-based environments.</li>
+        <li>I keep tooling/configs versioned and prefer transparent systems over “black box” setups.</li>
+      </ul>
 
-      <div class="section" id="about">
-        <h2>About</h2>
-        <p class="lead">
-          Pentest fókuszú security learner / practitioner. A célom nem “CTF flex”, hanem olyan dokumentáció,
-          ami üzleti környezetben is értelmezhető: attack surface → initial access → privilege escalation → mitigáció.
-        </p>
-
-        <ul class="bullets">
-          <li>Erősségek: szolgáltatás-felderítés (TCP/UDP), web és network attack chain gondolkodás, Linux privesc.</li>
-          <li>Output: tiszta, reprodukálható writeup + rövid remediation pontok (hardening, least privilege, auth).</li>
-          <li>Fókusz: valós hibaminták (misconfig, weak auth, info leak, unsafe evaluation, trust boundary).</li>
-        </ul>
-      </div>
-
-      <div class="section" id="focus">
-        <h2>Focus</h2>
-
-        <div class="grid">
-          <div class="box">
-            <h3>Technical areas</h3>
-            <p class="mono">Web exploitation • Network services • Linux privilege escalation • Reporting</p>
-            <ul class="kv">
-              <li><span class="key">Web</span> input handling anti-patterns, RCE paths, auth/logic issues</li>
-              <li><span class="key">Network</span> service discovery, protocol misconfig, weak secrets</li>
-              <li><span class="key">PrivEsc</span> sudo rules, misconfig, file access / trust abuse</li>
-            </ul>
-          </div>
-
-          <div class="box">
-            <h3>Method</h3>
-            <p>
-              A writeupokban a hangsúly az attack chainen és a védelmi tanulságokon van. Nem publikálok flaget,
-              jelszót vagy exploit-ready payloadokat.
-            </p>
-            <ul class="kv">
-              <li><span class="key">Scope</span> HTB lab environments</li>
-              <li><span class="key">Style</span> technical walkthrough + remediation</li>
-              <li><span class="key">Goal</span> recruiter-safe, reproducible notes</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="section" id="writeups">
-        <h2>Writeups</h2>
-
-        <div class="writeups">
-          <div class="item">
-            <a href="/htb_writeups/codeparttwo_writeup.html">CodePartTwo</a>
-            <p class="desc">
-              Web application attack chain: source disclosure → server-side code execution → credential exposure → privilege escalation.
-            </p>
-            <div class="tags">
-              <span class="tag hl">Web App Exploitation</span>
-              <span class="tag">RCE</span>
-              <span class="tag">Credential Security</span>
-              <span class="tag">PrivEsc</span>
-            </div>
-          </div>
-
-          <div class="item">
-            <a href="/htb_writeups/expressway_writeup.html">Expressway</a>
-            <p class="desc">
-              Network-focused chain: UDP discovery → IKE aggressive mode leakage → weak PSK offline attack → trust abuse → root.
-            </p>
-            <div class="tags">
-              <span class="tag hl">Network Services</span>
-              <span class="tag">IKE/IPsec</span>
-              <span class="tag">Information Disclosure</span>
-              <span class="tag">PrivEsc</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <footer>
-        <div>© B3r0 — security writeups</div>
-        <div class="mono">clean • content-first • minimal</div>
-      </footer>
+      <!-- Optional: only if you really want a single credibility anchor -->
+      <!-- <p class="mono" style="margin-top:14px;">Preparing for: eJPT / PNPT</p> -->
     </section>
 
     <!-- RIGHT -->
     <aside aria-label="Menu">
-      <div class="nav-title">Menu</div>
-      <ul class="nav">
-        <li><a class="active" href="#about">About</a></li>
-        <li><a href="#focus">Focus</a></li>
-        <li><a href="#writeups">Writeups</a></li>
-        <li><a href="/writeups.html">All writeups</a></li>
-      </ul>
+      <div class="menuTitle">Menu</div>
 
-      <div class="search">
-        <label for="q">Search</label>
-        <input id="q" type="text" placeholder="titles / techniques (coming soon)" />
+      <div class="navGroup">
+
+        <section class="group open" id="g-writeups">
+          <div class="row">
+            <a class="main" href="/writeups">Writeups</a>
+            <button class="toggle" type="button" aria-label="Toggle writeups" data-toggle="g-writeups">v</button>
+          </div>
+          <div class="sub">
+            <a href="/writeups">All writeups</a>
+            <a href="/writeups/htb">HTB</a>
+            <a href="/writeups/thm">THM</a>
+            <a href="/writeups/other">Other</a>
+          </div>
+        </section>
+
+        <section class="group" id="g-notes">
+          <div class="row">
+            <a class="main" href="/notes">Notes</a>
+            <button class="toggle" type="button" aria-label="Toggle notes" data-toggle="g-notes">v</button>
+          </div>
+          <div class="sub">
+            <a href="/notes">All notes</a>
+            <a href="/notes/linux">Linux</a>
+            <a href="/notes/windows">Windows</a>
+            <a href="/notes/web">Web</a>
+            <a href="/notes/ad">Active Directory</a>
+            <a href="/notes/bo">Buffer Overflow</a>
+            <a href="/notes/privesc">Privilege Escalation</a>
+          </div>
+        </section>
+
+        <section class="group" id="g-homelabs">
+          <div class="row">
+            <a class="main" href="/homelabs">Homelabs</a>
+            <button class="toggle" type="button" aria-label="Toggle homelabs" data-toggle="g-homelabs">v</button>
+          </div>
+          <div class="sub">
+            <a href="/homelabs/ad-lab">AD Lab Build</a>
+            <a href="/homelabs/segmented-network">Segmented Network (pfSense)</a>
+            <a href="/homelabs/logging">Central Logging (Wazuh/ELK)</a>
+            <a href="/homelabs/vuln-webapp">Vulnerable Web App + Fixes</a>
+            <a href="/homelabs/backups">Backup + Restore Drill</a>
+          </div>
+        </section>
+
+        <section class="group" id="g-roadmap">
+          <div class="row">
+            <a class="main" href="/roadmap">Roadmap</a>
+            <span style="width:30px;"></span>
+          </div>
+        </section>
+
       </div>
 
-      <div class="links">
-        <a href="https://github.com/b33r00" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/b33r00/htb_writeups" target="_blank" rel="noopener">Writeups repo</a>
-        <a href="https://github.com/b33r00/i3-artix-dotfiles" target="_blank" rel="noopener">Dotfiles</a>
+      <div class="divider"></div>
+
+      <div class="socials" aria-label="Socials">
+        <a class="iconBtn" href="https://github.com/b33r00" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.12 3.29 9.46 7.86 10.99.58.11.79-.26.79-.57v-2.1c-3.2.71-3.87-1.58-3.87-1.58-.52-1.37-1.27-1.73-1.27-1.73-1.04-.73.08-.72.08-.72 1.15.08 1.75 1.2 1.75 1.2 1.02 1.79 2.67 1.27 3.32.97.1-.76.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.84 0-1.29.45-2.35 1.19-3.18-.12-.3-.52-1.52.11-3.17 0 0 .98-.32 3.2 1.21a10.7 10.7 0 0 1 2.91-.4c.99 0 1.99.14 2.91.4 2.22-1.53 3.2-1.21 3.2-1.21.63 1.65.23 2.87.11 3.17.74.83 1.19 1.89 1.19 3.18 0 4.54-2.69 5.54-5.25 5.83.41.36.77 1.08.77 2.18v3.23c0 .32.21.69.8.57A11.3 11.3 0 0 0 23.25 12C23.25 5.62 18.27.5 12 .5z"/>
+          </svg>
+        </a>
+
+        <a class="iconBtn" href="https://discord.com/" target="_blank" rel="noopener" aria-label="Discord (set link)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20 4.8A16.4 16.4 0 0 0 15.9 3l-.2.4a14.6 14.6 0 0 1 3.3 1.6 12 12 0 0 0-4.6-1.4 10.4 10.4 0 0 0-1.5 0 12 12 0 0 0-4.6 1.4A14.6 14.6 0 0 1 11.6 3l-.2-.4A16.4 16.4 0 0 0 7.3 4.8C4.7 8.7 4 12.5 4.3 16.2A16.3 16.3 0 0 0 9 18.9l.9-1.4a10.6 10.6 0 0 1-1.8-.9l.4-.3a11.7 11.7 0 0 0 6.9 0l.4.3a10.6 10.6 0 0 1-1.8.9l.9 1.4a16.3 16.3 0 0 0 4.7-2.7c.4-4.1-.7-7.9-2.6-11.4zM9.4 14.5c-.7 0-1.3-.7-1.3-1.6s.6-1.6 1.3-1.6 1.3.7 1.3 1.6-.6 1.6-1.3 1.6zm5.2 0c-.7 0-1.3-.7-1.3-1.6s.6-1.6 1.3-1.6 1.3.7 1.3 1.6-.6 1.6-1.3 1.6z"/>
+          </svg>
+        </a>
       </div>
     </aside>
 
   </main>
 
   <script>
-    // Minimal: highlight active section in the right menu while scrolling.
-    // (No framework, no heavy JS.)
-    (function(){
-      const links = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
-      const sections = links
-        .map(a => document.querySelector(a.getAttribute('href')))
-        .filter(Boolean);
-
-      function setActive(id){
-        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-      }
-
-      const obs = new IntersectionObserver((entries)=>{
-        const visible = entries
-          .filter(e => e.isIntersecting)
-          .sort((a,b)=> b.intersectionRatio - a.intersectionRatio)[0];
-        if(visible && visible.target && visible.target.id) setActive(visible.target.id);
-      }, { rootMargin: "-20% 0px -70% 0px", threshold: [0.1, 0.2, 0.35] });
-
-      sections.forEach(s => obs.observe(s));
-    })();
+    // Toggle groups without breaking the main link behavior.
+    document.querySelectorAll('button[data-toggle]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = btn.getAttribute('data-toggle');
+        const group = document.getElementById(id);
+        if (group) group.classList.toggle('open');
+      });
+    });
   </script>
 </body>
 </html>
