@@ -19,7 +19,13 @@
       --accent:#f5c542;
       --max:1120px;
       --menuW:300px;
-      --radius:12px;
+
+      /* NO rounding */
+      --radius:0px;
+
+      /* terminal-ish */
+      --termBg:#070707;
+      --termLine:#242424;
     }
 
     *{ box-sizing:border-box; }
@@ -45,37 +51,33 @@
     }
 
     /* Back */
-  .back{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  font-family:"JetBrains Mono", ui-monospace, monospace;
-  color:var(--muted2);
-  font-size:13px;
-  margin-bottom:16px;
-  padding:0;            /* no box */
-}
+    .back{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      color:var(--muted2);
+      font-size:13px;
+      margin-bottom:16px;
+      padding:0;
+    }
 
-.back .arrow{
-  width:auto;
-  height:auto;
-  border:0;            /* remove border */
-  border-radius:0;     /* remove rounding */
-  display:inline-block;
-  color:var(--muted2);
-  line-height:1;
-}
+    .back .arrow{
+      width:auto;
+      height:auto;
+      border:0;
+      border-radius:0;
+      display:inline-block;
+      color:var(--muted2);
+      line-height:1;
+    }
 
-/* minimal hover: underline only */
-.back:hover{
-  color:var(--accent);
-  text-decoration:underline;
-  text-underline-offset:4px;
-}
-.back:hover .arrow{
-  color:var(--accent);
-}
-
+    .back:hover{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+    .back:hover .arrow{ color:var(--accent); }
 
     /* Header */
     h1{
@@ -94,16 +96,20 @@
       font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:13px;
     }
-.pill.hl{
-  border-color: var(--line) !important;     /* vissza sima vonalra */
-  color: var(--accent);
-  background: transparent;
-}
 
-/* opcionális: a sima pill-ek is lehetnek még "laposabbak" */
-.pill{
-  background: transparent;
-}
+    /* Tags: square, no yellow outline on HTB */
+    .pill{
+      border:1px solid var(--line);
+      padding:6px 10px;
+      border-radius:0;
+      color:var(--muted2);
+      background:transparent;
+    }
+    .pill.hl{
+      border-color:var(--line);   /* NO yellow outline */
+      color:var(--accent);
+      background:transparent;
+    }
 
     .intro{
       margin-top:16px;
@@ -113,9 +119,7 @@
     }
 
     /* Sections */
-    .content{
-      margin-top:22px;
-    }
+    .content{ margin-top:22px; }
 
     h2{
       margin:26px 0 10px;
@@ -146,12 +150,13 @@
     }
     li{ margin:6px 0; }
 
+    /* Callout: square + left yellow rail (no rounding) */
     .callout{
       margin:12px 0 0;
       padding:12px 14px;
       border:1px solid var(--line);
       border-left:2px solid var(--accent);
-      border-radius:var(--radius);
+      border-radius:0;
       background:transparent;
       color:var(--muted);
       max-width:82ch;
@@ -159,12 +164,29 @@
     }
     .callout strong{ color:var(--fg); font-weight:600; }
 
-.code{
-  border: 1px solid var(--line);
-  border-left: 1px solid var(--line);
-  box-shadow: inset 0 -2px 0 0 var(--accent); /* sárga vonal alul */
-}
+    /* CODE: terminal block + LEFT vertical yellow line, no underline, no rounding */
+    .code{
+      margin:12px 0;
+      padding:12px 14px;
 
+      border:1px solid var(--termLine);
+      border-left:2px solid var(--accent);
+      border-radius:0;
+
+      background:var(--termBg);
+      color:var(--fg);
+
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:13px;
+      line-height:1.6;
+
+      white-space:pre;           /* terminal feel */
+      overflow-x:auto;           /* long lines scroll */
+      max-width:92ch;
+
+      box-shadow:none;           /* IMPORTANT: no underline effect */
+      text-decoration:none;
+    }
 
     .twoCol{
       margin-top:12px;
@@ -175,7 +197,7 @@
     }
     .card{
       border:1px solid var(--line);
-      border-radius:var(--radius);
+      border-radius:0;
       padding:12px 14px;
       background:rgba(255,255,255,0.02);
     }
@@ -192,10 +214,13 @@
     }
 
     /* Right rail */
-aside{
-  border-left: 1px solid var(--line);
-}
-
+    aside{
+      padding-left:18px;
+      border-left:1px solid var(--line);
+      height:fit-content;
+      position:sticky;
+      top:28px;
+    }
 
     .railTitle{
       margin:0 0 12px 0;
@@ -250,7 +275,6 @@ aside{
 
     <!-- MAIN CONTENT -->
     <section aria-label="Writeup">
-      <!-- Back to writeups list (keeps filters if you want later) -->
       <a class="back" href="/writeups/" aria-label="Back to writeups">
         <span class="arrow">←</span>
         <span>writeups</span>
