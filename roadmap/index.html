@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Roadmap • b3r0</title>
 
-  <meta name="description" content="Penetration Testing Development Path — a specialization-first roadmap focused on real technical understanding, home labs, and proven practice." />
-  <meta property="og:title" content="Roadmap • b3r0" />
-  <meta property="og:description" content="A specialization-first penetration testing roadmap: labs, networks, Linux, AD, web, cloud, reporting, and automation." />
-  <meta property="og:type" content="website" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -48,15 +43,14 @@
       gap:34px;
     }
 
-    /* LEFT CONTENT */
+    /* TOP / CONTENT */
     .topbar{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:14px;
-      margin-bottom:18px;
+      margin-bottom:16px;
     }
-
     .back{
       display:inline-flex;
       align-items:center;
@@ -82,57 +76,22 @@
       font-size:13px;
     }
 
-    .lead{
-      margin:0;
-      color:var(--muted);
-      max-width:86ch;
-      font-size:15px;
-    }
-
     .hr{
       margin:18px 0;
       border-top:1px solid var(--line);
     }
 
-    .tocTitle{
-      margin:0 0 10px 0;
-      font-size:12px;
-      font-weight:600;
-      letter-spacing:0.12em;
-      text-transform:uppercase;
-      color:var(--fg);
-      opacity:0.85;
-    }
-
-    .toc{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      padding-left:0;
-      list-style:none;
-      margin:0;
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:13px;
-      color:var(--muted);
-      max-width:86ch;
-    }
-    .toc li::before{
-      content:"#";
-      color:var(--accent);
-      margin-right:10px;
-    }
-
     h2{
-      margin:22px 0 8px 0;
+      margin:22px 0 10px 0;
       font-size:16px;
       font-weight:600;
       letter-spacing:-0.01em;
     }
 
     p{
-      margin:0 0 10px 0;
+      margin:0 0 12px 0;
       color:var(--muted);
-      max-width:86ch;
+      max-width:90ch;
       font-size:15px;
     }
 
@@ -140,27 +99,16 @@
       margin:10px 0 12px 0;
       padding-left:18px;
       color:var(--muted);
-      max-width:86ch;
+      max-width:90ch;
       font-size:15px;
     }
     li{ margin:6px 0; }
 
-    .callout{
-      border-left:2px solid var(--accent);
-      padding-left:14px;
-      margin:14px 0;
-      color:var(--muted);
-      max-width:86ch;
+    .block{
+      margin-top:18px;
     }
 
-    .k{
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:13px;
-      color:var(--fg);
-      opacity:0.92;
-    }
-
-    /* RIGHT MENU */
+    /* RIGHT TOC MENU */
     aside{
       padding-left:18px;
       border-left:2px solid var(--accent);
@@ -179,40 +127,19 @@
       opacity:0.9;
     }
 
-    .navGroup{
+    .toc{
       display:flex;
       flex-direction:column;
-      gap:18px;
-    }
-
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .row a.main{
-      font-size:14px;
-      font-weight:500;
-      color:var(--fg);
-      padding:6px 0;
-      flex:1;
-    }
-
-    .sub{
-      margin-top:8px;
-      padding-left:10px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .sub a{
-      color:var(--muted);
-      font-size:13px;
-      padding:4px 0;
+      gap:10px;
       font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:13px;
+      color:var(--muted);
     }
+    .toc a{
+      color:var(--muted);
+      padding:4px 0;
+    }
+    .toc a:hover{ color:var(--accent); }
 
     .divider{
       margin:16px 0;
@@ -244,331 +171,148 @@
       <h1>Roadmap</h1>
       <div class="subtitle">Penetration Testing Development Path</div>
 
-      <p class="lead">
-        This roadmap aims at getting hired in penetration testing by shifting focus away from HR noise and random certificates,
-        and instead emphasizing specialization, deep technical understanding, and proof through real hands-on work.
-        The core principle is simple: <span class="k">practice continuously</span>, and <span class="k">prove it</span> through meaningful artifacts
-        (labs, writeups, projects, and reports).
-      </p>
-
-      <div class="hr"></div>
-
-      <div class="tocTitle">Contents</div>
-      <ul class="toc">
-        <li><a href="#labs">Home labs as the foundation</a></li>
-        <li><a href="#networking">Networking: learn + apply</a></li>
-        <li><a href="#systems">Systems knowledge (Linux-first)</a></li>
-        <li><a href="#methodology">Structured pentesting methodology</a></li>
-        <li><a href="#platforms">Learning platforms & practice loop</a></li>
-        <li><a href="#web">Advanced web security</a></li>
-        <li><a href="#ad">Active Directory as a core skill</a></li>
-        <li><a href="#cloud">Cloud security fundamentals</a></li>
-        <li><a href="#writeups">Writeups & professional reporting</a></li>
-        <li><a href="#automation">Scripting & automation</a></li>
-        <li><a href="#certs">Certs after skill development</a></li>
-        <li><a href="#community">Real-life experience & community</a></li>
-        <li><a href="#mindset">Attacker mindset & threat modeling</a></li>
-        <li><a href="#legal">Legal & ethical awareness</a></li>
-        <li><a href="#direction">Long-term direction</a></li>
-      </ul>
-
-      <div class="hr"></div>
-
-      <h2 id="labs">Home labs as the foundation</h2>
-      <p>
-        The process begins with building labs that force configuration, breaking, fixing, and rebuilding—because reading concepts
-        is not the same as understanding systems under pressure. Your lab should include:
-      </p>
-      <ul>
-        <li>Windows systems</li>
-        <li>Linux systems</li>
-        <li>Active Directory environments</li>
-        <li>Vulnerable virtual machines</li>
-        <li>Scripting environments</li>
-        <li>Networking setups</li>
-      </ul>
-      <p>
-        Build enterprise-like environments with a domain controller, segmented networks, realistic permissions, misconfigurations,
-        and attack paths. This is where “real compromise” intuition is built.
-      </p>
-
-      <div class="callout">
-        <div class="k">Rule:</div>
-        If you can’t build it, you don’t fully understand it.
+      <div class="block" id="intro">
+        <p>To get a job in penetration testing, the focus should not be on HR requirements or random certificates, but on specialization and real technical understanding. The most important part is continuous hands-on practice and being able to prove that practice through meaningful work. This starts with building home labs:</p>
+        <ul>
+          <li>Windows and Linux systems</li>
+          <li>Active Directory environments</li>
+          <li>vulnerable virtual machines</li>
+          <li>scripting</li>
+          <li>networking</li>
+        </ul>
+        <p>These labs are essential because they force you to actually configure, break, fix, and understand systems instead of just reading about them. Creating realistic enterprise-like environments with domain controllers, segmented networks, misconfigurations, and attack paths is crucial for understanding how real infrastructures are compromised.</p>
       </div>
 
-      <h2 id="networking">Networking: learn + apply</h2>
-      <p>
-        Networking must be learned deeply rather than memorized. Studying from university-level material is useful, but theory
-        alone is not enough. You should understand concepts like:
-      </p>
-      <ul>
-        <li>OSI model</li>
-        <li>Routing</li>
-        <li>Switching</li>
-        <li>VLANs</li>
-        <li>Basic network design</li>
-      </ul>
-      <p>
-        Then apply them. Cisco Packet Tracer is valuable because it forces manual configuration and immediately reveals gaps
-        in understanding. Combine Packet Tracer + your home lab to learn how segmentation behaves, how it fails, and how
-        misconfigurations enable lateral movement.
-      </p>
+      <div class="block" id="networking">
+        <h2>Networking</h2>
+        <p>Networking must be learned deeply, not memorized. Studying networking from university-level PDFs is important to understand how things really work under the hood. Learning the OSI model, routing, switching, VLANs, and basic network design is not enough on a theoretical level; it must be used in practice. Cisco Packet Tracer is very useful for this, because when you build networks there, you have to configure everything yourself, and that is where it becomes obvious whether you truly understand networking or not. A home lab combined with Packet Tracer is ideal for learning how networks behave in real environments, how segmentation can be bypassed, and how misconfigurations lead to lateral movement.</p>
+      </div>
 
-      <h2 id="systems">Systems knowledge (Linux-first)</h2>
-      <p>
-        Systems knowledge is critical—especially on Linux. It’s not enough to “know Debian” or be comfortable with a desktop.
-        You need constraints that cause mistakes and force rebuilding from scratch:
-      </p>
-      <ul>
-        <li>Run Arch / Artix with minimal setups</li>
-        <li>Use a window manager like i3 instead of a full DE</li>
-        <li>Install and configure manually (understand every moving part)</li>
-      </ul>
-      <p>
-        This builds real foundations: init systems, services, boot, user space, kernel interfaces. Later progression can move
-        toward Gentoo with custom configs, hardened kernels, musl-based systems, and minimal WMs like dwm.
-      </p>
-      <p>
-        “Ricing” is not about visuals—it’s a learning process for understanding the system internally.
-      </p>
+      <div class="block" id="systems-linux">
+        <h2>System Knowledge (Linux)</h2>
+        <p>System knowledge is just as critical, especially on Linux. It is not enough to “know Debian” or to be comfortable with a desktop environment. You need challenges that force you to make mistakes, break the system, and rebuild it. Running Arch or Artix Linux with a minimal setup, using a window manager like i3 instead of a full desktop environment, and installing everything manually without scripts gives a very strong foundation. This teaches how init systems work, how services interact, how the system boots, and how user space connects to the kernel. Later, moving to Gentoo with custom configurations, hardened kernels, musl-based systems, and minimal window managers like dwm pushes this understanding even further. Ricing the system is not about looks, but about understanding how the system works internally.</p>
+      </div>
 
-      <h2 id="methodology">Structured pentesting methodology</h2>
-      <p>
-        After the technical base exists, vulnerability research and exploitation should be learned via a structured methodology,
-        not random hacking. Understanding the full attack lifecycle is essential:
-      </p>
-      <ul>
-        <li>Reconnaissance</li>
-        <li>Enumeration</li>
-        <li>Initial access</li>
-        <li>Privilege escalation</li>
-        <li>Lateral movement</li>
-        <li>Persistence (when relevant)</li>
-        <li>Impact validation</li>
-        <li>Proper cleanup</li>
-      </ul>
-      <p>
-        This is closer to real engagements and produces repeatable results.
-      </p>
+      <div class="block" id="methodology">
+        <h2>Structured Penetration Testing Methodology</h2>
+        <p>Once this foundation is built, vulnerability research and exploitation can be learned properly, following a structured penetration testing methodology instead of random hacking. Understanding the full attack lifecycle is essential:</p>
+        <ul>
+          <li>reconnaissance</li>
+          <li>enumeration</li>
+          <li>initial access</li>
+          <li>privilege escalation</li>
+          <li>lateral movement</li>
+          <li>persistence when relevant</li>
+          <li>impact validation</li>
+          <li>proper cleanup</li>
+        </ul>
+        <p>This structured approach reflects real-world engagements and is critical for professional work.</p>
+      </div>
 
-      <h2 id="platforms">Learning platforms & practice loop</h2>
-      <p>
-        Use different platforms for different goals:
-      </p>
-      <ul>
-        <li>TryHackMe for structured learning</li>
-        <li>PortSwigger Web Security Academy for deep web mastery</li>
-        <li>VulnLab for highly realistic scenarios</li>
-        <li>OverTheWire to build manual Linux fundamentals</li>
-        <li>Later: HTB Academy + Hack The Box for advanced practice</li>
-      </ul>
-      <p>
-        Complete machines regularly. Spend multiple hours per day if possible. Struggle, try multiple approaches, and document
-        the thought process.
-      </p>
+      <div class="block" id="platforms">
+        <h2>Learning Platforms and Practice</h2>
+        <p>Platforms like TryHackMe are good for structured learning, while PortSwigger Web Security Academy is excellent for mastering web vulnerabilities in depth. VulnLab provides highly realistic scenarios, OverTheWire wargames can be used to build strong Linux fundamentals and manual exploitation skills before moving to more realistic lab environments and later Hack The Box Academy and Hack The Box should be used for advanced, hands-on practice. Machines should be done regularly, spending multiple hours a day if possible, struggling with problems, trying different approaches, and writing down solutions and thought processes.</p>
+      </div>
 
-      <h2 id="web">Advanced web security</h2>
-      <p>
-        Web security learning must go beyond classic vulnerability lists (SQLi, XSS, CSRF, file upload bypass, SSTI, auth issues).
-        Focus heavily on business logic vulnerabilities:
-      </p>
-      <ul>
-        <li>Workflow abuse</li>
-        <li>Authorization bypass</li>
-        <li>Payment manipulation</li>
-        <li>Broken verification processes</li>
-      </ul>
-      <p>
-        These flaws are common in real pentests and often have the highest business impact.
-      </p>
+      <div class="block" id="web-security">
+        <h2>Web Security</h2>
+        <p>Web security learning should go beyond classic vulnerability lists such as:</p>
+        <ul>
+          <li>SQL injection</li>
+          <li>XSS</li>
+          <li>CSRF</li>
+          <li>file upload bypasses</li>
+          <li>SSTI</li>
+          <li>authentication issues</li>
+        </ul>
+        <p>A strong focus should also be placed on business logic vulnerabilities: workflow abuse, authorization bypasses, payment manipulation, and broken verification processes. These flaws are extremely common in real-world pentests and often have the highest business impact.</p>
+      </div>
 
-      <h2 id="ad">Active Directory as a core skill</h2>
-      <p>
-        Treat Active Directory exploitation as core, because most enterprises rely on Windows domains. Skills to build:
-      </p>
-      <ul>
-        <li>Kerberoasting</li>
-        <li>AS-REP roasting</li>
-        <li>NTLM relay attacks</li>
-        <li>Pass-the-hash / pass-the-ticket</li>
-        <li>Abuse misconfigured services and permissions</li>
-        <li>Delegation attacks</li>
-        <li>Attack path analysis (e.g., BloodHound)</li>
-      </ul>
-      <p>
-        Build multiple AD labs with different misconfigurations. Rebuild them. Break them. Document attack paths.
-        That repetition creates realistic understanding.
-      </p>
+      <div class="block" id="active-directory">
+        <h2>Active Directory</h2>
+        <p>Active Directory exploitation should be treated as a core skill, since most enterprise environments rely on Windows domains. This includes techniques such as:</p>
+        <ul>
+          <li>Kerberoasting</li>
+          <li>AS-REP roasting</li>
+          <li>NTLM relay attacks</li>
+          <li>pass-the-hash</li>
+          <li>pass-the-ticket</li>
+          <li>abuse of misconfigured services and permissions</li>
+          <li>delegation attacks</li>
+          <li>attack path analysis using BloodHound</li>
+        </ul>
+        <p>Building multiple AD labs with different misconfigurations helps develop a realistic understanding of enterprise compromise.</p>
+      </div>
 
-      <h2 id="cloud">Cloud security fundamentals</h2>
-      <p>
-        You don’t need to become a cloud engineer, but you must understand common attack surfaces:
-      </p>
-      <ul>
-        <li>IAM misconfigurations</li>
-        <li>Exposed storage buckets</li>
-        <li>Metadata service abuse</li>
-        <li>Typical privilege escalation paths in cloud platforms</li>
-      </ul>
-      <p>
-        Many modern infrastructures are hybrid: on-prem + cloud. Learn the interfaces and failure modes.
-      </p>
+      <div class="block" id="cloud-security">
+        <h2>Cloud Security</h2>
+        <p>Basic cloud security knowledge is increasingly important in modern environments. This does not mean becoming a cloud engineer, but understanding common attack surfaces such as IAM misconfigurations, exposed storage buckets, metadata service abuse, and typical privilege escalation paths in cloud platforms. Many real infrastructures today are hybrid, combining on-premise and cloud systems.</p>
+      </div>
 
-      <h2 id="writeups">Writeups & professional reporting</h2>
-      <p>
-        Writeups are a key part of getting hired. The goal is not to prove you solved a box—it’s to demonstrate how you think:
-      </p>
-      <ul>
-        <li>How you approached the problem</li>
-        <li>How enumeration was performed</li>
-        <li>What failed</li>
-        <li>What worked</li>
-        <li>Why it worked</li>
-      </ul>
-      <p>
-        Good writeups + documented projects prove ability better than most certificates.
-      </p>
-      <p>
-        In addition, learn to produce professional pentest reports:
-      </p>
-      <ul>
-        <li>Clear reproduction steps</li>
-        <li>Technical details</li>
-        <li>Business impact</li>
-        <li>Risk assessment</li>
-        <li>Prioritized remediation advice</li>
-      </ul>
+      <div class="block" id="writeups-reporting">
+        <h2>Writeups and Reporting</h2>
+        <p>Writeups are a key part of getting a job. Not many writeups, but valuable ones. The goal of a writeup is not to show that a box was solved, but to show how it was approached, how enumeration was done, what failed, what worked, and why. Good writeups, combined with documented projects, prove real ability far better than certificates ever can. In addition to lab-style writeups, learning how to produce professional penetration testing reports is essential. These should include clear reproduction steps, technical details, business impact, risk assessment, and prioritized remediation advice.</p>
+      </div>
 
-      <h2 id="automation">Scripting & automation</h2>
-      <p>
-        Automation should emerge naturally from your workflow—especially for repetitive tasks. Focus on:
-      </p>
-      <ul>
-        <li>Bash</li>
-        <li>Python</li>
-      </ul>
-      <p>
-        Automate enumeration, parsing, exploitation helpers, and reporting helpers. This improves speed and deepens understanding.
-      </p>
+      <div class="block" id="automation">
+        <h2>Scripting and Automation</h2>
+        <p>Scripting and automation should naturally come from this process, mainly using Bash and Python to automate enumeration, exploitation, and repetitive tasks. This is part of working like a real pentester, not just solving labs, and significantly improves efficiency while deepening technical understanding.</p>
+      </div>
 
-      <h2 id="certs">Certs after skill development</h2>
-      <p>
-        Certifications should be pursued later, after real skills are already present. Useful options include:
-      </p>
-      <ul>
-        <li>PNPT (TCM Security)</li>
-        <li>CPTS</li>
-        <li>BSCP</li>
-      </ul>
-      <p>
-        HR-focused certifications should not drive your learning. Skill comes first.
-      </p>
+      <div class="block" id="certifications">
+        <h2>Certifications</h2>
+        <p>Certifications should only come later, after real skills are already there. Useful ones are PNPT from TCM Security, CPTS, and BSCP. HR-focused certifications should be ignored, because they do not reflect real knowledge and do not make someone a better professional.</p>
+      </div>
 
-      <h2 id="community">Real-life experience & community</h2>
-      <p>
-        Practice realistic scenarios (e.g., CyberDefenders), attend security events (BSides, Hacktivity), and participate in CTFs.
-        These show consistency, curiosity, and real engagement.
-      </p>
+      <div class="block" id="experience-community">
+        <h2>Experience and Community</h2>
+        <p>Real-life experience and community involvement also matter. Practicing realistic scenarios, such as those found on CyberDefenders, helps bridge the gap between labs and real environments. Attending security events, BSides, Hacktivity, and other conferences, and participating in onsite and online CTF competitions is highly valued by professionals. These experiences show passion, consistency, and real engagement with the field.</p>
+      </div>
 
-      <h2 id="mindset">Attacker mindset & threat modeling</h2>
-      <p>
-        Growth requires attacker mindset and basic threat modeling:
-      </p>
-      <ul>
-        <li>Identify high-value assets</li>
-        <li>Chain weaknesses into realistic attack paths</li>
-        <li>Understand business impact</li>
-        <li>Prioritize by risk, not just technical difficulty</li>
-      </ul>
+      <div class="block" id="attacker-mindset">
+        <h2>Attacker Mindset</h2>
+        <p>An important part of growth is developing an attacker mindset and basic threat modeling skills: identifying high-value assets, chaining multiple weaknesses into realistic attack paths, understanding business impact, and prioritizing exploitation based on real-world risk rather than technical difficulty alone.</p>
+      </div>
 
-      <h2 id="legal">Legal & ethical awareness</h2>
-      <p>
-        Professional penetration testing means operating within rules:
-      </p>
-      <ul>
-        <li>Understand authorization and scope</li>
-        <li>Respect boundaries</li>
-        <li>Follow responsible disclosure practices</li>
-      </ul>
+      <div class="block" id="legal-ethical">
+        <h2>Legal and Ethical Awareness</h2>
+        <p>Finally, basic legal and ethical awareness is necessary, including understanding authorization, scope boundaries, and responsible disclosure. Professional penetration testing is not just about technical exploitation, but about operating within defined rules and delivering value to organizations.</p>
+      </div>
 
-      <h2 id="direction">Long-term direction</h2>
-      <p>
-        This roadmap focuses on:
-      </p>
-      <ul>
-        <li>Deep understanding of networks and systems</li>
-        <li>Structured methodology</li>
-        <li>Constant hands-on practice</li>
-        <li>Meaningful writeups</li>
-        <li>Real-world skills (AD + cloud basics)</li>
-        <li>Continuous technical growth</li>
-      </ul>
-      <p>
-        This approach leads to employment because skills can be demonstrated rather than simply claimed.
-      </p>
+      <div class="block" id="long-term-goal">
+        <h2>Long-Term Goal</h2>
+        <p>This is the path that can be recommended to someone who truly wants to work in penetration testing: deep understanding of networks and systems, structured methodology, constant hands-on practice, meaningful writeups, real-world skills such as Active Directory and cloud exploitation, and continuous technical growth. This approach builds real value and leads to employment because the skills can be demonstrated, not just claimed.</p>
+      </div>
 
       <div class="hr"></div>
       <a class="back" href="/">← back</a>
     </section>
 
-    <!-- RIGHT -->
-    <aside aria-label="Menu">
-      <div class="menuTitle">Menu</div>
+    <!-- RIGHT: CONTENT TOC ONLY -->
+    <aside aria-label="Contents">
+      <div class="menuTitle">Contents</div>
 
-      <div class="navGroup">
+      <nav class="toc">
+        <a href="#intro">Intro / Labs</a>
+        <a href="#networking">Networking</a>
+        <a href="#systems-linux">System Knowledge (Linux)</a>
+        <a href="#methodology">Structured Methodology</a>
+        <a href="#platforms">Platforms & Practice</a>
+        <a href="#web-security">Web Security</a>
+        <a href="#active-directory">Active Directory</a>
+        <a href="#cloud-security">Cloud Security</a>
+        <a href="#writeups-reporting">Writeups & Reporting</a>
+        <a href="#automation">Scripting & Automation</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#experience-community">Experience & Community</a>
+        <a href="#attacker-mindset">Attacker Mindset</a>
+        <a href="#legal-ethical">Legal & Ethical Awareness</a>
+        <a href="#long-term-goal">Long-Term Goal</a>
+      </nav>
 
-        <section class="group">
-          <div class="row">
-            <a class="main" href="/writeups/index.html">Writeups</a>
-          </div>
-        </section>
+      <div class="divider"></div>
 
-        <section class="group">
-          <div class="row">
-            <a class="main" href="/notes">Notes</a>
-          </div>
-          <div class="sub">
-            <a href="/notes">Index</a>
-          </div>
-        </section>
-
-        <section class="group">
-          <div class="row">
-            <a class="main" href="/homelabs">Homelabs</a>
-          </div>
-          <div class="sub">
-            <a href="/homelabs">Index</a>
-          </div>
-        </section>
-
-        <section class="group">
-          <div class="row">
-            <a class="main" href="/roadmap">Roadmap</a>
-          </div>
-          <div class="sub">
-            <a href="#labs">Labs</a>
-            <a href="#networking">Networking</a>
-            <a href="#systems">Systems</a>
-            <a href="#methodology">Methodology</a>
-            <a href="#web">Web</a>
-            <a href="#ad">Active Directory</a>
-            <a href="#cloud">Cloud</a>
-            <a href="#writeups">Writeups</a>
-            <a href="#automation">Automation</a>
-            <a href="#legal">Legal</a>
-          </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <section class="group">
-          <div class="row">
-            <a class="main" href="/">Home</a>
-          </div>
-        </section>
-
-      </div>
+      <a class="back" href="/">← back</a>
     </aside>
 
   </main>
