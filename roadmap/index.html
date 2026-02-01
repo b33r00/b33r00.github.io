@@ -43,7 +43,7 @@
       gap:34px;
     }
 
-    /* TOP / CONTENT */
+    /* CONTENT */
     .topbar{
       display:flex;
       align-items:center;
@@ -70,7 +70,7 @@
       letter-spacing:-0.01em;
     }
     .subtitle{
-      margin:0 0 14px 0;
+      margin:0 0 16px 0;
       color:var(--muted2);
       font-family:"JetBrains Mono", ui-monospace, monospace;
       font-size:13px;
@@ -82,16 +82,25 @@
     }
 
     h2{
-      margin:22px 0 10px 0;
+      margin:24px 0 10px 0;
       font-size:16px;
       font-weight:600;
       letter-spacing:-0.01em;
     }
 
+    /* markdown-like H3 */
+    h3{
+      margin:18px 0 10px 0;
+      font-size:15px;
+      font-weight:600;
+      color:var(--fg);
+      opacity:0.95;
+    }
+
     p{
       margin:0 0 12px 0;
       color:var(--muted);
-      max-width:90ch;
+      max-width:92ch;
       font-size:15px;
     }
 
@@ -99,16 +108,23 @@
       margin:10px 0 12px 0;
       padding-left:18px;
       color:var(--muted);
-      max-width:90ch;
+      max-width:92ch;
       font-size:15px;
     }
     li{ margin:6px 0; }
 
-    .block{
-      margin-top:18px;
+    /* code-ish emphasis */
+    em{ color:var(--fg); opacity:0.92; font-style:italic; }
+    .mono{
+      font-family:"JetBrains Mono", ui-monospace, monospace;
+      font-size:13px;
+      color:var(--fg);
+      opacity:0.92;
     }
 
-    /* RIGHT TOC MENU */
+    .block{ margin-top:18px; }
+
+    /* RIGHT TOC */
     aside{
       padding-left:18px;
       border-left:2px solid var(--accent);
@@ -172,146 +188,173 @@
       <div class="subtitle">Penetration Testing Development Path</div>
 
       <div class="block" id="intro">
-        <p>To get a job in penetration testing, the focus should not be on HR requirements or random certificates, but on specialization and real technical understanding. The most important part is continuous hands-on practice and being able to prove that practice through meaningful work. This starts with building home labs:</p>
+        <p>This roadmap is not a certificate shopping list and not an HR compliance ritual. The objective is specialization and real technical understanding: the ability to explain a system, break it, rebuild it, and then break it again on purpose — with intent, not superstition. Hands-on practice matters only if it produces proof: artifacts, writeups, tools, and clean reasoning. Anything that cannot be reproduced, defended, or explained is not a skill; it’s a coincidence dressed up as confidence.</p>
+
+        <p>The path is depth-first: Linux → networking → programming &amp; logic → exploitation methodology → realistic environments. Everything else is downstream. “Pentesting” is not a topic you memorize. It is an epistemic discipline: you generate hypotheses, you instrument reality, you kill what fails, you keep what survives.</p>
+      </div>
+        <p>I run this with a strict 80/20 rule: 80% practice, 20% theory. Theory is there to sharpen the model, not to replace contact with reality. If the week doesn’t produce artifacts — configs, notes, scripts, writeups, reproducible labs — it didn’t produce progress.</p>
+
+      <div class="hr"></div>
+
+      <div class="block" id="phase-0">
+        <h3>Phase 0 — Linux first, because Linux is the spine</h3>
+
+        <p>System knowledge is just as critical, especially on Linux. It is not enough to “know Debian” or to be comfortable with a desktop environment.  The goal here is to inhabit it. Not as a user, but as someone who can reason about state, privilege, services, failure modes, and recovery without turning reinstall into a coping mechanism. You build competence by manufacturing friction: minimal installs, manual configuration, and systems you can break and recover repeatedly. The point is to stop treating the OS as a black box and start treating it as a machine whose behavior you can predict, explain, and deliberately manipulate.</p>
+
+        <p>Core focus is not distro tribalism, but mechanics:</p>
         <ul>
-          <li>Windows and Linux systems</li>
-          <li>Active Directory environments</li>
-          <li>vulnerable virtual machines</li>
-          <li>scripting</li>
-          <li>networking</li>
+          <li>processes, permissions, capabilities, namespaces, cgroups</li>
+          <li>filesystems, mounts, overlays, device nodes</li>
+          <li>init, services, logging, boot chain (what exists before you get a shell)</li>
+          <li>the host networking stack (sockets, routes, resolvers, firewall rules)</li>
         </ul>
-        <p>These labs are essential because they force you to actually configure, break, fix, and understand systems instead of just reading about them. Creating realistic enterprise-like environments with domain controllers, segmented networks, misconfigurations, and attack paths is crucial for understanding how real infrastructures are compromised.</p>
+
+        <p>You don’t “learn” these by reading. You learn them by doing something that should work, watching it not work, and refusing to accept mystery as an answer. Arch/Artix minimal + i3 is a constraint, not an aesthetic. Later, Gentoo is a forcing function: it takes away your ability to hide behind defaults. Ricing is irrelevant visually; it matters only insofar as it forces you to understand what you changed. If your system breaks and you can’t explain exactly why, you don’t “have a setup,” you have a fragile illusion.</p>
       </div>
 
-      <div class="block" id="networking">
-        <h2>Networking</h2>
-        <p>Networking must be learned deeply, not memorized. Studying networking from university-level PDFs is important to understand how things really work under the hood. Learning the OSI model, routing, switching, VLANs, and basic network design is not enough on a theoretical level; it must be used in practice. Cisco Packet Tracer is very useful for this, because when you build networks there, you have to configure everything yourself, and that is where it becomes obvious whether you truly understand networking or not. A home lab combined with Packet Tracer is ideal for learning how networks behave in real environments, how segmentation can be bypassed, and how misconfigurations lead to lateral movement.</p>
-      </div>
+      <div class="block" id="phase-1">
+        <h3>Phase 1 — Networking without memorization</h3>
 
-      <div class="block" id="systems-linux">
-        <h2>System Knowledge (Linux)</h2>
-        <p>System knowledge is just as critical, especially on Linux. It is not enough to “know Debian” or to be comfortable with a desktop environment. You need challenges that force you to make mistakes, break the system, and rebuild it. Running Arch or Artix Linux with a minimal setup, using a window manager like i3 instead of a full desktop environment, and installing everything manually without scripts gives a very strong foundation. This teaches how init systems work, how services interact, how the system boots, and how user space connects to the kernel. Later, moving to Gentoo with custom configurations, hardened kernels, musl-based systems, and minimal window managers like dwm pushes this understanding even further. Ricing the system is not about looks, but about understanding how the system works internally.</p>
-      </div>
+        <p>Networking learned as trivia is useless. Networking learned as mechanics becomes leverage. Study serious material (university-level PDFs are fine) to understand what’s under the hood, then prove it in configuration and observation. The OSI model is not a poster; it’s a map for debugging. The goal is not to recite layers, but to predict behavior when the environment becomes hostile: segmentation, policy, state, and the quiet places where assumptions leak.</p>
 
-      <div class="block" id="methodology">
-        <h2>Structured Penetration Testing Methodology</h2>
-        <p>Once this foundation is built, vulnerability research and exploitation can be learned properly, following a structured penetration testing methodology instead of random hacking. Understanding the full attack lifecycle is essential:</p>
+        <p>Keep the focus on behaviors you can demonstrate:</p>
         <ul>
-          <li>reconnaissance</li>
-          <li>enumeration</li>
-          <li>initial access</li>
-          <li>privilege escalation</li>
-          <li>lateral movement</li>
-          <li>persistence when relevant</li>
-          <li>impact validation</li>
-          <li>proper cleanup</li>
+          <li>routing, switching, ARP, DNS, DHCP</li>
+          <li>VLANs and segmentation as real constraints (and how they fail)</li>
+          <li>NAT, firewall policy, statefulness, packet flow</li>
         </ul>
-        <p>This structured approach reflects real-world engagements and is critical for professional work.</p>
+
+        <p>Cisco Packet Tracer matters because it forces manual configuration. Home lab networking matters because it forces consequences. The feedback loop is the point: you build a network, it behaves unexpectedly, you instrument it, you correct the model in your head. That correction is the skill. If you can’t explain why lateral movement was possible, you didn’t “find a path,” you stumbled into one.</p>
       </div>
 
-      <div class="block" id="platforms">
-        <h2>Learning Platforms and Practice</h2>
-        <p>Platforms like TryHackMe are good for structured learning, while PortSwigger Web Security Academy is excellent for mastering web vulnerabilities in depth. VulnLab provides highly realistic scenarios, OverTheWire wargames can be used to build strong Linux fundamentals and manual exploitation skills before moving to more realistic lab environments and later Hack The Box Academy and Hack The Box should be used for advanced, hands-on practice. Machines should be done regularly, spending multiple hours a day if possible, struggling with problems, trying different approaches, and writing down solutions and thought processes.</p>
-      </div>
+      <div class="block" id="phase-2">
+        <h3>Phase 2 — Programming and logic as weapons</h3>
 
-      <div class="block" id="web-security">
-        <h2>Web Security</h2>
-        <p>Web security learning should go beyond classic vulnerability lists such as:</p>
+        <p>A pentester who can only glue tools together is limited by other people’s imagination. Programming is not optional if you want depth. You need speed, yes — but you also need the ability to reason at the level where exploitation becomes intelligible. The difference between “I ran a tool” and “I understood what happened” is usually programming and logic, not another cheat sheet.</p>
+
+        <p>Automation layer: Bash and Python, because repetition is a tax and automation is refusing to pay it. Systems layer: C/C++ because memory, undefined behavior, and runtime realities are where a lot of “magic” turns into engineering. Logic layer: because the real meta-skill is the ability to hold complex state and not panic when the path isn’t visible yet — the ability to remain cold while the problem remains messy.</p>
+
+        <p>Minimal “non-negotiables” here:</p>
         <ul>
-          <li>SQL injection</li>
-          <li>XSS</li>
-          <li>CSRF</li>
-          <li>file upload bypasses</li>
-          <li>SSTI</li>
-          <li>authentication issues</li>
+          <li>Bash for environment control and pipeline thinking</li>
+          <li>Python for tooling, parsing, orchestration, PoC shaping</li>
+          <li>C/C++ for systems-level reasoning (what the compiler actually did, what memory actually is)</li>
         </ul>
-        <p>A strong focus should also be placed on business logic vulnerabilities: workflow abuse, authorization bypasses, payment manipulation, and broken verification processes. These flaws are extremely common in real-world pentests and often have the highest business impact.</p>
+
+        <p>And then the part most people skip: deliberate logic training. Hard problems, RE of small programs, reading code you didn’t author, writing small test programs to validate hypotheses. This is how you stop outsourcing your thinking to “known techniques” and start generating your own. Chess and reading also help — not because it’s romantic, but because attention and pattern discipline are transferable. Consider them mental deadlifts; the joke is that it looks like procrastination to people who don’t understand compounding, but it’s the same discipline: consistent pressure, slow accumulation, sudden payoff.</p>
       </div>
 
-      <div class="block" id="active-directory">
-        <h2>Active Directory</h2>
-        <p>Active Directory exploitation should be treated as a core skill, since most enterprise environments rely on Windows domains. This includes techniques such as:</p>
+      <div class="block" id="phase-3">
+        <h3>Phase 3 — Methodology over random hacking</h3>
+
+        <p>Once Linux + networking + programming are not shallow, exploitation stops being roulette. Penetration testing becomes a structured lifecycle: recon → enumeration → initial access → privilege escalation → lateral movement → impact validation → clean, reproducible proof. The method is not bureaucracy; it’s anti-delusion. It forces you to justify actions with evidence instead of vibes, and it keeps you from confusing movement with progress.</p>
+
+        <p>Keep one small checklist, but treat it as scaffolding, not authority. The real deliverable is a personal methodology you actually follow, plus post-mortems: what you missed, what fooled you, what you corrected. If you can’t describe your own failure modes, you’re not improving — you’re just repeating.</p>
+      </div>
+
+      <div class="block" id="phase-4">
+        <h3>Phase 4 — Platforms used with intent</h3>
+
+        <p>Platforms are training instruments, not identity. Use them by role:</p>
         <ul>
-          <li>Kerberoasting</li>
-          <li>AS-REP roasting</li>
-          <li>NTLM relay attacks</li>
-          <li>pass-the-hash</li>
-          <li>pass-the-ticket</li>
-          <li>abuse of misconfigured services and permissions</li>
-          <li>delegation attacks</li>
-          <li>attack path analysis using BloodHound</li>
+          <li>TryHackMe for structured ramps and coverage</li>
+          <li>PortSwigger Web Security Academy for web depth and precision</li>
+          <li>OverTheWire to harden Linux fundamentals and manual habits</li>
+          <li>VulnLab for realistic scenarios and enterprise flavor</li>
+          <li>HTB Academy + Hack The Box for advanced practice and grinding under ambiguity</li>
         </ul>
-        <p>Building multiple AD labs with different misconfigurations helps develop a realistic understanding of enterprise compromise.</p>
+
+        <p>Machines should be done regularly with long sessions. Struggle is part of the process; it’s where your model gets stress-tested. Document reasoning, not just solutions. A writeup that only lists steps is a diary; a writeup that exposes thinking is evidence. The discipline is not “solve more boxes,” it is to train the exact behaviors you will need under uncertainty:</p>
+        <ul>
+          <li>multiple hours a day (when possible)</li>
+          <li>struggle is part of the process</li>
+          <li>write down solutions and thought processes</li>
+        </ul>
       </div>
 
-      <div class="block" id="cloud-security">
-        <h2>Cloud Security</h2>
-        <p>Basic cloud security knowledge is increasingly important in modern environments. This does not mean becoming a cloud engineer, but understanding common attack surfaces such as IAM misconfigurations, exposed storage buckets, metadata service abuse, and typical privilege escalation paths in cloud platforms. Many real infrastructures today are hybrid, combining on-premise and cloud systems.</p>
+      <div class="block" id="phase-5">
+        <h3>Phase 5 — Web security beyond the greatest hits</h3>
+
+        <p>Classic vulnerabilities matter, but they’re not the finish line. Don’t just name them; understand where they live and why they work: SQL injection, XSS, CSRF, file upload bypasses, SSTI, authentication issues. Depth means understanding contexts, sinks, encodings, framework behavior — payload crafting as engineering, not copy/paste. If your approach is “try payloads until something pops,” you’re not testing; you’re gambling.</p>
+
+        <p>Business logic is where real impact often hides in plain sight, because it’s not “a bug,” it’s a broken model of reality. This is why it deserves more than a mention: you’re not exploiting a parser, you’re exploiting assumptions.</p>
+
+        <ul>
+          <li>workflow abuse (using the system in an order it didn’t anticipate)</li>
+          <li>authorization bypass (being someone you’re not allowed to be)</li>
+          <li>payment manipulation (numbers, states, and trust boundaries)</li>
+          <li>broken verification processes (the illusion of checks that don’t actually bind)</li>
+        </ul>
+
+        <p>Treat business logic like a chess position: you don’t look for a single tactic, you look for the structure that makes tactics possible.</p>
       </div>
 
-      <div class="block" id="writeups-reporting">
-        <h2>Writeups and Reporting</h2>
-        <p>Writeups are a key part of getting a job. Not many writeups, but valuable ones. The goal of a writeup is not to show that a box was solved, but to show how it was approached, how enumeration was done, what failed, what worked, and why. Good writeups, combined with documented projects, prove real ability far better than certificates ever can. In addition to lab-style writeups, learning how to produce professional penetration testing reports is essential. These should include clear reproduction steps, technical details, business impact, risk assessment, and prioritized remediation advice.</p>
+      <div class="block" id="phase-6">
+        <h3>Phase 6 — Active Directory as enterprise reality</h3>
+
+        <p>AD is core because enterprise is core. Treat it as a map, not a bag of tricks. The point is chaining and position, not single techniques. You learn it properly by building multiple labs with different misconfigurations until “enterprise compromise” stops being a story and becomes a navigable structure.</p>
+
+        <p>Core technique surface (learned as components of paths, not party tricks):</p>
+        <ul>
+          <li>Kerberoasting, AS-REP roasting</li>
+          <li>NTLM relay</li>
+          <li>pass-the-hash / pass-the-ticket</li>
+          <li>abusing misconfigured services, permissions, delegation</li>
+          <li>attack path analysis with BloodHound</li>
+        </ul>
+
+        <p>The didactic rule is simple: every technique you learn must be embedded into at least one reproducible chain. If you can’t explain where it sits in an attack path, it’s trivia. If you can’t reproduce it, it’s mythology.</p>
       </div>
 
-      <div class="block" id="automation">
-        <h2>Scripting and Automation</h2>
-        <p>Scripting and automation should naturally come from this process, mainly using Bash and Python to automate enumeration, exploitation, and repetitive tasks. This is part of working like a real pentester, not just solving labs, and significantly improves efficiency while deepening technical understanding.</p>
+      <div class="block" id="phase-7">
+        <h3>Phase 7 — Cloud (mentioned, not worshipped)</h3>
+
+        <p>You don’t need to become a cloud engineer, but you do need baseline literacy because hybrids are common. Understand common attack surfaces (IAM misconfigs, exposed storage, metadata abuse, typical privilege escalation paths) well enough that you’re not blind during assessments. Keep it concise; treat it as “what to check and why,” not an identity. The goal is competence, not cosplay.</p>
       </div>
 
-      <div class="block" id="certifications">
-        <h2>Certifications</h2>
-        <p>Certifications should only come later, after real skills are already there. Useful ones are PNPT from TCM Security, CPTS, and BSCP. HR-focused certifications should be ignored, because they do not reflect real knowledge and do not make someone a better professional.</p>
+      <div class="block" id="phase-8">
+        <h3>Phase 8 — Proof: writeups and reporting</h3>
+
+        <p>Writeups are not trophies; they are evidence. Not many writeups — valuable ones. The goal is not to show that a box was solved, but to show how it was approached: enumeration choices, failed hypotheses, pivots, why the final path worked. This is where you make your thinking legible, and legibility is the difference between “trust me” and “here is the proof.”</p>
+        <p>Proof is not limited to writeups. Home lab projects are proof too — often stronger proof — because they demonstrate systems thinking: building environments, introducing realistic constraints, and then breaking them deliberately. Documented lab builds (AD domains, segmented networks, misconfig sets, vulnerable services) plus reproducible configs, diagrams, and attack-path notes (foothold → escalation → lateral movement → impact) are not “learning.” They are evidence. </p>
+        <p>Pair that with professional reporting skills: clear reproduction steps, technical detail, business impact framing, prioritized remediation. This is what separates “I can hack” from “I can deliver value.” The report is not an afterthought; it is the interface between technical truth and action.</p>
       </div>
 
-      <div class="block" id="experience-community">
-        <h2>Experience and Community</h2>
-        <p>Real-life experience and community involvement also matter. Practicing realistic scenarios, such as those found on CyberDefenders, helps bridge the gap between labs and real environments. Attending security events, BSides, Hacktivity, and other conferences, and participating in onsite and online CTF competitions is highly valued by professionals. These experiences show passion, consistency, and real engagement with the field.</p>
+      <div class="block" id="signal">
+        <h3>Signal and stress-testing (community without cringe)</h3>
+
+        <p>Real-life experience and community involvement matter when they function as stress-tests and signal, not as virtue badges. Use realistic scenarios (CyberDefenders) to bridge the gap between labs and real environments. Use events (BSides, Hacktivity, and similar conferences) as exposure to practitioners and real narratives of failure. Use onsite and online CTFs as time-pressure training and collaboration practice. The value is not “participation.” The value is what it does to your thinking under constraints.</p>
       </div>
 
-      <div class="block" id="attacker-mindset">
-        <h2>Attacker Mindset</h2>
-        <p>An important part of growth is developing an attacker mindset and basic threat modeling skills: identifying high-value assets, chaining multiple weaknesses into realistic attack paths, understanding business impact, and prioritizing exploitation based on real-world risk rather than technical difficulty alone.</p>
-      </div>
+      <div class="block" id="meta">
+        <h3>Meta — attacker mindset, the disciplined kind</h3>
 
-      <div class="block" id="legal-ethical">
-        <h2>Legal and Ethical Awareness</h2>
-        <p>Finally, basic legal and ethical awareness is necessary, including understanding authorization, scope boundaries, and responsible disclosure. Professional penetration testing is not just about technical exploitation, but about operating within defined rules and delivering value to organizations.</p>
-      </div>
-
-      <div class="block" id="long-term-goal">
-        <h2>Long-Term Goal</h2>
-        <p>This is the path that can be recommended to someone who truly wants to work in penetration testing: deep understanding of networks and systems, structured methodology, constant hands-on practice, meaningful writeups, real-world skills such as Active Directory and cloud exploitation, and continuous technical growth. This approach builds real value and leads to employment because the skills can be demonstrated, not just claimed.</p>
+        <p>The attacker mindset is not roleplay and not paperwork. It’s disciplined imagination: identify high-value assets, chain weaknesses into realistic paths, prioritize by impact, keep thinking when the obvious path is blocked. If you want shorthand: think less “checklist compliance,” more “Elliot with instrumentation.” The paranoia must be testable. Out-of-the-box thinking is only useful if you can bring it back into the box as a reproducible method.</p>
       </div>
 
       <div class="hr"></div>
       <a class="back" href="/">← back</a>
     </section>
 
-    <!-- RIGHT: CONTENT TOC ONLY -->
+    <!-- RIGHT: TOC ONLY -->
     <aside aria-label="Contents">
       <div class="menuTitle">Contents</div>
-
       <nav class="toc">
-        <a href="#intro">Intro / Labs</a>
-        <a href="#networking">Networking</a>
-        <a href="#systems-linux">System Knowledge (Linux)</a>
-        <a href="#methodology">Structured Methodology</a>
-        <a href="#platforms">Platforms & Practice</a>
-        <a href="#web-security">Web Security</a>
-        <a href="#active-directory">Active Directory</a>
-        <a href="#cloud-security">Cloud Security</a>
-        <a href="#writeups-reporting">Writeups & Reporting</a>
-        <a href="#automation">Scripting & Automation</a>
-        <a href="#certifications">Certifications</a>
-        <a href="#experience-community">Experience & Community</a>
-        <a href="#attacker-mindset">Attacker Mindset</a>
-        <a href="#legal-ethical">Legal & Ethical Awareness</a>
-        <a href="#long-term-goal">Long-Term Goal</a>
+        <a href="#intro">Intro</a>
+        <a href="#phase-0">Phase 0 — Linux</a>
+        <a href="#phase-1">Phase 1 — Networking</a>
+        <a href="#phase-2">Phase 2 — Programming & logic</a>
+        <a href="#phase-3">Phase 3 — Methodology</a>
+        <a href="#phase-4">Phase 4 — Platforms</a>
+        <a href="#phase-5">Phase 5 — Web security</a>
+        <a href="#phase-6">Phase 6 — Active Directory</a>
+        <a href="#phase-7">Phase 7 — Cloud</a>
+        <a href="#phase-8">Phase 8 — Proof</a>
+        <a href="#signal">Signal & stress-testing</a>
+        <a href="#meta">Meta — mindset</a>
       </nav>
 
       <div class="divider"></div>
-
       <a class="back" href="/">← back</a>
     </aside>
 
