@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Learning Resources — b3r0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../writeups.css">
+</head>
+<body>
+
+<a class="back" href="../index.html">← back</a>
+
+<div class="meta-block">
+  <h1>Security Learning Resources</h1>
+  <div class="meta-row">
+    <span>blog</span>
+    <span>resources</span>
+    <span>2026</span>
+  </div>
+</div>
+
+<p>A curated list of platforms, references, and tools I have found genuinely useful. No affiliate links, no filler. Organized by topic.</p>
+
+<h2>methodology / cheat sheets</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://pentesting.site/" target="_blank" rel="noopener">pentesting.site</a><span class="link-desc">Full kill chain walkthrough from recon to post-exploitation, broken down by port and service. Cheat sheets for 18 tools including nmap, ffuf, BloodHound, Impacket, NetExec, Mimikatz, hashcat. Actively maintained.</span></li>
+  <li><a class="link-url" href="https://payloads.site/" target="_blank" rel="noopener">payloads.site</a><span class="link-desc">Payload collection companion to pentesting.site, from the same author.</span></li>
+  <li><a class="link-url" href="https://book.hacktricks.xyz/" target="_blank" rel="noopener">book.hacktricks.xyz</a><span class="link-desc">Comprehensive pentesting wiki covering privilege escalation, Active Directory attacks, web vulnerabilities, and more. One of the most referenced field guides.</span></li>
+  <li><a class="link-url" href="https://gowthams.gitbook.io/bughunter-handbook" target="_blank" rel="noopener">gowthams.gitbook.io/bughunter-handbook</a><span class="link-desc">Bug hunter handbook focused on web security methodology and recon techniques.</span></li>
+  <li><a class="link-url" href="https://www.pentest-book.com/" target="_blank" rel="noopener">pentest-book.com</a><span class="link-desc">Pentesting reference in book format — enumeration, exploitation, post-exploitation.</span></li>
+  <li><a class="link-url" href="https://www.amanhardikar.com/mindmaps.html" target="_blank" rel="noopener">amanhardikar.com/mindmaps</a><span class="link-desc">Mind maps covering practice labs, forensics, and code review. Content is from 2019 but the structural overview is still useful.</span></li>
+  <li><a class="link-url" href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener">OWASP Web Security Testing Guide</a><span class="link-desc">Authoritative reference for systematic web application security testing methodology.</span></li>
+</ul>
+
+<h2>web application security</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://portswigger.net/web-security" target="_blank" rel="noopener">portswigger.net/web-security</a><span class="link-desc">PortSwigger Web Security Academy. Free labs covering OWASP Top 10, SQLi, XSS, SSRF, XXE, deserialization, and an LLM security module. The gold standard for web security practice.</span></li>
+  <li><a class="link-url" href="https://hacker101.com/" target="_blank" rel="noopener">hacker101.com</a><span class="link-desc">HackerOne free training platform with videos and CTF challenges. High scores can earn private bug bounty program invites.</span></li>
+  <li><a class="link-url" href="https://hackinghub.io/" target="_blank" rel="noopener">hackinghub.io</a><span class="link-desc">Closest to real-world pentesting scenarios among web lab platforms. Scenario-driven rather than isolated challenges.</span></li>
+  <li><a class="link-url" href="https://pentesterlab.com/" target="_blank" rel="noopener">pentesterlab.com</a><span class="link-desc">Badge-based learning organized by vulnerability type (SQLi, XXE, JWT, code review), built on real CVEs.</span></li>
+  <li><a class="link-url" href="https://websec.fr/" target="_blank" rel="noopener">websec.fr</a><span class="link-desc">Logic flaw based challenges. Non-trivial, requires thinking beyond pattern-matching.</span></li>
+  <li><a class="link-url" href="https://alf.nu/alert1" target="_blank" rel="noopener">alf.nu/alert1</a><span class="link-desc">XSS wargame focused exclusively on bypassing XSS filters.</span></li>
+  <li><a class="link-url" href="https://application.security/" target="_blank" rel="noopener">application.security</a><span class="link-desc">Kontra AppSec: interactive code review training focused on identifying vulnerabilities in source code.</span></li>
+</ul>
+
+<h2>ai / llm security</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://gandalf.lakera.ai/baseline" target="_blank" rel="noopener">gandalf.lakera.ai</a><span class="link-desc">Progressive prompt injection challenges designed to extract a secret from a guarded LLM. Good for understanding injection escalation.</span></li>
+  <li><a class="link-url" href="https://pentesting.site/exploitation-of-web-and-ai/pentesting-ai/" target="_blank" rel="noopener">pentesting.site — LLM methodology</a><span class="link-desc">Methodology guide for LLM pentesting. PortSwigger also has a dedicated LLM module.</span></li>
+</ul>
+
+<h2>linux / privilege escalation</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="http://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">overthewire.org/wargames/bandit</a><span class="link-desc">SSH-based wargame that drills Linux fundamentals — SUID, cron jobs, file permissions, and misconfiguration exploitation. Best starting point for Linux privilege escalation concepts.</span></li>
+  <li><a class="link-url" href="https://cmdchallenge.com/" target="_blank" rel="noopener">cmdchallenge.com</a><span class="link-desc">Browser-based shell drills. Pure command-line problem solving without any environment setup.</span></li>
+</ul>
+
+<h2>ctf / wargames</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://www.root-me.org/?lang=en" target="_blank" rel="noopener">root-me.org</a><span class="link-desc">Large multi-category platform (web, crypto, forensics, network, RE) with a well-structured difficulty curve.</span></li>
+  <li><a class="link-url" href="https://picoctf.com/" target="_blank" rel="noopener">picoctf.com</a><span class="link-desc">Beginner-oriented, open year-round. Extensive writeup community.</span></li>
+  <li><a class="link-url" href="https://capturetheflag.withgoogle.com/" target="_blank" rel="noopener">Google CTF</a><span class="link-desc">Annual competition. Previous years challenges are publicly available and are high quality.</span></li>
+  <li><a class="link-url" href="https://dreamhack.io/ctf" target="_blank" rel="noopener">dreamhack.io</a><span class="link-desc">Ongoing CTF challenges with writeups from challenge authors. Covers pwn and web.</span></li>
+  <li><a class="link-url" href="https://training.olicyber.it/challenges" target="_blank" rel="noopener">OliCyber Training</a><span class="link-desc">Italian national CTF team platform with 2000+ challenges across all levels.</span></li>
+  <li><a class="link-url" href="https://www.holidayhackchallenge.com/" target="_blank" rel="noopener">SANS Holiday Hack Challenge</a><span class="link-desc">Annual seasonal CTF with a narrative-driven format.</span></li>
+</ul>
+
+<h2>boot2root / vulnerable vms</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://hackmyvm.eu/" target="_blank" rel="noopener">hackmyvm.eu</a><span class="link-desc">Downloadable and online vulnerable machines.</span></li>
+  <li><a class="link-url" href="https://vulnyx.com/" target="_blank" rel="noopener">vulnyx.com</a><span class="link-desc">160+ free vulnerable VMs across difficulty levels.</span></li>
+  <li><a class="link-url" href="https://dockerlabs.es/" target="_blank" rel="noopener">dockerlabs.es</a><span class="link-desc">Docker-based vulnerable environments. Fast to spin up.</span></li>
+  <li><a class="link-url" href="https://exploit.education/" target="_blank" rel="noopener">exploit.education</a><span class="link-desc">Phoenix, Fusion, and Nebula VMs for learning binary exploitation in a controlled environment.</span></li>
+</ul>
+
+<h2>binary exploitation / pwn</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://pwn.college/" target="_blank" rel="noopener">pwn.college</a><span class="link-desc">Structured curriculum from GDB and assembly basics up to kernel exploitation. Best free resource for learning binary exploitation systematically.</span></li>
+  <li><a class="link-url" href="https://pwnable.kr/" target="_blank" rel="noopener">pwnable.kr</a><span class="link-desc">Classic binary exploitation wargame. Well-known reference challenges.</span></li>
+  <li><a class="link-url" href="https://ir0nstone.gitbook.io/notes" target="_blank" rel="noopener">ir0nstone binary exploitation notes</a><span class="link-desc">Well-written progressive guide covering ret2win, ROP chains, ASLR bypass, heap exploitation.</span></li>
+  <li><a class="link-url" href="https://guyinatuxedo.github.io/index.html" target="_blank" rel="noopener">Nightmare</a><span class="link-desc">Introduction to binary exploitation and reverse engineering through CTF challenges. Covers format strings, heap, ROP, and more.</span></li>
+  <li><a class="link-url" href="https://wargames.ret2.systems/" target="_blank" rel="noopener">ret2 wargames</a><span class="link-desc">Browser-based exploit development environment.</span></li>
+</ul>
+
+<h2>reverse engineering</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://crackmes.one/" target="_blank" rel="noopener">crackmes.one</a><span class="link-desc">Large archive of crackme binaries across all skill levels and platforms.</span></li>
+  <li><a class="link-url" href="https://microcorruption.com/" target="_blank" rel="noopener">microcorruption.com</a><span class="link-desc">Embedded systems RE challenge using MSP430 assembly with an in-browser debugger.</span></li>
+  <li><a class="link-url" href="https://flare-on.com/" target="_blank" rel="noopener">Flare-On</a><span class="link-desc">Mandiant annual reverse engineering competition. Previous years challenges are among the most rigorous RE exercises publicly accessible.</span></li>
+  <li><a class="link-url" href="https://p.ost2.fyi/" target="_blank" rel="noopener">OpenSecurityTraining2</a><span class="link-desc">University-depth courses on architecture, firmware analysis, and RE. Free.</span></li>
+</ul>
+
+<h2>cryptography</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://cryptohack.org/" target="_blank" rel="noopener">cryptohack.org</a><span class="link-desc">Modern cryptography challenges focused on practical attacks — RSA, ECC, block ciphers.</span></li>
+  <li><a class="link-url" href="https://cryptopals.com/" target="_blank" rel="noopener">cryptopals.com</a><span class="link-desc">48 challenges where you break real crypto by implementing the attacks yourself. Covers stream ciphers, CBC padding oracles, hash length extension, and more.</span></li>
+</ul>
+
+<h2>blue team / forensics / dfir</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://cyberdefenders.org/" target="_blank" rel="noopener">cyberdefenders.org</a><span class="link-desc">Forensics and incident response labs — memory forensics, network analysis, malware triage.</span></li>
+  <li><a class="link-url" href="https://kc7cyber.com/" target="_blank" rel="noopener">kc7cyber.com</a><span class="link-desc">Threat hunting platform using Azure log queries and IOC pivoting. Scenario-driven SOC analyst training.</span></li>
+</ul>
+
+<h2>bug bounty</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://hackerone.com/" target="_blank" rel="noopener">hackerone.com</a><span class="link-desc">Leading bug bounty platform. Public and private programs across major companies.</span></li>
+  <li><a class="link-url" href="https://bugcrowd.com/" target="_blank" rel="noopener">bugcrowd.com</a><span class="link-desc">Bugcrowd University: bug hunting methodology training alongside the bounty platform.</span></li>
+  <li><a class="link-url" href="https://intigriti.com/" target="_blank" rel="noopener">intigriti.com</a><span class="link-desc">European bug bounty platform with a built-in learning section (Hackademy).</span></li>
+  <li><a class="link-url" href="https://pentester.land/writeups/" target="_blank" rel="noopener">pentester.land/writeups</a><span class="link-desc">Curated bug bounty and CTF writeups indexed by vulnerability class.</span></li>
+  <li><a class="link-url" href="https://hackerone.com/hacktivity" target="_blank" rel="noopener">HackerOne Hacktivity</a><span class="link-desc">Public disclosed bug bounty reports. Excellent for learning real vulnerability chains.</span></li>
+</ul>
+
+<h2>blockchain / smart contract security</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://ethernaut.openzeppelin.com/" target="_blank" rel="noopener">ethernaut.openzeppelin.com</a><span class="link-desc">Solidity vulnerability challenges in an OverTheWire-style progression. Covers reentrancy, access control, delegatecall abuse, and more.</span></li>
+  <li><a class="link-url" href="https://damnvulnerabledefi.xyz/" target="_blank" rel="noopener">damnvulnerabledefi.xyz</a><span class="link-desc">DeFi-specific exploit scenarios including flash loan attacks, price oracle manipulation, and lending protocol exploits.</span></li>
+</ul>
+
+<h2>tools</h2>
+<ul class="link-list">
+  <li><a class="link-url" href="https://www.revshells.com/" target="_blank" rel="noopener">revshells.com</a><span class="link-desc">Reverse shell one-liner generator for all major languages and encodings.</span></li>
+  <li><a class="link-url" href="https://github.com/DominicBreuker/stego-toolkit" target="_blank" rel="noopener">stego-toolkit</a><span class="link-desc">Docker image bundling steganography detection and extraction tools. Useful for CTF stego challenges.</span></li>
+  <li><a class="link-url" href="https://github.com/arch3rPro/PentestTools" target="_blank" rel="noopener">PentestTools</a><span class="link-desc">Curated collection of pentesting tools organized by category.</span></li>
+</ul>
+
+<footer>b3r0 — 2026</footer>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proofmark — b3r0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../writeups.css">
+</head>
+<body>
+
+<a class="back" href="../../index.html">← back</a>
+
+<div class="meta-block">
+  <h1>Proofmark</h1>
+  <div class="meta-row">
+    <span>Cyber Apocalypse 2026</span>
+    <span>mobile / reverse engineering</span>
+    <span>hard</span>
+  </div>
+  <div class="flag-box">HTB{p3rf3ct_f4c3_tru3_sp1n3}</div>
+</div>
+
+<h2>overview</h2>
+<p>Android APK built on the Godot engine. A 3D scene: you walk into a forge, reach an anvil that runs an "assay" on a ring. The mechanic is to trick that assay into certifying a forged piece — when it accepts, it returns the flag as a certificate string.</p>
+<p>Almost none of the verification logic lives in GDScript. It is in a small stripped native library shipped as a GDExtension. This challenge is ARM64 reversing wearing a game as a costume.</p>
+
+<h2>initial recon</h2>
+<pre>file proofmark.apk
+unzip -l proofmark.apk</pre>
+
+<p>Contents: <code>classes*.dex</code>, two <code>libgodot_android.so</code> builds (arm64 + x86_64), and <code>assets/</code> with <code>.gdc</code> scripts, <code>.tscn.remap</code> scene files, <code>project.binary</code>, <code>assets.sparsepck</code>. A Godot export — logic is not in the dex at all.</p>
+<p>The key file was <code>assets/proofmark.gdextension</code>:</p>
+<pre>[configuration]
+entry_symbol = "proofmark_library_init"
+compatibility_minimum = "4.7"
+
+[libraries]
+android.release.arm64 = "res://bin/android/libproofmark.arm64.so"</pre>
+
+<p>A 9.8 KB custom native library next to the huge engine binary. That is the actual target.</p>
+
+<h2>analysis</h2>
+
+<h3>recovering gdscript source</h3>
+<p>Compiled <code>.gdc</code> bytecode — pulled GDRE Tools and ran a full project recovery:</p>
+<pre>./gdre_tools.x86_64 --headless --recover=proofmark.apk --output=recovered</pre>
+
+<p>Got back readable <code>.gd</code> source for all scripts. The mechanic: <code>GameState</code> keeps three <code>wards</code> values (clamped 0–24) and a <code>bite</code> computed as <code>bite = wards[0] + wards[1]*2 + wards[2]*3</code>. Walking through trigger zones nudges wards by fixed steps. Every change calls <code>ForgeClient.reseal(snapshot)</code>. Stepping onto the anvil calls:</p>
+<pre>func strike(state: PackedByteArray, hallmark: int) -> Array:
+    var v: int = _native.submit(state.decode_s32(0), state.decode_s32(4),
+        state.decode_s32(8), state.decode_s32(12), hallmark)
+    var mark: String = _native.certificate() if v == Verdict.ACCEPTED else ""
+    return [v, mark]</pre>
+
+<p>The real check lives inside the native <code>Proofmark</code> class. Three exposed methods: <code>reseal()</code>, <code>submit()</code>, <code>certificate()</code>.</p>
+
+<h3>reversing the native library</h3>
+<pre>apt-get install -y binutils-aarch64-linux-gnu radare2
+aarch64-linux-gnu-nm -D --defined-only libproofmark.arm64.so
+r2 -A -q -c "afl; iz" libproofmark.arm64.so</pre>
+
+<p>Only three real functions: <code>proofmark_library_init</code> (GDExtension boilerplate) and two at <code>0x1af4</code> and <code>0x1ff4</code>.</p>
+<p><code>fcn.00001af4</code> is <code>reseal()</code> — a small hand-rolled bytecode interpreter running a program from <code>.rodata</code> over the state buffer.</p>
+<p><code>fcn.00001ff4</code> is the core of <code>submit()</code>. Key gate in the disassembly:</p>
+<pre>cmp x8, 0x0000004300000053   ; wards0=0x53, wards1=0x43
+ccmp x9, 0x000001ce00000037  ; wards2=0x37, bite=0x1ce
+b.ne -> return 0  (REJECT_STATE)</pre>
+
+<p>In decimal: <code>wards0=83, wards1=67, wards2=55, bite=462</code>. Wards are clamped 0–24 in gameplay. These values are unreachable by playing normally — the whole point of the story.</p>
+<p>Past that gate: 1,198,464 iterations of a MurmurHash3-style fmix32 round:</p>
+<pre>t = h + 0xc2b2ae35
+t ^= t >> 16
+t *= 0x85ebca6b
+t ^= t >> 13
+t *= 0xc2b2ae35
+h = t ^ (t >> 16)</pre>
+
+<p>Then XOR-decrypts a 28-byte blob embedded at offset <code>0x580</code> using the top byte of each round's intermediate value as the keystream byte. Checks first four decrypted bytes against <code>"HTB{"</code>, returns <code>ACCEPTED</code> (2) and copies out the certificate only on match.</p>
+
+<h2>vulnerability</h2>
+<div class="callout">The state check and the hallmark check are independent. There is no cryptographic binding between "this specific ring" and "this specific hallmark". The state is a fixed constant, and the cipher is a 32-bit keyspace built entirely of invertible operations.</div>
+
+<p>Every operation in the round function — add, xor-shift, multiply by odd constant — is invertible mod 2^32. The entire 1,198,464-round chain is a bijection. A 32-bit keyspace with a fully invertible, non-authenticated stream cipher is brute-forceable, and because it is invertible you only need to brute-force the cheap first few keystream bytes.</p>
+
+<h2>exploitation</h2>
+
+<h3>step 1 — emulate first to verify the model</h3>
+<p>Rather than hand-simulating over a million rounds, I set up a Unicorn ARM64 harness to run the real function. First attempt failed — turned out I had mapped segments by file offset instead of <code>p_vaddr</code>. Fixed by parsing program headers properly. After that the emulator ran cleanly and matched a Python re-implementation byte for byte.</p>
+
+<h3>step 2 — recover required keystream bytes</h3>
+<pre>data = open("libproofmark.arm64.so","rb").read()
+ciphertext = data[0x580:0x580+28]
+ks = bytes(c ^ p for c, p in zip(ciphertext[:4], b"HTB{"))
+# 62 07 99 00</pre>
+
+<h3>step 3 — brute force the seed with numpy</h3>
+<pre>def F_vec(x):
+    t = x + np.uint32(0xc2b2ae35)
+    t ^= t >> np.uint32(16)
+    t = t * np.uint32(0x85ebca6b)
+    t ^= t >> np.uint32(13)
+    t = t * np.uint32(0xc2b2ae35)
+    y = t ^ (t >> np.uint32(16))
+    return y, t
+
+# round 0: scan all 2^32 seeds, keep where top byte == 0x62
+# round 1..3: advance survivors one more round each, filter on next byte</pre>
+
+<p>After four filter stages: two candidate seeds. Decrypted the full 28-byte blob with both:</p>
+<pre>0x1c7c8990 -> b'HTB{p3rf3ct_f4c3_tru3_sp1n3}'
+0x2bd302a4 -> garbage</pre>
+
+<h3>step 4 — recover the actual hallmark</h3>
+<p>Inverted the seed derivation and the 1,198,464-round chain analytically using modular inverses of the two odd multiplication constants:</p>
+<pre>INV_C1 = pow(0xc2b2ae35, -1, 1 << 32)
+INV_C2 = pow(0x85ebca6b, -1, 1 << 32)
+
+h_final = Fp_inv(0x1c7c8990)   # 0xa56ba3b2
+h0 = h_final
+for _ in range(0x124f80):
+    h0 = F_inv(h0)             # 0x71d3a101</pre>
+
+<h3>step 5 — verify against real emulated code</h3>
+<pre>verdict, out = run_submit(uc, struct.pack("<iiii", 83, 67, 55, 462), 0x71d3a101)
+print(verdict, out)
+# 2  b'HTB{p3rf3ct_f4c3_tru3_sp1n3}'</pre>
+
+<h2>alternative paths</h2>
+<p>Frida on a real device: hook <code>submit()</code>, overwrite the state argument with the magic bytes, brute-force the hallmark on-device by calling the exported native method in a loop. Slower, requires less crypto analysis up front.</p>
+<p>Patching the <code>.so</code> to force the "HTB{" branch to always pass gets you an accepted verdict but <code>certificate()</code> returns garbage — the ciphertext was never actually decrypted correctly.</p>
+
+<h2>takeaway</h2>
+<p>When a native check gates on two independent conditions checked in sequence, look at whether they are cryptographically bound to each other or just sequential. Independent checks can be satisfied independently.</p>
+<p>Whenever every step of a "hash" is reversible and the keyspace is small, the problem is an inversion problem, not a brute-force problem. That changes "computationally infeasible" to "a few seconds of numpy."</p>
+<p>Set up the Unicorn emulation harness early. It catches transcription mistakes in hand-read disassembly immediately and turns "re-derive the hash by hand" into "run the real code with the input you want."</p>
+
+<footer>b3r0 — Cyber Apocalypse 2026</footer>
+</body>
+</html>

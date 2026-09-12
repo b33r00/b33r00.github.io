@@ -1,0 +1,113 @@
+/* =========================================================
+   b3r0 — writeups.css
+   Shared styling for all article pages (writeups, research, blog, projects)
+   ========================================================= */
+
+:root {
+  --bg:        #090909;
+  --text:      #d6c1ad;
+  --fg:        #d96a18;
+  --fg-mid:    #b85a16;
+  --fg-dim:    #80502e;
+  --fg-bright: #ff8a3d;
+  --rule:      #2b1b11;
+  --surface:   #0f0b08;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+body { max-width: 72ch; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+/* ── Navigation ── */
+a.back {
+  display: inline-block; margin-bottom: 2.5rem;
+  color: var(--fg-dim); font-size: 0.78rem; letter-spacing: 0.06em;
+  text-decoration: none; border-bottom: 1px solid var(--rule);
+  transition: color 0.12s ease;
+}
+a.back:hover { color: var(--fg-bright); }
+
+/* ── Header ── */
+.meta-block { margin-bottom: 2.8rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--rule); }
+.meta-block h1 { margin-bottom: 0.65rem; color: var(--fg-bright); font-size: 1.35rem; font-weight: 700; line-height: 1.2; }
+.meta-row { display: flex; flex-wrap: wrap; gap: 0.55rem 1.4rem; color: var(--fg-dim); font-size: 0.78rem; }
+.meta-row span::before { content: "· "; }
+
+/* ── Flag / result box ── */
+.flag-box {
+  margin-top: 0.9rem; padding: 0.65rem 0.9rem;
+  color: var(--fg-bright); background: var(--surface); border: 1px solid var(--fg-dim);
+  font-family: 'Fira Code', monospace; font-size: 0.78rem; line-height: 1.55; word-break: break-all;
+}
+
+/* ── Headings ── */
+h2 {
+  margin: 2.8rem 0 1rem; padding-bottom: 0.55rem;
+  color: var(--fg-bright); border-bottom: 1px solid var(--rule);
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em;
+}
+h3 { margin: 1.8rem 0 0.65rem; color: var(--fg-mid); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; }
+
+/* ── Body copy ── */
+p { max-width: 66ch; margin-bottom: 0.95rem; color: var(--text); font-size: 0.92rem; line-height: 1.78; }
+ul, ol { margin: 0.6rem 0 1rem 1.25rem; color: var(--text); font-size: 0.92rem; }
+li { margin-bottom: 0.35rem; }
+strong { color: var(--fg-bright); font-weight: 700; }
+a { color: var(--fg-mid); text-decoration: none; border-bottom: 1px solid var(--rule); }
+a:hover { color: var(--fg-bright); border-color: var(--fg-dim); }
+
+/* ── Code ── */
+code { color: var(--fg-mid); font-family: 'Fira Code', monospace; font-size: 0.84em; }
+pre {
+  margin: 1.1rem 0 1.45rem; padding: 1rem 1.1rem;
+  color: var(--fg); background: var(--surface);
+  border: 1px solid var(--rule); border-left: 2px solid var(--fg-dim);
+  font-family: 'Fira Code', monospace; font-size: 0.78rem; line-height: 1.6;
+  overflow-x: auto; tab-size: 2;
+}
+pre code { color: inherit; font-size: inherit; }
+
+/* ── Math ── */
+.math {
+  display: block; margin: 0.9rem 0; padding: 0.55rem 0.9rem;
+  color: var(--fg-mid); background: var(--surface); border: 1px solid var(--rule);
+  font-family: 'Fira Code', monospace; font-size: 0.86rem;
+}
+
+/* ── Callout ── */
+.callout {
+  margin: 1.45rem 0; padding: 0.8rem 1rem;
+  color: var(--fg-mid); background: #0d0a07; border-left: 2px solid var(--fg-mid);
+  font-size: 0.86rem; font-style: italic; line-height: 1.65;
+}
+
+/* ── Footer ── */
+footer { margin-top: 4.5rem; padding-top: 1rem; color: var(--fg-dim); border-top: 1px solid var(--rule); font-size: 0.72rem; }
+
+/* ── Link list (used in blog/resource pages) ── */
+.link-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+.link-list li { border-bottom: 1px solid var(--rule); padding: 0.5rem 0; }
+.link-list .link-url { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--fg-mid); display: block; margin-bottom: 0.2rem; border-bottom: none; }
+.link-list .link-url:hover { color: var(--fg-bright); }
+.link-list .link-desc { font-size: 0.86rem; color: var(--text); display: block; }
+
+/* ── Accessibility ── */
+a:focus-visible { outline: 1px solid var(--fg-bright); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+
+/* ── Mobile ── */
+@media (max-width: 680px) {
+  body { padding: 2rem 1.2rem 4rem; }
+  .meta-block h1 { font-size: 1.2rem; }
+  h2 { margin-top: 2.4rem; }
+  p, ul, ol { font-size: 0.9rem; }
+  pre { padding: 0.85rem; font-size: 0.74rem; }
+}

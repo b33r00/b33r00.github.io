@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>b3r0 — writeups &amp; research</title>
+    <link>https://b33r00.github.io/</link>
+    <description>CTF writeups, vulnerability research, and security findings by b3r0.</description>
+    <language>en</language>
+    <atom:link href="https://b33r00.github.io/rss.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Mon, 01 Jan 2026 00:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Proofmark — Cyber Apocalypse 2026 (mobile/RE, hard)</title>
+      <link>https://b33r00.github.io/writeups/cyber-apocalypse-2026/proofmark.html</link>
+      <description>ARM64 reverse engineering of a Godot GDExtension. Inverting a 32-bit stream cipher to recover the flag without playing the game.</description>
+      <pubDate>Mon, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://b33r00.github.io/writeups/cyber-apocalypse-2026/proofmark.html</guid>
+    </item>
+
+    <item>
+      <title>The Ashen Field — Cyber Apocalypse 2026 (crypto, very easy)</title>
+      <link>https://b33r00.github.io/writeups/cyber-apocalypse-2026/the-ashen-field.html</link>
+      <description>HFE public key system with base field q=2. The Frobenius maps collapse all nonlinearity; Gaussian elimination recovers the key.</description>
+      <pubDate>Mon, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://b33r00.github.io/writeups/cyber-apocalypse-2026/the-ashen-field.html</guid>
+    </item>
+
+    <!-- add new writeup/research items above this line -->
+  </channel>
+</rss>

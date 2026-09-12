@@ -1,367 +1,734 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>b3r0</title>
-
+  <link rel="alternate" type="application/rss+xml" title="b3r0 writeups &amp; research" href="rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="b3r0 blog" href="blog-rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0a0a0a;
-      --fg:#f2f2f2;
-      --muted:#b7b7b7;
-      --muted2:#8d8d8d;
-      --line:#1a1a1a;
-      --accent:#f5c542;
-      --max:1120px;
-      --menuW:280px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #090909;
+      --fg:            #e2d9cf;
+      --fg-dim:        #7a6a5e;
+      --fg-dimmer:     #3d2e24;
+      --accent:        #f07000;
+      --accent-dim:    #a04800;
+      --accent-bright: #ff8c2a;
+      --rule:          #1e1410;
+      --sidebar-w:     280px;
     }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--fg);
-      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      line-height:1.55;
+    html { background:var(--bg); color:var(--fg); font-family:'Courier Prime','Courier New',Courier,monospace; font-size:16px; line-height:1.7; }
+    .layout { display:flex; min-height:100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width:var(--sidebar-w); min-width:var(--sidebar-w);
+      padding:2.2rem 1.2rem 2.4rem;
+      border-right:1px solid var(--rule);
+      position:sticky; top:0; height:100vh; overflow-y:auto;
+      display:flex; flex-direction:column; align-items:center;
     }
 
-a{
-  color:#4da3ff;
-  text-decoration:none;
-  transition: color .2s ease, text-shadow .2s ease;
-  text-shadow: 0 0 6px rgba(77,163,255,.4);
-}
-
-a:hover{
-  color:var(--accent);
-  text-shadow: 0 0 8px rgba(245,197,66,.6);
-}
-
-
-    .page{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:44px 18px;
-      display:grid;
-      grid-template-columns: 1fr var(--menuW);
-      gap:34px;
+    .profile-pic {
+      width:120px; height:120px; border-radius:50%;
+      border:1px solid var(--fg-dimmer); object-fit:cover;
+      display:block; margin-bottom:1.1rem; background:var(--rule);
+      flex-shrink:0;
     }
 
-    /* LEFT */
-    .ascii{
-      font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    /* ASCII — Fira Code, large enough to be fully visible at 280px sidebar */
+    .ascii-name {
+      font-family:'Fira Code','Consolas','Lucida Console',monospace;
+      font-size:0.5rem;
+      line-height:1.18;
       color:var(--accent);
-      font-size:12px;
-      line-height:1.2;
       white-space:pre;
-      margin:0 0 20px 0;
-      opacity:0.95;
-    }
-
-    .header{
-      display:flex;
-      align-items:center;
-      gap:16px;
-      margin-bottom:14px;
-    }
-
-    .avatar{
-      width:78px;
-      height:78px;
-      border-radius:50%;
-      border:1px solid var(--line);
-      background: radial-gradient(circle at 35% 30%, rgba(245,197,66,0.08), transparent 55%);
+      user-select:none;
+      letter-spacing:0;
+      margin-bottom:1rem;
+      width:100%;
       overflow:hidden;
-      flex:0 0 78px;
-    }
-    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
-
-    h1{
-      margin:0;
-      font-size:24px;
-      font-weight:600;
-      letter-spacing:-0.01em;
     }
 
-    .subline{
-      margin-top:6px;
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:13px;
-      color:var(--muted2);
-    }
+    .bio-line { font-size:0.78rem; color:var(--fg-dim); margin-bottom:0.18rem; letter-spacing:0.04em; text-align:center; }
 
-    .prompt{
-      margin:12px 0 16px 0;
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:13px;
-      color:var(--accent);
-    }
+    .focus-block { margin-top:1rem; margin-bottom:1.4rem; width:100%; }
+    .focus-label { font-size:0.62rem; color:var(--fg-dim); letter-spacing:0.14em; font-weight:700; margin-bottom:0.3rem; text-align:center; }
+    .focus-block ul { list-style:none; font-size:0.75rem; color:var(--fg-dim); text-align:center; }
+    .focus-block ul li::before { content:"· "; color:var(--fg-dimmer); }
 
-    .about{
-      max-width:82ch;
-      color:var(--muted);
-      font-size:15px;
-      margin:0;
-    }
+    /* lang toggle */
+    .lang-toggle { display:flex; gap:0.6rem; margin-bottom:1rem; font-size:0.68rem; letter-spacing:0.08em; }
+    .lang-toggle button { background:none; border:none; color:var(--fg-dim); font-family:inherit; cursor:pointer; padding:0; border-bottom:1px solid transparent; transition:color 0.1s; }
+    .lang-toggle button.active { color:var(--accent); border-bottom-color:var(--accent-dim); }
+    .lang-toggle button:hover { color:var(--accent-bright); }
 
-    .bullets{
-      margin:14px 0 0 0;
-      padding:0;
-      list-style:none;
-      color:var(--muted);
-      font-size:15px;
+    /* nav — vivid orange always */
+    .sidebar-nav { list-style:none; display:flex; flex-direction:column; align-items:center; gap:0.08rem; margin-top:auto; width:100%; }
+    .sidebar-nav a {
+      display:block; font-size:0.9rem;
+      color:var(--accent);          /* vivid orange, always */
+      text-decoration:none;
+      padding:0.26rem 0.8rem;
+      border-left:2px solid transparent;
+      transition:color 0.1s, border-color 0.1s;
+      letter-spacing:0.04em; text-align:center; width:100%;
     }
-    .bullets li{ margin:8px 0; }
-    .bullets li::before{
-      content:"—";
-      color:var(--accent);
-      margin-right:10px;
-    }
+    .sidebar-nav a:hover { color:var(--accent-bright); border-left-color:var(--accent-bright); }
+    .sidebar-nav a.active { color:var(--accent-bright); border-left-color:var(--accent-bright); }
 
-    .socialBlock{
-      margin-top:18px;
-      padding-top:16px;
-      border-top:1px solid var(--line);
-      max-width:82ch;
+    .sidebar-socials {
+      margin-top:1.4rem; font-size:0.7rem; color:var(--fg-dim);
+      display:flex; flex-direction:column; align-items:center;
+      gap:0.2rem; width:100%; text-align:center;
     }
-    .socialTitle{
-      margin:0 0 10px 0;
-      font-size:12px;
-      font-weight:600;
-      letter-spacing:0.12em;
-      text-transform:uppercase;
-      color:var(--fg);
-      opacity:0.85;
+    .sidebar-socials a { color:var(--fg-dim); text-decoration:none; transition:color 0.1s; }
+    .sidebar-socials a:hover { color:var(--accent-bright); }
+    .sidebar-socials .rss-link { color:var(--fg-dimmer); font-size:0.64rem; margin-top:0.35rem; text-decoration:none; }
+    .sidebar-socials .rss-link:hover { color:var(--accent-bright); }
+
+    /* ── Main ── */
+    .main { flex:1; padding:2.8rem 2.8rem 6rem; max-width:800px; }
+    .section { display:none; }
+    .section.active { display:block; }
+    .section-heading { font-size:0.7rem; color:var(--accent-dim); letter-spacing:0.18em; font-weight:700; margin-bottom:2rem; padding-bottom:0.5rem; border-bottom:1px solid var(--rule); }
+    hr.divider { border:none; border-top:1px solid var(--rule); margin:1.6rem 0; }
+
+    /* i18n */
+    [data-lang="en"] .hu { display:none; }
+    [data-lang="hu"] .en { display:none; }
+
+    /* ── About ── */
+    .about-text { font-size:0.91rem; max-width:62ch; }
+    .about-text p { margin-bottom:0.85rem; color:var(--fg); }
+    .setup { list-style:none; font-size:0.82rem; color:var(--fg-dim); margin-top:0.6rem; }
+    .setup li::before { content:"→  "; color:var(--fg-dimmer); }
+    .setup a { color:var(--fg-dim); text-decoration:none; border-bottom:1px solid var(--rule); }
+    .setup a:hover { color:var(--accent-bright); }
+
+    /* ── Writeups — two-level filter ── */
+
+    /* level 1: year buttons */
+    .year-filter { display:flex; gap:0.9rem; margin-bottom:0; flex-wrap:wrap; }
+    .year-filter button {
+      background:none; border:none; color:var(--fg-dim);
+      font-family:inherit; font-size:0.8rem; cursor:pointer;
+      padding:0.22rem 0; border-bottom:2px solid transparent;
+      letter-spacing:0.06em; transition:color 0.1s, border-color 0.1s;
     }
-    .socials{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      font-family:"JetBrains Mono", ui-monospace, monospace;
-      font-size:13px;
-      color:var(--muted2);
-    }
-    .socialRow{
-      display:flex;
-      gap:10px;
-      align-items:baseline;
+    .year-filter button:hover { color:var(--accent-bright); }
+    .year-filter button.active { color:var(--accent-bright); border-bottom-color:var(--accent); }
+
+    /* level 2: contest bar — appears below year row */
+    .contest-bar {
+      display:none;
+      margin-top:0.9rem;
+      padding-top:0.7rem;
+      border-top:1px solid var(--rule);
+      display:none;
       flex-wrap:wrap;
+      gap:0.6rem;
     }
-    .label{
-      min-width:88px;
-      color:var(--muted2);
+    .contest-bar.visible { display:flex; }
+    .contest-btn {
+      background:none; border:1px solid var(--rule);
+      color:var(--fg-dim); font-family:inherit; font-size:0.74rem;
+      cursor:pointer; padding:0.2rem 0.6rem;
+      letter-spacing:0.04em; transition:color 0.1s, border-color 0.1s;
     }
-    .value{
-      color:var(--fg);
-      opacity:0.92;
+    .contest-btn:hover { color:var(--accent-bright); border-color:var(--accent-dim); }
+    .contest-btn.active { color:var(--accent-bright); border-color:var(--accent); }
+
+    /* writeup entries */
+    .writeup-entries { margin-top:1.4rem; }
+    .writeup-group { display:none; }
+    .writeup-group.visible { display:block; }
+    .writeup-group-label { font-size:0.66rem; color:var(--accent-dim); letter-spacing:0.16em; font-weight:700; margin-bottom:0.55rem; padding-bottom:0.35rem; border-bottom:1px solid var(--rule); }
+
+    .writeup-list { list-style:none; font-size:0.87rem; display:flex; flex-direction:column; gap:0.22rem; }
+    .writeup-list li { display:grid; grid-template-columns:1fr auto auto; gap:1rem; align-items:baseline; border-bottom:1px solid var(--rule); padding-bottom:0.26rem; }
+    .writeup-list a { color:var(--fg); text-decoration:none; }
+    .writeup-list a:hover { color:var(--accent-bright); }
+    .writeup-list .badge { font-size:0.66rem; color:var(--fg-dim); border:1px solid var(--rule); padding:0.04rem 0.3rem; white-space:nowrap; }
+    .writeup-list .meta { font-size:0.73rem; color:var(--fg-dim); white-space:nowrap; }
+
+    /* ── Blog ── */
+    .blog-category { font-size:0.66rem; color:var(--accent-dim); letter-spacing:0.16em; font-weight:700; margin:1.6rem 0 0.5rem; padding-bottom:0.35rem; border-bottom:1px solid var(--rule); }
+    .blog-category:first-child { margin-top:0; }
+    .blog-list { list-style:none; display:flex; flex-direction:column; gap:0; }
+    .blog-list li { border-bottom:1px solid var(--rule); padding:0.55rem 0; display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:baseline; }
+    .blog-list a { color:var(--fg); text-decoration:none; font-size:0.88rem; }
+    .blog-list a:hover { color:var(--accent-bright); }
+    .blog-list .meta { font-size:0.73rem; color:var(--fg-dim); white-space:nowrap; }
+
+    /* ── Research ── */
+    .research-list { list-style:none; display:flex; flex-direction:column; gap:0; }
+    .research-list li { border-bottom:1px solid var(--rule); padding:0.7rem 0; }
+    .research-list .r-title { font-size:0.88rem; color:var(--fg); display:block; margin-bottom:0.18rem; text-decoration:none; }
+    .research-list a.r-title:hover { color:var(--accent-bright); }
+    .research-list .r-meta { font-size:0.72rem; color:var(--fg-dim); display:flex; gap:1rem; flex-wrap:wrap; }
+    .research-list .r-meta span::before { content:"· "; }
+    .research-list .r-desc { font-size:0.84rem; color:var(--fg-dim); margin-top:0.22rem; display:block; }
+
+    /* ── Projects ── */
+    .proj-year-filter { display:flex; gap:0.9rem; margin-bottom:1.6rem; flex-wrap:wrap; }
+    .proj-year-filter button { background:none; border:none; color:var(--fg-dim); font-family:inherit; font-size:0.8rem; cursor:pointer; padding:0; border-bottom:2px solid transparent; letter-spacing:0.06em; transition:color 0.1s; }
+    .proj-year-filter button:hover { color:var(--accent-bright); }
+    .proj-year-filter button.active { color:var(--accent-bright); border-bottom-color:var(--accent); }
+    .project-list { display:flex; flex-direction:column; gap:1.4rem; }
+    .project-item { border-left:2px solid var(--rule); padding-left:1.1rem; }
+    .project-title { font-size:0.9rem; font-weight:700; color:var(--accent); margin-bottom:0.22rem; }
+    .project-title a { color:inherit; text-decoration:none; border-bottom:1px solid var(--rule); }
+    .project-title a:hover { color:var(--accent-bright); }
+    .project-desc { font-size:0.84rem; color:var(--fg); max-width:58ch; }
+    .project-tags { margin-top:0.32rem; font-size:0.7rem; color:var(--fg-dim); display:flex; gap:0.7rem; flex-wrap:wrap; }
+    .project-tags span::before { content:"# "; }
+    .project-year { font-size:0.7rem; color:var(--fg-dimmer); margin-top:0.3rem; }
+
+    /* ── Certifications ── */
+    .cert-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
+    .cert-box { border:1px solid var(--accent-dim); padding:1rem 1.1rem 1.1rem; display:flex; flex-direction:column; gap:0.4rem; }
+    .cert-box-provider { font-size:0.66rem; color:var(--accent-dim); letter-spacing:0.16em; font-weight:700; }
+    .cert-box-name { font-size:0.86rem; color:var(--fg); }
+    .cert-box-name .cert-year { font-size:0.73rem; color:var(--fg-dim); margin-left:0.4rem; }
+
+    /* ── Notes ── */
+    .notes-placeholder { font-size:0.87rem; color:var(--fg-dim); font-style:italic; }
+
+    /* ── Mobile ── */
+    @media (max-width:720px) {
+      .layout { flex-direction:column; }
+      .sidebar { width:100%; min-width:unset; height:auto; position:static; border-right:none; border-bottom:1px solid var(--rule); padding:1.6rem 1rem 1.2rem; }
+      .ascii-name { font-size:0.38rem; }
+      .sidebar-nav { flex-direction:row; flex-wrap:wrap; justify-content:center; gap:0.1rem 0.9rem; margin-top:0.8rem; }
+      .sidebar-nav a { border-left:none; border-bottom:2px solid transparent; padding-left:0; width:auto; }
+      .sidebar-nav a:hover, .sidebar-nav a.active { border-left-color:transparent; border-bottom-color:var(--accent-bright); }
+      .sidebar-socials { flex-direction:row; flex-wrap:wrap; justify-content:center; gap:0.35rem 1rem; margin-top:0.7rem; }
+      .main { padding:1.8rem 1rem 4rem; }
+      .cert-grid { grid-template-columns:1fr; }
+      .writeup-list li { grid-template-columns:1fr auto; }
+      .writeup-list .badge { display:none; }
+      .blog-list li { grid-template-columns:1fr; }
     }
-.value a{
-  color: var(--fg);
-  position: relative;
-}
-
-.value a::before{
-  content: "[";
-  color: transparent;
-  margin-right:4px;
-  transition:.2s;
-}
-
-.value a::after{
-  content: "]";
-  color: transparent;
-  margin-left:4px;
-  transition:.2s;
-}
-
-.value a:hover{
-  color:var(--accent);
-}
-
-.value a:hover::before,
-.value a:hover::after{
-  color:var(--accent);
-}
-
-
-
-
-    /* RIGHT MENU */
-    aside{
-      padding-left:18px;
-      border-left:2px solid var(--accent);
-      height:fit-content;
-      position:sticky;
-      top:28px;
-    }
-
-    .menuTitle{
-      margin:0 0 12px 0;
-      font-size:12px;
-      font-weight:600;
-      letter-spacing:0.12em;
-      text-transform:uppercase;
-      color:var(--fg);
-      opacity:0.9;
-    }
-
-    .navGroup{
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-    }
-
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    /* Main link */
-    .row a.main{
-      font-size:14px;
-      font-weight:500;
-      color:var(--fg);
-      padding:6px 0;
-      flex:1;
-    }
-
-    /* Submenu always visible (no collapse) */
-    .sub{
-      margin-top:8px;
-      padding-left:10px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .sub a{
-      color:var(--muted);
-      font-size:13px;
-      padding:4px 0;
-    }
-
-    .divider{
-      margin:16px 0;
-      border-top:1px solid var(--line);
-    }
-
-    @media (max-width:900px){
-      .page{ grid-template-columns:1fr; }
-      aside{
-        position:static;
-        border-left:none;
-        padding-left:0;
-        border-top:2px solid var(--accent);
-        padding-top:16px;
-      }
-    }
+    @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
   </style>
 </head>
-
 <body>
-  <main class="page">
+<div class="layout">
 
-    <!-- LEFT -->
-    <section aria-label="About">
-<pre class="ascii">    _    ____   ___  _   _ _____   __  __ _____
-   / \  | __ ) / _ \| | | |_   _| |  \/  | ____|
-  / _ \ |  _ \| | | | | | | | |   | |\/| |  _|
- / ___ \| |_) | |_| | |_| | | |   | |  | | |___
-/_/   \_\____/ \___/ \___/  |_|   |_|  |_|_____</pre>
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside class="sidebar">
+  <img class="profile-pic" src="assets/profile.jpg" alt="b3r0"
+       onerror="this.style.background='#1e1410';this.removeAttribute('src')">
 
-      <div class="header">
-        <div class="avatar" aria-label="Profile picture">
-       <img src="/assets/pfp.jpg" alt="b3r0"> 
-        </div>
-        <div>
-          <h1>b3r0</h1>
-          <div class="subline">18 y/o pentester • Hungary</div>
-        </div>
-      </div>
+  <pre class="ascii-name"> ██████╗ ██████╗ ██████╗  ██████╗
+ ██╔══██╗╚════██╗██╔══██╗██╔═████╗
+ ██████╔╝ █████╔╝██████╔╝██║██╔██║
+ ██╔══██╗ ╚═══██╗██╔══██╗████╔╝██║
+ ██████╔╝██████╔╝██║  ██║╚██████╔╝
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝</pre>
 
-      <div class="prompt">b3r0@gentoo:~$ emerge -s about-me</div>
+  <p class="bio-line">penetration tester</p>
+  <p class="bio-line">hungary · 18 y/o</p>
 
-      <p class="about">
-        I’m a pentester from Hungary with a bias toward fundamentals and systems thinking.
-        I care about understanding why an exploit works, how trust boundaries fail, and how small misconfigurations
-        combine into real compromise paths. My interests currently center on web security, Active Directory, and practical
-        exploitation in realistic environments.
-      </p>
-
-      <ul class="bullets">
-        <li>Linux-first workflow; daily-driven minimalist environments <a color=#f5c542 href="https://github.com/b33r00/i3-artix-dotfiles" > [Artix + runit + i3wm]</a> and experimented with Gentoo-based setups.</li>
-        <li>I keep tooling and configurations versioned, and prefer transparent systems I can reason about end-to-end.</li>
-      </ul>
-
-      <div class="socialBlock" aria-label="Socials">
-        <div class="socialTitle">Socials</div>
-        <div class="socials">
-          <div class="socialRow"><span class="label">Discord</span><span class="value">0x00f17e</span></div>
-          <div class="socialRow">
-  <span class="label">HTB</span>
-  <span class="value">
-    <a href="https://app.hackthebox.com/users/1405272" target="_blank" rel="noopener">b3r0</a>
-  </span>
-</div>
-
-<div class="socialRow">
-  <span class="label">THM</span>
-  <span class="value">
-    <a href="https://tryhackme.com/p/b3r0" target="_blank" rel="noopener">b3r0</a>
-  </span>
-</div>
-
-          <div class="socialRow">
-            <span class="label">GitHub</span>
-            <span class="value"><a href="https://github.com/b33r00" target="_blank" rel="noopener">github.com/b33r00</a></span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RIGHT -->
- <aside aria-label="Menu">
-  <div class="menuTitle">Menu</div>
-
-  <div class="navGroup">
-
-    <section class="group">
-      <div class="row">
-        <a class="main" href="/writeups/index.html">Writeups</a>
-      </div>
-    </section>
-
-    <section class="group">
-      <div class="row">
-        <a class="main" href="/notes/wip.html">Notes</a>
-      </div>
-    </section>
-
-    <section class="group">
-      <div class="row">
-        <a class="main" href="/homelabs/wip.html">Homelabs</a>
-      </div>
-    </section>
-
-    <section class="group">
-      <div class="row">
-        <a class="main" href="/roadmap/index.html">Roadmap</a>
-      </div>
-    </section>
-
+  <div class="focus-block">
+    <div class="focus-label">focus</div>
+    <ul>
+      <li>web security</li>
+      <li>active directory</li>
+      <li>ctf / labs</li>
+    </ul>
   </div>
 
-  <div class="divider"></div>
+  <div class="lang-toggle">
+    <button onclick="setLang('en')" class="active" id="btn-en">en</button>
+    <span style="color:var(--fg-dimmer)">/</span>
+    <button onclick="setLang('hu')" id="btn-hu">hu</button>
+  </div>
+
+  <ul class="sidebar-nav">
+    <li><a href="#" data-section="about" class="active">/about</a></li>
+    <li><a href="#" data-section="writeups">/writeups</a></li>
+    <li><a href="#" data-section="research">/research</a></li>
+    <li><a href="#" data-section="blog">/blog</a></li>
+    <li><a href="#" data-section="projects">/projects</a></li>
+    <li><a href="#" data-section="notes">/notes</a></li>
+    <li><a href="#" data-section="certifications">/certifications</a></li>
+  </ul>
+
+  <div class="sidebar-socials">
+    <a href="https://github.com/b33r00" target="_blank" rel="noopener">github</a>
+    <a href="https://app.hackthebox.com/users/1405272" target="_blank" rel="noopener">hackthebox</a>
+    <a href="https://tryhackme.com/p/b3r0" target="_blank" rel="noopener">tryhackme</a>
+    <a href="https://hackerone.com/b3r0" target="_blank" rel="noopener">hackerone</a>
+    <a href="https://twitter.com/b3r0sec" target="_blank" rel="noopener">twitter / x</a>
+    <a href="https://signal.me/#p/beer.57" target="_blank" rel="noopener">signal</a>
+    <span>discord: 0x00f17e</span>
+    <a class="rss-link" href="rss.xml">rss — writeups &amp; research</a>
+    <a class="rss-link" href="blog-rss.xml">rss — blog</a>
+  </div>
 </aside>
 
+<!-- ═══════ MAIN ═══════ -->
+<main class="main">
 
-  </main>
+  <!-- About -->
+  <section id="about" class="section active">
+    <div class="section-heading en">about</div>
+    <div class="section-heading hu">rolam</div>
+    <div class="about-text">
+      <p class="en">18 y/o pentester from Hungary. I care about understanding why an exploit works, how trust boundaries fail, and how small misconfigurations chain into real compromise paths. Current focus: web security, Active Directory, and practical exploitation in realistic environments.</p>
+      <p class="hu">18 eves pentester Magyarorszagrol. Erdekel hogy miert mukodik egy exploit, hogyan vallanak meg a biztonsagi hatarok, es hogyan lancelodnak apro hibak valos kompromittalassa. Jelenlegi fokusz: web security, Active Directory, realisztikus lab kornyezetek.</p>
+      <p class="en">Linux-first. Tooling and configs are versioned. I prefer transparent systems I can reason about end-to-end.</p>
+      <p class="hu">Linux-elso. Az eszkozok es konfigok verziokezelt. Attlatszo rendszereket preferalok, amelyeket vegig tudom gondolni.</p>
+      <ul class="setup">
+        <li><a href="https://github.com/b33r00/i3-artix-dotfiles">Artix + runit + i3wm</a> — <span class="en">daily driver</span><span class="hu">napi hasznalat</span></li>
+        <li><span class="en">Gentoo-based setups — experimented</span><span class="hu">Gentoo alapu rendszerek — kiserleteztem</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Writeups — two-level filter -->
+  <section id="writeups" class="section">
+    <div class="section-heading">writeups</div>
+
+    <!-- Level 1: years -->
+    <div class="year-filter" id="yr">
+      <button class="active" data-year="all">all</button>
+      <button data-year="2026">/2026</button>
+      <button data-year="2025">/2025</button>
+      <button data-year="2024">/2024</button>
+      <button data-year="2023">/2023</button>
+      <button data-year="2022">/2022</button>
+      <button data-year="2021">/2021</button>
+      <button data-year="2020">/2020</button>
+    </div>
+
+    <!-- Level 2: contest bar (populated by JS) -->
+    <div class="contest-bar" id="contest-bar"></div>
+
+    <!-- All writeup groups — data-year + data-contest attributes drive filtering -->
+    <div class="writeup-entries" id="writeup-entries">
+
+      <!-- 2026 / Cyber Apocalypse -->
+      <div class="writeup-group visible" data-year="2026" data-contest="cyber-apocalypse-2026">
+        <div class="writeup-group-label">Cyber Apocalypse 2026</div>
+        <ul class="writeup-list">
+          <li>
+            <a href="writeups/cyber-apocalypse-2026/the-ashen-field.html">The Ashen Field</a>
+            <span class="badge">crypto · very easy</span>
+            <span class="meta">2026</span>
+          </li>
+          <li>
+            <a href="writeups/cyber-apocalypse-2026/proofmark.html">Proofmark</a>
+            <span class="badge">mobile · hard</span>
+            <span class="meta">2026</span>
+          </li>
+          <!-- add more writeups here — they show under this contest automatically -->
+        </ul>
+      </div>
+
+      <!-- 2026 / HCSC -->
+      <div class="writeup-group visible" data-year="2026" data-contest="hcsc-2026">
+        <div class="writeup-group-label">HCSC 2026</div>
+        <ul class="writeup-list">
+          <li>
+            <a href="#">writeup coming</a>
+            <span class="badge">ctf</span>
+            <span class="meta">2026</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2025 / HCSC -->
+      <div class="writeup-group" data-year="2025" data-contest="hcsc-2025">
+        <div class="writeup-group-label">HCSC 2025</div>
+        <ul class="writeup-list">
+          <li>
+            <a href="#">writeup coming</a>
+            <span class="badge">ctf</span>
+            <span class="meta">2025</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2024 / HCSC -->
+      <div class="writeup-group" data-year="2024" data-contest="hcsc-2024">
+        <div class="writeup-group-label">HCSC 2024</div>
+        <ul class="writeup-list">
+          <li>
+            <a href="#">writeup coming</a>
+            <span class="badge">ctf</span>
+            <span class="meta">2024</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2022 / VulnHub -->
+      <div class="writeup-group" data-year="2022" data-contest="vulnhub">
+        <div class="writeup-group-label">VulnHub</div>
+        <ul class="writeup-list">
+          <li>
+            <a href="#">machine — coming</a>
+            <span class="badge">linux</span>
+            <span class="meta">2022</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2021 / VulnHub -->
+      <div class="writeup-group" data-year="2021" data-contest="vulnhub">
+        <div class="writeup-group-label">VulnHub</div>
+        <ul class="writeup-list">
+          <li>
+            <a href="#">machine — coming</a>
+            <span class="badge">linux</span>
+            <span class="meta">2021</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2020 / VulnHub -->
+      <div class="writeup-group" data-year="2020" data-contest="vulnhub">
+        <div class="writeup-group-label">VulnHub</div>
+        <ul class="writeup-list">
+          <li>
+            <a href="writeups/vulnhub/mr-robot.html">Mr. Robot: 1</a>
+            <span class="badge">linux · medium</span>
+            <span class="meta">2020</span>
+          </li>
+          <li>
+            <a href="#">machine — coming</a>
+            <span class="badge">linux</span>
+            <span class="meta">2020</span>
+          </li>
+        </ul>
+      </div>
+
+      <!--
+        HOW TO ADD A NEW WRITEUP GROUP:
+        1. Copy a <div class="writeup-group"> block
+        2. Set data-year="YYYY" and data-contest="contest-slug"
+        3. The contest slug must match what you add in the CONTESTS object in the JS below
+        4. Add <li> entries inside .writeup-list
+        The year filter and contest bar update automatically.
+      -->
+
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section id="research" class="section">
+    <div class="section-heading">research</div>
+    <p style="font-size:0.86rem;color:var(--fg-dim);margin-bottom:1.6rem;" class="en">Vulnerabilities, CVEs, and security findings I have reported or discovered. Subscribe via <a href="rss.xml" style="color:var(--accent-dim);border-bottom:1px solid var(--rule);">RSS</a>.</p>
+    <p style="font-size:0.86rem;color:var(--fg-dim);margin-bottom:1.6rem;" class="hu">Sajat sebezhetosegek, CVE-k, biztonsagi megfigylesek. <a href="rss.xml" style="color:var(--accent-dim);border-bottom:1px solid var(--rule);">RSS</a>-en is kovetheto.</p>
+    <ul class="research-list">
+      <li><span class="r-title" style="color:var(--fg-dim);font-style:italic;">No public disclosures yet.</span></li>
+      <!--
+        HOW TO ADD A FINDING:
+        <li>
+          <a class="r-title" href="research/finding-name.html">CVE-XXXX-XXXXX — Product Name</a>
+          <div class="r-meta"><span>CVE</span><span>CVSS: X.X</span><span>2025</span></div>
+          <span class="r-desc">Short one-line description.</span>
+        </li>
+        Also add an <item> to rss.xml.
+      -->
+    </ul>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog" class="section">
+    <div class="section-heading">blog</div>
+
+    <!-- thoughts — opinions, reflections, random ideas -->
+    <div class="blog-category en">thoughts</div>
+    <div class="blog-category hu">gondolatok</div>
+    <ul class="blog-list">
+      <li>
+        <a href="blog/roadmap.html" class="en">Roadmap</a>
+        <a href="blog/roadmap.html" class="hu">Fejlodesi ut</a>
+        <span class="meta">2026</span>
+      </li>
+      <!-- future: opinions on tooling, learning approach, mindset, etc. -->
+    </ul>
+
+    <!-- resources — curated lists, references, link collections -->
+    <div class="blog-category en">resources</div>
+    <div class="blog-category hu">forrasok</div>
+    <ul class="blog-list">
+      <li>
+        <a href="blog/security-resources.html" class="en">Security Learning Resources</a>
+        <a href="blog/security-resources.html" class="hu">Biztonsagi tanulasi forrasok</a>
+        <span class="meta">2026</span>
+      </li>
+      <!-- future: tool lists, cheatsheets, recommended reading -->
+    </ul>
+
+    <!-- hardware — physical devices, embedded, electronics -->
+    <div class="blog-category en">hardware</div>
+    <div class="blog-category hu">hardware</div>
+    <ul class="blog-list">
+      <!-- future: Flipper Zero notes, USB gadgets, microcontroller experiments -->
+      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
+    </ul>
+
+    <!-- linux & systems — distros, configs, sysadmin -->
+    <div class="blog-category en">linux &amp; systems</div>
+    <div class="blog-category hu">linux &amp; rendszerek</div>
+    <ul class="blog-list">
+      <!-- future: USE flags, kernel config, init systems, ricing -->
+      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
+    </ul>
+
+    <!-- security concepts — deeper technical writeups that aren't CTF-specific -->
+    <div class="blog-category en">security concepts</div>
+    <div class="blog-category hu">biztonsagi fogalmak</div>
+    <ul class="blog-list">
+      <!-- future: attack chains, protocol analysis, vulnerability classes -->
+      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
+    </ul>
+
+    <!-- ctf — event recaps, strategy posts, meta -->
+    <div class="blog-category en">ctf</div>
+    <div class="blog-category hu">ctf</div>
+    <ul class="blog-list">
+      <!-- future: event recaps, what I learned, team notes -->
+      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
+    </ul>
+
+    <!--
+      HOW TO ADD A BLOG POST:
+      1. Copy blog/roadmap.html to blog/your-post.html, edit content
+      2. Add a <li> in the right category above
+      3. Add an <item> to blog-rss.xml
+      Categories: thoughts / resources / hardware / linux & systems / security concepts / ctf
+      Add a new category block (blog-category + blog-list) if none fit.
+    -->
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section">
+    <div class="section-heading">projects</div>
+    <div class="proj-year-filter" id="proj-yr">
+      <button class="active" data-year="all">all</button>
+      <button data-year="2026">/2026</button>
+      <button data-year="2025">/2025</button>
+      <button data-year="2024">/2024</button>
+      <button data-year="2023">/2023</button>
+      <button data-year="2022">/2022</button>
+      <button data-year="2021">/2021</button>
+      <button data-year="2020">/2020</button>
+    </div>
+    <div class="project-list">
+
+      <div class="project-item" data-year="2026">
+        <div class="project-title"><a href="projects/xor-cipher.html">XOR Cipher Study</a></div>
+        <p class="project-desc en">Key recovery from known plaintext, repeating key detection, single-byte XOR breaking with frequency analysis.</p>
+        <p class="project-desc hu">Kulcsvisszafejtes ismert szovegbol, ismetlodo kulcs detektalas, egybajtos XOR tores frekvencia analizissal.</p>
+        <div class="project-tags"><span>cryptography</span><span>python</span></div>
+        <div class="project-year">2026</div>
+      </div>
+
+      <div class="project-item" data-year="2025">
+        <div class="project-title"><a href="projects/gentoo.html">Gentoo Linux install</a></div>
+        <p class="project-desc en">Full Gentoo from scratch — USE flags, kernel config, init selection, portage optimisation for a minimal security-focused system.</p>
+        <p class="project-desc hu">Teljes Gentoo telepites alapokbol — USE flag-ek, kernel konfig, init valasztas, portage optimalizalas.</p>
+        <div class="project-tags"><span>linux</span><span>gentoo</span></div>
+        <div class="project-year">2025</div>
+      </div>
+
+      <div class="project-item" data-year="2024">
+        <div class="project-title">homelab</div>
+        <p class="project-desc en">add description — network layout, services, what you are testing.</p>
+        <p class="project-desc hu">add description — halozati felepites, futtatott szolgaltatasok.</p>
+        <div class="project-tags"><span>homelab</span><span>active directory</span></div>
+        <div class="project-year">2024</div>
+      </div>
+
+      <div class="project-item" data-year="2023">
+        <div class="project-title"><a href="https://github.com/b33r00/i3-artix-dotfiles">Artix + i3wm dotfiles</a></div>
+        <p class="project-desc en">Daily driver config — Artix Linux, runit, i3wm. Versioned.</p>
+        <p class="project-desc hu">Napi konfig — Artix Linux, runit, i3wm. Verziokezelt.</p>
+        <div class="project-tags"><span>linux</span><span>dotfiles</span></div>
+        <div class="project-year">2023</div>
+      </div>
+
+      <div class="project-item" data-year="2023">
+        <div class="project-title"><a href="projects/hardware-hacking.html">Microchips &amp; hardware gadgets</a></div>
+        <p class="project-desc en">Hardware hacking tools and microcontroller experiments — Flipper Zero, custom gadgets, embedded attack surfaces.</p>
+        <p class="project-desc hu">Hardware hacking eszkozok es mikrokontroller kiserletezesek.</p>
+        <div class="project-tags"><span>hardware</span><span>embedded</span></div>
+        <div class="project-year">2023</div>
+      </div>
+
+      <div class="project-item" data-year="2022">
+        <div class="project-title"><a href="projects/arch.html">Arch Linux manual install</a></div>
+        <p class="project-desc en">Manual Arch without archinstall — partitioning, bootloader, AUR, minimal system from scratch.</p>
+        <p class="project-desc hu">Manualis Arch telepites archinstall nelkul.</p>
+        <div class="project-tags"><span>linux</span><span>arch</span></div>
+        <div class="project-year">2022</div>
+      </div>
+
+      <div class="project-item" data-year="2021">
+        <div class="project-title"><a href="projects/fedora.html">Fedora install &amp; setup</a></div>
+        <p class="project-desc en">First structured Linux environment with a pentesting toolkit.</p>
+        <p class="project-desc hu">Elso strukturalt Linux kornyezet pentesting eszkozokkal.</p>
+        <div class="project-tags"><span>linux</span><span>fedora</span></div>
+        <div class="project-year">2021</div>
+      </div>
+
+      <div class="project-item" data-year="2020">
+        <div class="project-title"><a href="projects/kali.html">First Kali Linux install</a></div>
+        <p class="project-desc en">First contact with a security-focused distro. Exploring tools, breaking things.</p>
+        <p class="project-desc hu">Elso talalkozas biztonsagi Linux disztribucioval.</p>
+        <div class="project-tags"><span>linux</span><span>kali</span></div>
+        <div class="project-year">2020</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Notes -->
+  <section id="notes" class="section">
+    <div class="section-heading">notes</div>
+    <p class="notes-placeholder en">Notes coming — methodology docs, tool references, topic breakdowns.</p>
+    <p class="notes-placeholder hu">Hamarosan — metodologia jegyzetek, eszkoz referenciak, temakor osszefoglalok.</p>
+  </section>
+
+  <!-- Certifications -->
+  <section id="certifications" class="section">
+    <div class="section-heading">certifications</div>
+    <div class="cert-grid">
+      <div class="cert-box">
+        <div class="cert-box-provider">hackthebox</div>
+        <div class="cert-box-name">HTB CPTS</div>
+      </div>
+      <div class="cert-box">
+        <div class="cert-box-provider">hackthebox</div>
+        <div class="cert-box-name">HTB CWES</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script>
+// ── Section nav ──
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    link.classList.add('active');
+    document.getElementById(link.dataset.section).classList.add('active');
+  });
+});
+
+// ── Writeups two-level filter ──
+// Contest metadata: slug -> display label, list of years it appears in
+const CONTESTS = {
+  'cyber-apocalypse-2026': { label: 'Cyber Apocalypse 2026', years: ['2026'] },
+  'hcsc-2026':             { label: 'HCSC 2026',             years: ['2026'] },
+  'hcsc-2025':             { label: 'HCSC 2025',             years: ['2025'] },
+  'hcsc-2024':             { label: 'HCSC 2024',             years: ['2024'] },
+  'vulnhub':               { label: 'VulnHub',               years: ['2020','2021','2022'] },
+  // HOW TO ADD A NEW CONTEST:
+  // 'my-contest-2027': { label: 'My Contest 2027', years: ['2027'] },
+  // Then add a .writeup-group with data-contest="my-contest-2027" data-year="2027"
+};
+
+const allGroups  = [...document.querySelectorAll('.writeup-group')];
+const contestBar = document.getElementById('contest-bar');
+let activeYear    = 'all';
+let activeContest = 'all';
+
+function getContestsForYear(year) {
+  if (year === 'all') return Object.keys(CONTESTS);
+  return Object.keys(CONTESTS).filter(slug => CONTESTS[slug].years.includes(year));
+}
+
+function renderContestBar(year) {
+  const slugs = getContestsForYear(year);
+  if (year === 'all' || slugs.length <= 1) {
+    contestBar.classList.remove('visible');
+    contestBar.innerHTML = '';
+    return;
+  }
+  contestBar.innerHTML = '';
+  // "all" button for the year
+  const allBtn = document.createElement('button');
+  allBtn.className = 'contest-btn active';
+  allBtn.textContent = 'all';
+  allBtn.addEventListener('click', () => selectContest('all'));
+  contestBar.appendChild(allBtn);
+
+  slugs.forEach(slug => {
+    const btn = document.createElement('button');
+    btn.className = 'contest-btn';
+    btn.textContent = CONTESTS[slug].label;
+    btn.dataset.slug = slug;
+    btn.addEventListener('click', () => selectContest(slug));
+    contestBar.appendChild(btn);
+  });
+  contestBar.classList.add('visible');
+}
+
+function selectContest(slug) {
+  activeContest = slug;
+  contestBar.querySelectorAll('.contest-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.slug === slug || (slug === 'all' && !b.dataset.slug));
+  });
+  applyFilters();
+}
+
+function applyFilters() {
+  allGroups.forEach(grp => {
+    const yMatch = activeYear === 'all' || grp.dataset.year === activeYear;
+    const cMatch = activeContest === 'all' || grp.dataset.contest === activeContest;
+    grp.classList.toggle('visible', yMatch && cMatch);
+  });
+}
+
+document.querySelectorAll('#yr button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeYear = btn.dataset.year;
+    activeContest = 'all';
+    document.querySelectorAll('#yr button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderContestBar(activeYear);
+    applyFilters();
+  });
+});
+
+// ── Projects year filter ──
+document.querySelectorAll('#proj-yr button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const year = btn.dataset.year;
+    document.querySelectorAll('#proj-yr button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.project-item').forEach(item => {
+      item.style.display = (year === 'all' || item.dataset.year === year) ? '' : 'none';
+    });
+  });
+});
+
+// ── Language toggle ──
+function setLang(lang) {
+  document.documentElement.dataset.lang = lang;
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-hu').classList.toggle('active', lang === 'hu');
+  localStorage.setItem('b3ro-lang', lang);
+}
+const saved = localStorage.getItem('b3ro-lang');
+if (saved) setLang(saved);
+</script>
 </body>
 </html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XOR Cipher Study — b3r0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../writeups.css">
+</head>
+<body>
+
+<a class="back" href="../index.html">← back</a>
+
+<div class="meta-block">
+  <h1>XOR Cipher Study</h1>
+  <div class="meta-row">
+    <span>project</span>
+    <span>cryptography</span>
+    <span>python</span>
+    <span>2026</span>
+  </div>
+</div>
+
+<h2>motivation</h2>
+<p>I wanted to understand concretely why XOR encryption is considered weak. XOR ciphers appear in beginner CTF challenges and small programs because they are easy to implement, but they are also easy to break if the implementation is not careful. This project was not about building a strong cryptographic system — it was about studying how an attacker recovers the key and decrypts the message using basic mathematical properties.</p>
+
+<h2>how XOR encryption works</h2>
+<p>The XOR cipher encrypts data one byte at a time using the XOR operation:</p>
+<code class="math">C = P ⊕ K</code>
+<p>Where P is plaintext, K is the key, C is the ciphertext, and ⊕ is XOR. The critical property of XOR is:</p>
+<code class="math">A ⊕ B ⊕ B = A</code>
+<p>Which means we can rearrange the encryption formula to recover the key:</p>
+<code class="math">K = C ⊕ P</code>
+<p>If an attacker knows or can guess any part of the plaintext, they can recover the key directly from that segment of ciphertext. No brute force needed.</p>
+
+<h2>what this project implements</h2>
+<p>Three scenarios that appear frequently in CTF challenges and beginner cryptography exercises:</p>
+<ul>
+  <li>Key recovery when plaintext is known (or partially guessable)</li>
+  <li>Detecting repeating XOR keys using index of coincidence</li>
+  <li>Breaking single-byte XOR using English letter frequency analysis</li>
+</ul>
+
+<h2>implementation</h2>
+<pre>from collections import Counter
+import string
+
+def xor_bytes(data: bytes, key: bytes) -> bytes:
+    return bytes(data[i] ^ key[i % len(key)] for i in range(len(data)))
+
+def recover_key_from_known_plaintext(ciphertext: bytes, plaintext: bytes) -> bytes:
+    if len(ciphertext) != len(plaintext):
+        raise ValueError("Ciphertext and plaintext must have same length.")
+    return bytes(c ^ p for c, p in zip(ciphertext, plaintext))
+
+def english_score(text: bytes) -> int:
+    common = b" etaoinshrdlu"
+    score = 0
+    for byte in text.lower():
+        if byte in common:
+            score += 1
+    return score
+
+def break_single_byte_xor(ciphertext: bytes):
+    best_score = 0
+    best_key = None
+    best_plaintext = None
+
+    for key in range(256):
+        decrypted = bytes(c ^ key for c in ciphertext)
+        score = english_score(decrypted)
+
+        if score > best_score:
+            best_score = score
+            best_key = key
+            best_plaintext = decrypted
+
+    return best_key, best_plaintext</pre>
+
+<h2>example usage</h2>
+<p>Recovering the key from known plaintext:</p>
+<pre>ciphertext = b'\x1f\x04\x0c'
+plaintext  = b'cat'
+
+key = recover_key_from_known_plaintext(ciphertext, plaintext)
+print("Recovered key:", key)</pre>
+
+<p>Breaking single-byte XOR with frequency analysis — this is a classic Cryptopals challenge:</p>
+<pre>cipher = bytes.fromhex("1b37373331363f78151b7f2b783431333d78397828372d36")
+
+key, plaintext = break_single_byte_xor(cipher)
+
+print("Recovered key:", key)
+print("Decrypted message:", plaintext)</pre>
+
+<div class="callout">The frequency scoring function is intentionally minimal. For real-world use, scoring against full English letter frequencies (a–z weighted) performs better than a simple character membership check.</div>
+
+<h2>why this matters</h2>
+<p>Single-byte XOR is trivially broken by trying all 256 possible keys and scoring the output — 256 trials. Repeating-key XOR (Vigenère-style) can be broken by finding the key length via index of coincidence, then reducing the problem to N independent single-byte XOR problems.</p>
+<p>The underlying lesson: XOR is a symmetric, invertible operation with no diffusion. Without a secure key derivation, key stretching, and proper authentication, anything built on raw XOR is fragile. This is why CTF challenges keep using it — and why modern symmetric ciphers (AES-GCM, ChaCha20-Poly1305) layer XOR with substitutions, permutations, and authentication tags on top.</p>
+
+<footer>b3r0 — 2026</footer>
+</body>
+</html>

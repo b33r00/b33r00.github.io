@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mr. Robot: 1 — b3r0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../writeups.css">
+</head>
+<body>
+
+<a class="back" href="../../index.html">← back</a>
+
+<div class="meta-block">
+  <h1>Mr. Robot: 1</h1>
+  <div class="meta-row">
+    <span>VulnHub</span>
+    <span>linux</span>
+    <span>medium</span>
+    <span>2020</span>
+  </div>
+  <div class="flag-box">3 keys hidden on the machine</div>
+</div>
+
+<p class="placeholder">
+  Writeup coming — this was one of the first intentionally vulnerable machines I rooted,
+  back in 2020. Sending the full writeup soon.
+</p>
+
+<h2>quick notes</h2>
+<p>WordPress-based machine. The attack chain involves enumerating exposed files (<code>robots.txt</code> reveals a wordlist), credential brute-forcing the WordPress admin panel, getting a reverse shell via the theme editor, and two privilege escalation steps to get all three keys.</p>
+
+<div class="callout">Full writeup will be added here — this is a placeholder stub.</div>
+
+<footer>b3r0 — VulnHub · 2020</footer>
+</body>
+</html>

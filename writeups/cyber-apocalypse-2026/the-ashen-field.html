@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ashen Field — b3r0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../writeups.css">
+</head>
+<body>
+
+<a class="back" href="../../index.html">← back</a>
+
+<div class="meta-block">
+  <h1>The Ashen Field</h1>
+  <div class="meta-row">
+    <span>Cyber Apocalypse 2026</span>
+    <span>crypto</span>
+    <span>very easy</span>
+  </div>
+  <div class="flag-box">HTB{e1th3r_gr0bn3r_0r_v4r13ty___1t_st1ll_w0rks!th4nks_f4l4y_f0r_y0ur_4tt4ck_0n_HFE}</div>
+</div>
+
+<h2>overview</h2>
+<p>Single file challenge: <code>output.txt</code>. The description hinted at "a public rite built from equations" — public key crypto. Goal: decrypt a ciphertext and read the flag.</p>
+
+<h2>initial recon</h2>
+<p>Before writing any code, just look at the file.</p>
+<pre>wc -l output.txt
+# 3
+
+awk '{print NR": "length" chars: "substr($0,1,120)}' output.txt
+# 1: 155354 chars: (x1^4 + x2^4 + x4^4 + x5^4 + ...
+# 2: 411    chars: [0, 0, 0, 1, 0, 1, 0, 1, 0, 0, ...
+# 3: 192    chars: 408799963d4632a2...</pre>
+
+<p>Three lines. Line 1 is a massive tuple of multivariate polynomials in variables <code>x1</code> through <code>x137</code>. Line 2 is 137 bits (encrypted key). Line 3 is a hex string (encrypted flag).</p>
+<p>The polynomial format and variable count pointed immediately to HFE — Hidden Field Equations, a multivariate public key scheme.</p>
+
+<h2>analysis</h2>
+<p>Quick script to inspect the polynomial structure:</p>
+<pre>import re
+
+with open('output.txt') as f:
+    lines = f.read().split('\n')
+
+body = lines[0].strip()[1:-1]
+polys = body.split(', ')
+print("number of polynomials:", len(polys))
+# 137
+
+var_re = re.compile(r'x(\d+)\^(\d+)')
+exponents = set()
+for p in polys:
+    for m in var_re.finditer(p):
+        exponents.add(int(m.group(2)))
+
+print("exponents found:", exponents)
+# {2, 4}
+
+print("cross terms:", any('*' in p for p in polys))
+# False</pre>
+
+<p>Only exponents 2 and 4, no cross terms. This is the key observation.</p>
+<p>In a standard HFE scheme the central polynomial is <code>F(X) = X^(q^a) + X^(q^b)</code> over an extension field. With <code>q = 2</code>, those exponents become <code>2^1 = 2</code> and <code>2^2 = 4</code>. In characteristic 2, raising to a power of 2 is a Frobenius endomorphism — it is GF(2)-linear:</p>
+<pre>(a + b)^2 = a^2 + b^2   over GF(2)
+(a + b)^4 = a^4 + b^4   over GF(2)</pre>
+
+<p>And since inputs are actual bits, <code>x^2 = x</code> and <code>x^4 = x</code> for all <code>x</code> in {0, 1}. So every output bit is just an XOR of some subset of input bits plus a constant. The whole system collapses to an affine map over GF(2):</p>
+<pre>ciphertext = M * plaintext + b   (mod 2)</pre>
+<p>Inverting an affine map over GF(2) is Gaussian elimination.</p>
+
+<div class="callout">Root cause: HFE instantiated with base field q = 2. The Frobenius powers are GF(2)-linear, so on binary inputs the nonlinearity vanishes completely.</div>
+
+<h2>exploitation</h2>
+<p><strong>Step 1 — parse the public key into a matrix.</strong> The coefficient of variable <code>xi</code> in polynomial <code>j</code> is the XOR-parity of how many times <code>xi^2</code> and <code>xi^4</code> appear (both reduce to <code>xi</code> on bit inputs).</p>
+<pre>N = 137
+var_re = re.compile(r'^x(\d+)\^(\d+)$')
+M, bvec = [], []
+
+for p in polys:
+    terms = p.split(' + ')
+    coeff = [0] * N
+    const = 0
+    for t in terms:
+        t = t.strip()
+        if t == '1':
+            const ^= 1
+        else:
+            m = var_re.match(t)
+            if m:
+                idx = int(m.group(1))
+                coeff[idx - 1] ^= 1
+    M.append(coeff)
+    bvec.append(const)
+
+print("matrix shape:", len(M), "x", len(M[0]))
+# 137 x 137</pre>
+
+<p><strong>Step 2 — Gaussian elimination over GF(2)</strong> using integer bitmasks for speed. The encrypted key <code>c</code> satisfies <code>c = M * key + b (mod 2)</code>, so solve <code>M * v = c XOR b</code>.</p>
+<pre>encrypted_key = eval(lines[1].strip())
+rhs = [encrypted_key[i] ^ bvec[i] for i in range(N)]
+
+rows = []
+for i in range(N):
+    mask = 0
+    for j in range(N):
+        if M[i][j]:
+            mask |= (1 << j)
+    rows.append((mask, rhs[i]))
+
+work = rows[:]
+pivot_cols = {}
+r = 0
+
+for col in range(N):
+    piv = next((i for i in range(r, N) if (work[i][0] >> col) & 1), None)
+    if piv is None:
+        continue
+    work[r], work[piv] = work[piv], work[r]
+    pivot_cols[col] = r
+    pm, pa = work[r]
+    for i in range(N):
+        if i != r and (work[i][0] >> col) & 1:
+            work[i] = (work[i][0] ^ pm, work[i][1] ^ pa)
+    r += 1
+
+print("rank:", r)          # 135
+print("free columns:", ...)  # [133, 136]</pre>
+
+<p>Rank 135 with 137 variables → 2-dimensional null space → four candidate solutions. Bit 136 must be set (the key is 137 bits), which narrowed it to two. Tried both:</p>
+<pre>import itertools, hashlib
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+
+enc_flag = bytes.fromhex(lines[2].strip())
+
+for bits in itertools.product([0, 1], repeat=2):
+    # ... reconstruct v from pivot solution + free variable assignment
+    if v[136] != 1:
+        continue
+    KEY = sum((1 << i) for i in range(N) if v[i])
+    AES_KEY = hashlib.sha256(str(KEY).encode()).digest()
+    cipher = AES.new(AES_KEY, AES.MODE_ECB)
+    dec = cipher.decrypt(enc_flag)
+    try:
+        pt = unpad(dec, 16)
+        print("Flag:", pt.decode())
+    except Exception:
+        pass</pre>
+
+<h2>takeaway</h2>
+<p>When a multivariate public key system has only pure power terms with no mixed monomials, check whether the exponents are powers of the characteristic. If they are, the system is GF-linear on binary inputs regardless of apparent degree. Skip the Gröbner basis attacks and go straight to Gaussian elimination.</p>
+<p>The security of HFE lives and dies by the size of the base field. Small base field equals small security.</p>
+
+<footer>b3r0 — Cyber Apocalypse 2026</footer>
+</body>
+</html>

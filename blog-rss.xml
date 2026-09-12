@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>b3r0 — blog</title>
+    <link>https://b33r00.github.io/</link>
+    <description>Thoughts, resources, and notes by b3r0.</description>
+    <language>en</language>
+    <atom:link href="https://b33r00.github.io/blog-rss.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Mon, 01 Jan 2026 00:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Roadmap</title>
+      <link>https://b33r00.github.io/blog/roadmap.html</link>
+      <description>Where I am going and why — current focus, short-term goals, longer-term direction.</description>
+      <pubDate>Mon, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://b33r00.github.io/blog/roadmap.html</guid>
+    </item>
+
+    <item>
+      <title>Security Learning Resources</title>
+      <link>https://b33r00.github.io/blog/security-resources.html</link>
+      <description>Curated list of platforms, references, and tools organized by topic — web security, RE, pwn, crypto, bug bounty, and more.</description>
+      <pubDate>Mon, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://b33r00.github.io/blog/security-resources.html</guid>
+    </item>
+
+    <!-- add new blog items above this line -->
+  </channel>
+</rss>
