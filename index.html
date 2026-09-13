@@ -43,7 +43,7 @@
       flex-shrink:0;
     }
 
-    /* ASCII — Fira Code, large enough to be fully visible at 280px sidebar */
+    /* ASCII — Fira Code, width:auto hogy a flex align-items:center középre rakja */
     .ascii-name {
       font-family:'Fira Code','Consolas','Lucida Console',monospace;
       font-size:0.5rem;
@@ -51,9 +51,9 @@
       color:var(--accent);
       white-space:pre;
       user-select:none;
-      letter-spacing:0;
       margin-bottom:1rem;
-      width:100%;
+      width:auto;
+      max-width:100%;
       overflow:hidden;
     }
 
@@ -74,7 +74,7 @@
     .sidebar-nav { list-style:none; display:flex; flex-direction:column; align-items:center; gap:0.08rem; margin-top:auto; width:100%; }
     .sidebar-nav a {
       display:block; font-size:0.9rem;
-      color:var(--accent);          /* vivid orange, always */
+      color:var(--accent);
       text-decoration:none;
       padding:0.26rem 0.8rem;
       border-left:2px solid transparent;
@@ -132,7 +132,6 @@
       margin-top:0.9rem;
       padding-top:0.7rem;
       border-top:1px solid var(--rule);
-      display:none;
       flex-wrap:wrap;
       gap:0.6rem;
     }
@@ -150,6 +149,7 @@
     .writeup-entries { margin-top:1.4rem; }
     .writeup-group { display:none; }
     .writeup-group.visible { display:block; }
+    .writeup-group + .writeup-group.visible { margin-top:1.6rem; }
     .writeup-group-label { font-size:0.66rem; color:var(--accent-dim); letter-spacing:0.16em; font-weight:700; margin-bottom:0.55rem; padding-bottom:0.35rem; border-bottom:1px solid var(--rule); }
 
     .writeup-list { list-style:none; font-size:0.87rem; display:flex; flex-direction:column; gap:0.22rem; }
@@ -160,8 +160,32 @@
     .writeup-list .meta { font-size:0.73rem; color:var(--fg-dim); white-space:nowrap; }
 
     /* ── Blog ── */
-    .blog-category { font-size:0.66rem; color:var(--accent-dim); letter-spacing:0.16em; font-weight:700; margin:1.6rem 0 0.5rem; padding-bottom:0.35rem; border-bottom:1px solid var(--rule); }
-    .blog-category:first-child { margin-top:0; }
+    .blog-filter {
+      display:flex;
+      gap:0.9rem;
+      flex-wrap:wrap;
+      margin-bottom:1.6rem;
+    }
+    .blog-filter button {
+      background:none;
+      border:none;
+      color:var(--fg-dim);
+      font-family:inherit;
+      font-size:0.8rem;
+      cursor:pointer;
+      padding:0.22rem 0;
+      border-bottom:2px solid transparent;
+      letter-spacing:0.06em;
+      transition:color 0.1s, border-color 0.1s;
+    }
+    .blog-filter button:hover { color:var(--accent-bright); }
+    .blog-filter button.active { color:var(--accent-bright); border-bottom-color:var(--accent); }
+
+    .blog-group { display:none; }
+    .blog-group.visible { display:block; }
+    .blog-group + .blog-group.visible { margin-top:1.6rem; }
+
+    .blog-category { font-size:0.66rem; color:var(--accent-dim); letter-spacing:0.16em; font-weight:700; margin:0 0 0.5rem; padding-bottom:0.35rem; border-bottom:1px solid var(--rule); }
     .blog-list { list-style:none; display:flex; flex-direction:column; gap:0; }
     .blog-list li { border-bottom:1px solid var(--rule); padding:0.55rem 0; display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:baseline; }
     .blog-list a { color:var(--fg); text-decoration:none; font-size:0.88rem; }
@@ -178,7 +202,28 @@
     .research-list .r-desc { font-size:0.84rem; color:var(--fg-dim); margin-top:0.22rem; display:block; }
 
     /* ── Projects ── */
-    .proj-year-filter { display:flex; gap:0.9rem; margin-bottom:1.6rem; flex-wrap:wrap; }
+    .proj-tag-filter {
+      display:flex;
+      gap:0.9rem;
+      flex-wrap:wrap;
+      margin-bottom:1.1rem;
+    }
+    .proj-tag-filter button {
+      background:none;
+      border:none;
+      color:var(--fg-dim);
+      font-family:inherit;
+      font-size:0.8rem;
+      cursor:pointer;
+      padding:0.22rem 0;
+      border-bottom:2px solid transparent;
+      letter-spacing:0.06em;
+      transition:color 0.1s, border-color 0.1s;
+    }
+    .proj-tag-filter button:hover { color:var(--accent-bright); }
+    .proj-tag-filter button.active { color:var(--accent-bright); border-bottom-color:var(--accent); }
+
+    .proj-year-filter { display:flex; gap:0.9rem; margin-bottom:1.6rem; flex-wrap:wrap; padding-top:0.9rem; border-top:1px solid var(--rule); }
     .proj-year-filter button { background:none; border:none; color:var(--fg-dim); font-family:inherit; font-size:0.8rem; cursor:pointer; padding:0; border-bottom:2px solid transparent; letter-spacing:0.06em; transition:color 0.1s; }
     .proj-year-filter button:hover { color:var(--accent-bright); }
     .proj-year-filter button.active { color:var(--accent-bright); border-bottom-color:var(--accent); }
@@ -191,6 +236,8 @@
     .project-tags { margin-top:0.32rem; font-size:0.7rem; color:var(--fg-dim); display:flex; gap:0.7rem; flex-wrap:wrap; }
     .project-tags span::before { content:"# "; }
     .project-year { font-size:0.7rem; color:var(--fg-dimmer); margin-top:0.3rem; }
+
+    .filter-empty { font-size:0.86rem; color:var(--fg-dim); font-style:italic; display:none; }
 
     /* ── Certifications ── */
     .cert-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
@@ -228,13 +275,13 @@
   <img class="profile-pic" src="assets/profile.jpg" alt="b3r0"
        onerror="this.style.background='#1e1410';this.removeAttribute('src')">
 
-  <center><pre class="ascii-name"> 
+<pre class="ascii-name">
  ██████╗ ██████╗ ██████╗  ██████╗
  ██╔══██╗╚════██╗██╔══██╗██╔═████╗
  ██████╔╝ █████╔╝██████╔╝██║██╔██║
  ██╔══██╗ ╚═══██╗██╔══██╗████╔╝██║
  ██████╔╝██████╔╝██║  ██║╚██████╔╝
- ╚═════╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝</pre> </center>
+ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝</pre>
 
   <p class="bio-line">penetration tester</p>
   <!-- <p class="bio-line">hungary · 18 y/o</p> -->
@@ -249,9 +296,9 @@
   </div>
 
   <div class="lang-toggle">
-    <button onclick="setLang('en')" class="active" id="btn-en">en</button>
+    <button type="button" onclick="setLang('en')" class="active" id="btn-en">en</button>
     <span style="color:var(--fg-dimmer)">/</span>
-    <button onclick="setLang('hu')" id="btn-hu">hu</button>
+    <button type="button" onclick="setLang('hu')" id="btn-hu">hu</button>
   </div>
 
   <ul class="sidebar-nav">
@@ -302,14 +349,14 @@
 
     <!-- Level 1: years -->
     <div class="year-filter" id="yr">
-      <button class="active" data-year="all">all</button>
-      <button data-year="2026">/2026</button>
-      <button data-year="2025">/2025</button>
-      <button data-year="2024">/2024</button>
-      <button data-year="2023">/2023</button>
-      <button data-year="2022">/2022</button>
-      <button data-year="2021">/2021</button>
-      <button data-year="2020">/2020</button>
+      <button type="button" class="active" data-year="all">all</button>
+      <button type="button" data-year="2026">/2026</button>
+      <button type="button" data-year="2025">/2025</button>
+      <button type="button" data-year="2024">/2024</button>
+      <button type="button" data-year="2023">/2023</button>
+      <button type="button" data-year="2022">/2022</button>
+      <button type="button" data-year="2021">/2021</button>
+      <button type="button" data-year="2020">/2020</button>
     </div>
 
     <!-- Level 2: contest bar (populated by JS) -->
@@ -319,7 +366,7 @@
     <div class="writeup-entries" id="writeup-entries">
 
       <!-- 2026 / Cyber Apocalypse -->
-      <div class="writeup-group visible" data-year="2026" data-contest="cyber-apocalypse-2026">
+      <div class="writeup-group" data-year="2026" data-contest="cyber-apocalypse-2026">
         <div class="writeup-group-label">Cyber Apocalypse 2026</div>
         <ul class="writeup-list">
           <li>
@@ -332,12 +379,11 @@
             <span class="badge">mobile · hard</span>
             <span class="meta">2026</span>
           </li>
-          <!-- add more writeups here — they show under this contest automatically -->
         </ul>
       </div>
 
       <!-- 2026 / HCSC -->
-      <div class="writeup-group visible" data-year="2026" data-contest="hcsc-2026">
+      <div class="writeup-group" data-year="2026" data-contest="hcsc-2026">
         <div class="writeup-group-label">HCSC 2026</div>
         <ul class="writeup-list">
           <li>
@@ -448,88 +494,132 @@
   <section id="blog" class="section">
     <div class="section-heading">blog</div>
 
+    <!-- kategória szűrő -->
+    <div class="blog-filter" id="blog-filter">
+      <button type="button" class="active" data-cat="all">all</button>
+      <button type="button" data-cat="thoughts"><span class="en">thoughts</span><span class="hu">gondolatok</span></button>
+      <button type="button" data-cat="resources"><span class="en">resources</span><span class="hu">forrasok</span></button>
+      <button type="button" data-cat="hardware">hardware</button>
+      <button type="button" data-cat="linux"><span class="en">linux &amp; systems</span><span class="hu">linux &amp; rendszerek</span></button>
+      <button type="button" data-cat="security"><span class="en">security concepts</span><span class="hu">biztonsagi fogalmak</span></button>
+      <button type="button" data-cat="ctf">ctf</button>
+    </div>
+
     <!-- thoughts — opinions, reflections, random ideas -->
-    <div class="blog-category en">thoughts</div>
-    <div class="blog-category hu">gondolatok</div>
-    <ul class="blog-list">
-      <li>
-        <a href="blog/roadmap.html" class="en">Roadmap</a>
-        <a href="blog/roadmap.html" class="hu">Fejlodesi ut</a>
-        <span class="meta">2026</span>
-      </li>
-      <!-- future: opinions on tooling, learning approach, mindset, etc. -->
-    </ul>
+    <div class="blog-group" data-cat="thoughts">
+      <div class="blog-category en">thoughts</div>
+      <div class="blog-category hu">gondolatok</div>
+      <ul class="blog-list">
+        <li>
+          <a href="blog/roadmap.html" class="en">Roadmap</a>
+          <a href="blog/roadmap.html" class="hu">Fejlodesi ut</a>
+          <span class="meta">2026</span>
+        </li>
+        <!-- future: opinions on tooling, learning approach, mindset, etc. -->
+      </ul>
+    </div>
 
     <!-- resources — curated lists, references, link collections -->
-    <div class="blog-category en">resources</div>
-    <div class="blog-category hu">forrasok</div>
-    <ul class="blog-list">
-      <li>
-        <a href="blog/security-resources.html" class="en">Security Learning Resources</a>
-        <a href="blog/security-resources.html" class="hu">Biztonsagi tanulasi forrasok</a>
-        <span class="meta">2026</span>
-      </li>
-      <!-- future: tool lists, cheatsheets, recommended reading -->
-    </ul>
+    <div class="blog-group" data-cat="resources">
+      <div class="blog-category en">resources</div>
+      <div class="blog-category hu">forrasok</div>
+      <ul class="blog-list">
+        <li>
+          <a href="blog/security-resources.html" class="en">Security Learning Resources</a>
+          <a href="blog/security-resources.html" class="hu">Biztonsagi tanulasi forrasok</a>
+          <span class="meta">2026</span>
+        </li>
+        <!-- future: tool lists, cheatsheets, recommended reading -->
+      </ul>
+    </div>
 
     <!-- hardware — physical devices, embedded, electronics -->
-    <div class="blog-category en">hardware</div>
-    <div class="blog-category hu">hardware</div>
-    <ul class="blog-list">
-      <!-- future: Flipper Zero notes, USB gadgets, microcontroller experiments -->
-      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
-    </ul>
+    <div class="blog-group" data-cat="hardware">
+      <div class="blog-category en">hardware</div>
+      <div class="blog-category hu">hardware</div>
+      <ul class="blog-list">
+        <!-- future: Flipper Zero notes, USB gadgets, microcontroller experiments -->
+        <li>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span>
+          <span class="meta"></span>
+        </li>
+      </ul>
+    </div>
 
     <!-- linux & systems — distros, configs, sysadmin -->
-    <div class="blog-category en">linux &amp; systems</div>
-    <div class="blog-category hu">linux &amp; rendszerek</div>
-    <ul class="blog-list">
-      <!-- future: USE flags, kernel config, init systems, ricing -->
-      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
-    </ul>
+    <div class="blog-group" data-cat="linux">
+      <div class="blog-category en">linux &amp; systems</div>
+      <div class="blog-category hu">linux &amp; rendszerek</div>
+      <ul class="blog-list">
+        <!-- future: USE flags, kernel config, init systems, ricing -->
+        <li>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span>
+          <span class="meta"></span>
+        </li>
+      </ul>
+    </div>
 
     <!-- security concepts — deeper technical writeups that aren't CTF-specific -->
-    <div class="blog-category en">security concepts</div>
-    <div class="blog-category hu">biztonsagi fogalmak</div>
-    <ul class="blog-list">
-      <!-- future: attack chains, protocol analysis, vulnerability classes -->
-      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
-    </ul>
+    <div class="blog-group" data-cat="security">
+      <div class="blog-category en">security concepts</div>
+      <div class="blog-category hu">biztonsagi fogalmak</div>
+      <ul class="blog-list">
+        <!-- future: attack chains, protocol analysis, vulnerability classes -->
+        <li>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span>
+          <span class="meta"></span>
+        </li>
+      </ul>
+    </div>
 
     <!-- ctf — event recaps, strategy posts, meta -->
-    <div class="blog-category en">ctf</div>
-    <div class="blog-category hu">ctf</div>
-    <ul class="blog-list">
-      <!-- future: event recaps, what I learned, team notes -->
-      <li><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span><span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span><span class="meta"></span></li>
-    </ul>
+    <div class="blog-group" data-cat="ctf">
+      <div class="blog-category en">ctf</div>
+      <div class="blog-category hu">ctf</div>
+      <ul class="blog-list">
+        <!-- future: event recaps, what I learned, team notes -->
+        <li>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="en">coming</span>
+          <span style="font-size:0.82rem;color:var(--fg-dimmer);font-style:italic;" class="hu">hamarosan</span>
+          <span class="meta"></span>
+        </li>
+      </ul>
+    </div>
 
     <!--
       HOW TO ADD A BLOG POST:
       1. Copy blog/roadmap.html to blog/your-post.html, edit content
-      2. Add a <li> in the right category above
+      2. Add a <li> in the right .blog-group above
       3. Add an <item> to blog-rss.xml
-      Categories: thoughts / resources / hardware / linux & systems / security concepts / ctf
-      Add a new category block (blog-category + blog-list) if none fit.
+      Categories: thoughts / resources / hardware / linux / security / ctf
+      Add a new category: add a <button data-cat="slug"> and a matching .blog-group.
     -->
   </section>
 
   <!-- Projects -->
   <section id="projects" class="section">
     <div class="section-heading">projects</div>
+
+    <!-- tag szűrő — JS tölti fel a data-tags attribútumokból -->
+    <div class="proj-tag-filter" id="proj-tag-filter"></div>
+
     <div class="proj-year-filter" id="proj-yr">
-      <button class="active" data-year="all">all</button>
-      <button data-year="2026">/2026</button>
-      <button data-year="2025">/2025</button>
-      <button data-year="2024">/2024</button>
-      <button data-year="2023">/2023</button>
-      <button data-year="2022">/2022</button>
-      <button data-year="2021">/2021</button>
-      <button data-year="2020">/2020</button>
+      <button type="button" class="active" data-year="all">all</button>
+      <button type="button" data-year="2026">/2026</button>
+      <button type="button" data-year="2025">/2025</button>
+      <button type="button" data-year="2024">/2024</button>
+      <button type="button" data-year="2023">/2023</button>
+      <button type="button" data-year="2022">/2022</button>
+      <button type="button" data-year="2021">/2021</button>
+      <button type="button" data-year="2020">/2020</button>
     </div>
+
     <div class="project-list">
 
-      <div class="project-item" data-year="2026">
+      <div class="project-item" data-year="2026" data-tags="crypto,python">
         <div class="project-title"><a href="projects/xor-cipher.html">XOR Cipher Study</a></div>
         <p class="project-desc en">Key recovery from known plaintext, repeating key detection, single-byte XOR breaking with frequency analysis.</p>
         <p class="project-desc hu">Kulcsvisszafejtes ismert szovegbol, ismetlodo kulcs detektalas, egybajtos XOR tores frekvencia analizissal.</p>
@@ -537,7 +627,7 @@
         <div class="project-year">2026</div>
       </div>
 
-      <div class="project-item" data-year="2025">
+      <div class="project-item" data-year="2025" data-tags="linux,gentoo">
         <div class="project-title"><a href="projects/gentoo.html">Gentoo Linux install</a></div>
         <p class="project-desc en">Full Gentoo from scratch — USE flags, kernel config, init selection, portage optimisation for a minimal security-focused system.</p>
         <p class="project-desc hu">Teljes Gentoo telepites alapokbol — USE flag-ek, kernel konfig, init valasztas, portage optimalizalas.</p>
@@ -545,7 +635,7 @@
         <div class="project-year">2025</div>
       </div>
 
-      <div class="project-item" data-year="2024">
+      <div class="project-item" data-year="2024" data-tags="homelab,active-directory">
         <div class="project-title">homelab</div>
         <p class="project-desc en">add description — network layout, services, what you are testing.</p>
         <p class="project-desc hu">add description — halozati felepites, futtatott szolgaltatasok.</p>
@@ -553,7 +643,7 @@
         <div class="project-year">2024</div>
       </div>
 
-      <div class="project-item" data-year="2023">
+      <div class="project-item" data-year="2023" data-tags="linux,dotfiles">
         <div class="project-title"><a href="https://github.com/b33r00/i3-artix-dotfiles">Artix + i3wm dotfiles</a></div>
         <p class="project-desc en">Daily driver config — Artix Linux, runit, i3wm. Versioned.</p>
         <p class="project-desc hu">Napi konfig — Artix Linux, runit, i3wm. Verziokezelt.</p>
@@ -561,7 +651,7 @@
         <div class="project-year">2023</div>
       </div>
 
-      <div class="project-item" data-year="2023">
+      <div class="project-item" data-year="2023" data-tags="hardware,embedded">
         <div class="project-title"><a href="projects/hardware-hacking.html">Microchips &amp; hardware gadgets</a></div>
         <p class="project-desc en">Hardware hacking tools and microcontroller experiments — Flipper Zero, custom gadgets, embedded attack surfaces.</p>
         <p class="project-desc hu">Hardware hacking eszkozok es mikrokontroller kiserletezesek.</p>
@@ -569,7 +659,7 @@
         <div class="project-year">2023</div>
       </div>
 
-      <div class="project-item" data-year="2022">
+      <div class="project-item" data-year="2022" data-tags="linux,arch">
         <div class="project-title"><a href="projects/arch.html">Arch Linux manual install</a></div>
         <p class="project-desc en">Manual Arch without archinstall — partitioning, bootloader, AUR, minimal system from scratch.</p>
         <p class="project-desc hu">Manualis Arch telepites archinstall nelkul.</p>
@@ -577,7 +667,7 @@
         <div class="project-year">2022</div>
       </div>
 
-      <div class="project-item" data-year="2021">
+      <div class="project-item" data-year="2021" data-tags="linux,fedora">
         <div class="project-title"><a href="projects/fedora.html">Fedora install &amp; setup</a></div>
         <p class="project-desc en">First structured Linux environment with a pentesting toolkit.</p>
         <p class="project-desc hu">Elso strukturalt Linux kornyezet pentesting eszkozokkal.</p>
@@ -585,7 +675,7 @@
         <div class="project-year">2021</div>
       </div>
 
-      <div class="project-item" data-year="2020">
+      <div class="project-item" data-year="2020" data-tags="linux,kali">
         <div class="project-title"><a href="projects/kali.html">First Kali Linux install</a></div>
         <p class="project-desc en">First contact with a security-focused distro. Exploring tools, breaking things.</p>
         <p class="project-desc hu">Elso talalkozas biztonsagi Linux disztribucioval.</p>
@@ -594,6 +684,15 @@
       </div>
 
     </div>
+
+    <p class="filter-empty" id="proj-empty">no projects match this filter.</p>
+
+    <!--
+      HOW TO ADD A PROJECT:
+      1. Copy a .project-item block
+      2. Set data-year="YYYY" and data-tags="slug1,slug2"
+      3. New tags automatically appear as buttons (via TAG_LABELS for pretty names)
+    -->
   </section>
 
   <!-- Notes -->
@@ -634,7 +733,6 @@ document.querySelectorAll('.sidebar-nav a').forEach(link => {
 });
 
 // ── Writeups two-level filter ──
-// Contest metadata: slug -> display label, list of years it appears in
 const CONTESTS = {
   'cyber-apocalypse-2026': { label: 'Cyber Apocalypse 2026', years: ['2026'] },
   'hcsc-2026':             { label: 'HCSC 2026',             years: ['2026'] },
@@ -643,7 +741,6 @@ const CONTESTS = {
   'vulnhub':               { label: 'VulnHub',               years: ['2020','2021','2022'] },
   // HOW TO ADD A NEW CONTEST:
   // 'my-contest-2027': { label: 'My Contest 2027', years: ['2027'] },
-  // Then add a .writeup-group with data-contest="my-contest-2027" data-year="2027"
 };
 
 const allGroups  = [...document.querySelectorAll('.writeup-group')];
@@ -664,8 +761,8 @@ function renderContestBar(year) {
     return;
   }
   contestBar.innerHTML = '';
-  // "all" button for the year
   const allBtn = document.createElement('button');
+  allBtn.type = 'button';
   allBtn.className = 'contest-btn active';
   allBtn.textContent = 'all';
   allBtn.addEventListener('click', () => selectContest('all'));
@@ -673,6 +770,7 @@ function renderContestBar(year) {
 
   slugs.forEach(slug => {
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'contest-btn';
     btn.textContent = CONTESTS[slug].label;
     btn.dataset.slug = slug;
@@ -687,10 +785,10 @@ function selectContest(slug) {
   contestBar.querySelectorAll('.contest-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.slug === slug || (slug === 'all' && !b.dataset.slug));
   });
-  applyFilters();
+  applyWriteupFilters();
 }
 
-function applyFilters() {
+function applyWriteupFilters() {
   allGroups.forEach(grp => {
     const yMatch = activeYear === 'all' || grp.dataset.year === activeYear;
     const cMatch = activeContest === 'all' || grp.dataset.contest === activeContest;
@@ -705,25 +803,114 @@ document.querySelectorAll('#yr button').forEach(btn => {
     document.querySelectorAll('#yr button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     renderContestBar(activeYear);
-    applyFilters();
+    applyWriteupFilters();
   });
 });
 
-// ── Projects year filter ──
-document.querySelectorAll('#proj-yr button').forEach(btn => {
+// kezdeti állapot: minden .writeup-group rejtve a HTML-ben → most szinkronizáljuk
+renderContestBar(activeYear);
+applyWriteupFilters();
+
+// ── Blog category filter ──
+document.querySelectorAll('#blog-filter button').forEach(btn => {
   btn.addEventListener('click', () => {
-    const year = btn.dataset.year;
-    document.querySelectorAll('#proj-yr button').forEach(b => b.classList.remove('active'));
+    const cat = btn.dataset.cat;
+    document.querySelectorAll('#blog-filter button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    document.querySelectorAll('.project-item').forEach(item => {
-      item.style.display = (year === 'all' || item.dataset.year === year) ? '' : 'none';
+    document.querySelectorAll('.blog-group').forEach(g => {
+      const show = cat === 'all' || g.dataset.cat === cat;
+      g.classList.toggle('visible', show);
     });
   });
 });
 
+// kezdeti állapot: minden blog-group látható
+document.querySelectorAll('.blog-group').forEach(g => g.classList.add('visible'));
+
+// ── Projects: tag + year filter (combined) ──
+const TAG_LABELS = {
+  'active-directory': 'active directory',
+  'crypto':           'crypto',
+  'homelab':          'homelab',
+  'hardware':         'hardware',
+  'web':              'web',
+  // bővítsd nyugodtan — ha nincs itt, a slug-ot kötőjel nélkül írja ki
+};
+const labelFor = s => TAG_LABELS[s] || s.replace(/-/g, ' ');
+
+const projectItems = [...document.querySelectorAll('.project-item')];
+const projTagBar    = document.getElementById('proj-tag-filter');
+const projEmpty     = document.getElementById('proj-empty');
+
+// 1) összegyűjtjük az összes egyedi taget
+const tagSet = new Set();
+projectItems.forEach(item => {
+  (item.dataset.tags || '')
+    .split(',').map(s => s.trim()).filter(Boolean)
+    .forEach(t => tagSet.add(t));
+});
+const sortedTags = [...tagSet].sort();
+
+// 2) felépítjük a gombokat
+const allTagBtn = document.createElement('button');
+allTagBtn.type = 'button';
+allTagBtn.dataset.tag = 'all';
+allTagBtn.textContent = 'all';
+allTagBtn.classList.add('active');
+projTagBar.appendChild(allTagBtn);
+
+sortedTags.forEach(slug => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.dataset.tag = slug;
+  b.textContent = labelFor(slug);
+  projTagBar.appendChild(b);
+});
+
+// 3) szűrési állapot + apply
+let activeProjTag  = 'all';
+let activeProjYear = 'all';
+
+function applyProjFilters() {
+  let visible = 0;
+  projectItems.forEach(item => {
+    const tags = (item.dataset.tags || '')
+      .split(',').map(s => s.trim()).filter(Boolean);
+    const tagMatch  = activeProjTag  === 'all' || tags.includes(activeProjTag);
+    const yearMatch = activeProjYear === 'all' || item.dataset.year === activeProjYear;
+    const show = tagMatch && yearMatch;
+    item.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  if (projEmpty) projEmpty.style.display = visible === 0 ? 'block' : 'none';
+}
+
+// 4) event delegation a tag sávon
+projTagBar.addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  activeProjTag = btn.dataset.tag;
+  [...projTagBar.children].forEach(b => b.classList.toggle('active', b === btn));
+  applyProjFilters();
+});
+
+// 5) év szűrő
+document.querySelectorAll('#proj-yr button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeProjYear = btn.dataset.year;
+    document.querySelectorAll('#proj-yr button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyProjFilters();
+  });
+});
+
+// kezdeti állapot
+applyProjFilters();
+
 // ── Language toggle ──
 function setLang(lang) {
   document.documentElement.dataset.lang = lang;
+  document.documentElement.lang = lang;
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.getElementById('btn-hu').classList.toggle('active', lang === 'hu');
   localStorage.setItem('b3ro-lang', lang);
